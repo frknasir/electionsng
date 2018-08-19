@@ -1,7 +1,7 @@
 window.Popper = require('popper.js').default;
 window._ = require('lodash');
 window.L = require('leaflet');
-
+window.Chartist = require('chartist');
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -28,7 +28,6 @@ try {
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/core.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/arrive.min.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/buttons.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/chartist.min.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-notify.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/material-dashboard.min.js?v=2.0.2');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.sharrre.js');
