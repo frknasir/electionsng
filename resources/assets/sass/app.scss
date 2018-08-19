@@ -1,0 +1,19 @@
+
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons');
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
+
+// Variables
+//@import 'variables';
+
+// Bootstrap
+//@import '~bootstrap/scss/bootstrap';
+
+@import '../../../node_modules/leaflet/dist/leaflet.css';
+@import '../../../node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css';
+@import '../../../template/material-dashboard-html-v2.1.0/assets/scss/material-dashboard.scss';
+
+/*.navbar-laravel {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}*/
