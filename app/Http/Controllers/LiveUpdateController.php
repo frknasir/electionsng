@@ -24,7 +24,7 @@ class LiveUpdateController extends Controller {
     public function electionLiveUpdates($electionId) {
         $election = Election::findOrFail($electionId);
 
-        $liveUpdates = $election->liveUpdates()->paginate(20);
+        $liveUpdates = $election->liveUpdates()->paginate(2);
 
         return LiveUpdateResource::collection($liveUpdates);
     }

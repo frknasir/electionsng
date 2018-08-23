@@ -47,11 +47,11 @@
 
         <!-- pagination -->
         <div id="pagination">
-            <button class="btn btn-just-icon">
+            <button @click="getLiveUpdates(luPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.prev_page_url}]">
                 <i class="material-icons">chevron_left</i>
             </button>
-            <label for="">1/3</label>
-            <button class="btn btn-just-icon">
+            <label for="">{{ luPagination.to }}/{{ luPagination.total }}</label>
+            <button @click="getLiveUpdates(luPagination.next_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.next_page_url}]">
                 <i class="material-icons">chevron_right</i>                        
             </button>
         </div>
@@ -156,15 +156,19 @@
 </template>
 <script>
     export default {
+        props: [
+            'luPagination',
+            'liveUpdates'
+        ],
         data() {
             return {
                 map: null,
-                liveUpdates: [],
                 liveUpdate: {
 
                 },
                 info_window_active: false,
-                map_z_index: 1
+                map_z_index: 1,
+                markers: []
             }
         },
         mounted() {
@@ -175,13 +179,13 @@
         },
         methods: {
             initMap() {
-                var mymap = L.map('map').setView([9.0765, 7.3986], 8);
+                this.map = L.map('map').setView([9.0765, 7.3986], 8);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(mymap);
+                }).addTo(this.map);
 
-                var marker = L.marker([9.0765, 7.3986]).addTo(mymap);
+                //var marker = L.marker([9.0765, 7.3986]).addTo(mymap);
 
                 //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 
@@ -189,7 +193,8 @@
                     .setLatLng([51.5, -0.09])
                     .setContent("I am a standalone popup.")
                     .openOn(mymap);*/
-                marker.on('click', this.openInfoWindow);
+                //marker.on('click', this.openInfoWindow);
+                this.buildMarkers(this.map);
             },
             openInfoWindow() {
                 this.info_window_active = true;
@@ -200,11 +205,29 @@
             onMarkerClicked(e) {
                 alert('marker clicked at '+e.latlng.toString());
             },
-            buildMarkers() {
+            buildMarkers(map) {
+                let vm = this;
 
+                for(let i = 0; i < vm.liveUpdates.length; i++) {
+                    let liveUpdate = vm.liveUpdates[i];
+                    console.log(liveUpdate.location.latitude);
+                    let marker = L.marker([
+                        liveUpdate.location.latitude,
+                        liveUpdate.location.longitude
+                    ]).addTo(map);
+                    marker.on('click', vm.openInfoWindow);
+
+                    vm.markers.push(marker);
+                }
             },
             clearMarkers() {
 
+            },
+            getLiveUpdates(url) {
+                this.$store.dispatch('getElectionLiveUpdates', {
+                    id: this.$route.params.id,
+                    url: null
+                })
             }
         }
     }

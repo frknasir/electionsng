@@ -19,4 +19,9 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
     });
 });
 
+Route::group(['prefix'=> 'v1'], function() {
+  Route::get('/election/{id}/candidates', 'CandidateController@electionCandidates');
+  Route::get('/election/{id}/liveUpdates', 'LiveUpdateController@electionLiveUpdates');
+});
+
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

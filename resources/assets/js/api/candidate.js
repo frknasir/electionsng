@@ -7,8 +7,9 @@ export default {
     /*
         GET /api/v1/election/{election_id}/candidates
     */
-    getElectionCandidates: function( electionId ) {
-        return axios.get( CONFIG.API_URL + '/election/' + electionId + '/candidates' );
+    getElectionCandidates: function( electionId, url = null ) {
+        url = url || CONFIG.API_URL + '/election/' + electionId + '/candidates';
+        return axios.get(url);
     },
 
     /*

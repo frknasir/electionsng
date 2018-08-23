@@ -20,7 +20,7 @@ class CandidateController extends Controller
         $candidates = Candidate::where(
             'election_id', 
             $electionId
-        )->get(); 
+        )->paginate(2); 
 
         return CandidateResource::collection($candidates);
     }

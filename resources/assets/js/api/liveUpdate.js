@@ -6,13 +6,11 @@ import { CONFIG } from '../config.js';
 export default {
     /*
     GET /api/v1/election/{election_id}/liveUpdates
-    */
-    getElectionLiveUpdates: function(electionId) {
+    */ 
+    getElectionLiveUpdates: function(electionId, url = null) {
+        url = url || CONFIG.API_URL + '/election/' + electionId + '/liveUpdates';
         return axios.get( 
-            CONFIG.API_URL + 
-            '/election/' + 
-            electionId + 
-            '/liveUpdates' 
+            url
         );
     },
 

@@ -6,95 +6,100 @@
 */
 
 import LiveUpdateAPI from '../api/liveUpdate.js';
-import { CONFIG } from '../config.js';
 
 export const liveUpdate = {
     state: {
         liveUpdates: [],
-        liveUpdatesLoadStatus: CONFIG.STATUSES.idle,
+        luPagination: {},
+        liveUpdatesLoadStatus: 0,
         liveUpdate: {},
-        liveUpdateLoadStatus: CONFIG.STATUSES.idle,
-        addLiveUpdateLoadStatus: CONFIG.STATUSES.idle,
-        updateLiveUpdateLoadStatus: CONFIG.STATUSES.idle,
-        deleteLiveUpdateLoadStatus: CONFIG.STATUSES.idle
+        liveUpdateLoadStatus: 0,
+        addLiveUpdateLoadStatus: 0,
+        updateLiveUpdateLoadStatus: 0,
+        deleteLiveUpdateLoadStatus: 0
     },
     actions: {
         getElectionLiveUpdates({commit}, data) {
-            commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setLiveUpdatesLoadStatus', 1);
 
             LiveUpdateAPI.getElectionLiveUpdates(
-                data.id
+                data.id,
+                data.url
             ).then(function(response) {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setLiveUpdates', response.data);
+                commit('setLiveUpdatesLoadStatus', 2);
+                commit('setLiveUpdates', response.data.data);
+                commit('setLUPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
             });
         },
 
         getStateLiveUpdates({commit}, data) {
-            commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setLiveUpdatesLoadStatus', 1);
 
             LiveUpdateAPI.getStateLiveUpdates(
                 data.electionId,
                 data.stateId
             ).then(function(response) {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data);
             }).catch(function() {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
             });
         },
 
         getLocalGovernmentLiveUpdates({commit}, data) {
-            commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setLiveUpdatesLoadStatus', 1);
 
             LiveUpdateAPI.getLocalGovernmentLiveUpdates(
                 data.electionId,
                 data.localGovernmentId
             ).then(function(response) {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data);
             }).catch(function() {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
             });
         },
 
         getRegistrationAreaLiveUpdates({commit}, data) {
-            commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setLiveUpdatesLoadStatus', 1);
 
             LiveUpdateAPI.getRegistrationAreaLiveUpdates(
                 data.electionId,
                 data.registrationAreaId
             ).then(function(response) {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data);
             }).catch(function() {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
             });
         },
 
         getPollingUnitLiveUpdates({commit}, data) {
-            commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setLiveUpdatesLoadStatus', 1);
 
             LiveUpdateAPI.getPollingUnitLiveUpdates(
                 data.electionId,
                 data.pollingUnitId
             ).then(function(response) {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data);
             }).catch(function() {
-                commit('setLiveUpdatesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
             });
         },
 
         addLiveUpdate({commit, state, dispatch}, data) {
-            commit('setAddLiveUpdateLoadStatus', CONFIG.STATUSES.loading);
+            commit('setAddLiveUpdateLoadStatus', 1);
 
             LiveUpdateAPI.addLiveUpdate(
                 data.title,
@@ -105,14 +110,14 @@ export const liveUpdate = {
                 data.added_by,
                 data.updated_by
             ).then(function(response) {
-                commit('setAddLiveUpdateLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setAddLiveUpdateLoadStatus', 2);
             }).catch(function() {
-                commit('setAddLiveUpdateLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setAddLiveUpdateLoadStatus', 3);
             });
         },
 
         updateLiveUpdate({commit, state, dispatch}, data) {
-            commit('setUpdateLiveUpdateLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdateLiveUpdateLoadStatus', 1);
 
             LiveUpdateAPI.updateLiveUpdate(
                 data.id,
@@ -120,21 +125,21 @@ export const liveUpdate = {
                 data.description,
                 data.updated_by
             ).then(function(response) {
-                commit('setUpdateLiveUpdateLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdateLiveUpdateLoadStatus', 2);
             }).catch(function() {
-                commit('setUpdateLiveUpdateLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdateLiveUpdateLoadStatus', 3);
             });
         },
 
         deleteLiveUpdate({commit, state, dispatch}, data) {
-            commit('setDeleteLiveUpdateLoadStatus', CONFIG.STATUSES.loading);
+            commit('setDeleteLiveUpdateLoadStatus', 1);
 
             LiveUpdateAPI.deleteLiveUpdate(
                 data.id
             ).then(function(response) {
-                commit('setDeleteLiveUpdateLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setDeleteLiveUpdateLoadStatus', 2);
             }).catch(function() {
-                commit('setDeleteLiveUpdateLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setDeleteLiveUpdateLoadStatus', 3);
             });
         }
     },
@@ -145,6 +150,22 @@ export const liveUpdate = {
 
         setLiveUpdates(state, incidents) {
             state.liveUpdates = incidents;
+        },
+
+        setLUPagination(state, data) {
+            let meta = data.meta;
+            let links = data.links;
+
+            let pagination = {
+                current_page: meta.current_page,
+                last_page: meta.last_page,
+                to: meta.to,
+                total: meta.total,
+                next_page_url: links.next,
+                prev_page_url: links.prev
+            };
+        
+            state.luPagination = pagination;
         },
 
         setLiveUpdateLoadStatus(state, status) {
@@ -174,6 +195,10 @@ export const liveUpdate = {
 
         getLiveUpdates(state) {
             return state.liveUpdates;
+        },
+
+        getLUPagination(state) {
+            return state.luPagination;
         },
 
         getLiveUpdateLoadStatus(state) {

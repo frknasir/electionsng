@@ -24,8 +24,8 @@
                 </button>
             </div>
         </div>
-        <map-component v-if="active_component === 'map'"></map-component>
-        <timeline v-else-if="active_component === 'timeline'"></timeline>
+        <map-component :luPagination="luPagination" :liveUpdates="liveUpdates" v-if="active_component === 'map'"></map-component>
+        <timeline :luPagination="luPagination" :liveUpdates="liveUpdates" v-else-if="active_component === 'timeline'"></timeline>
     </div>
 </template>
 <script>
@@ -43,9 +43,31 @@
                 map_active: true,
                 timeline_active: false,
             }
+        }, 
+        computed: {
+            liveUpdates() {
+                return this.$store.getters.getLiveUpdates;
+            },
+            liveUpdatesLoadStatus() {
+                return this.$store.getters.getLiveUpdatesLoadStatus;
+            },
+            luPagination() {
+                return this.$store.getters.getLUPagination;
+            }
+        },
+        watch: {
+            liveUpdatesLoadStatus: function() {
+
+            }
+        },
+        mounted() {
+
         },
         created() {
-
+            this.$store.dispatch('getElectionLiveUpdates', {
+                id: this.$route.params.id,
+                url: null
+            })
         },
         methods: {
             toggleComponent(component) {
