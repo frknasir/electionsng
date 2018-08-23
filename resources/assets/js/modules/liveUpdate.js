@@ -98,6 +98,20 @@ export const liveUpdate = {
             });
         },
 
+        getLiveUpdate({commit}, data) {
+            commit('setLiveUpdateLoadStatus', 1);
+
+            LiveUpdateAPI.getLiveUpdate(
+                data.id
+            ).then(function(response) {
+                commit('setLiveUpdateLoadStatus', 2);
+                commit('setLiveUpdate', response.data.data);
+            }).catch(function() {
+                commit('setLiveUpdateLoadStatus', 3);
+                commit('setLiveUpdate', {});
+            });
+        },
+
         addLiveUpdate({commit, state, dispatch}, data) {
             commit('setAddLiveUpdateLoadStatus', 1);
 

@@ -24,7 +24,7 @@ class LiveUpdateController extends Controller {
     public function electionLiveUpdates($electionId) {
         $election = Election::findOrFail($electionId);
 
-        $liveUpdates = $election->liveUpdates()->paginate(2);
+        $liveUpdates = $election->liveUpdates()->paginate(5);
 
         return LiveUpdateResource::collection($liveUpdates);
     }
@@ -101,8 +101,10 @@ class LiveUpdateController extends Controller {
      * @param  \App\LiveUpdate  $liveUpdate
      * @return \Illuminate\Http\Response
      */
-    public function show(LiveUpdate $liveUpdate) {
-        //
+    public function show($id) {
+        $liveUpdate = LiveUpdate::findOrFail($id);
+
+        return new LiveUpdateResource($liveUpdate);
     }
 
     /**

@@ -13,7 +13,7 @@ try {
     
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/core/bootstrap-material-design.min.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/perfect-scrollbar.jquery.min.js');
-    require('moment');
+    window.moment = require('moment');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/sweetalert2.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.validate.min.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.bootstrap-wizard.js');

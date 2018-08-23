@@ -26,21 +26,36 @@
         <!--info window-->
         <div v-show="info_window_active" id="info-window" class="col-md-4">
             <div class="card card-nav-tabs">
-                <div class="card-header card-header-danger">
-                    Featured  
+                <div class="card-header card-header-success">
+                    <h4 class="card-title"></h4>
+                    <p class="category"></p> 
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
+                <div class="card-body">
+
+                </div>
                 <div class="card-footer">
-                    <button @click="closeInfoWindow" class="btn btn-danger btn-sm">
-                        <i class="material-icons">
-                            cancel
-                        </i>
-                        close
-                    </button>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <button @click="closeInfoWindow" class="btn btn-success btn-sm">
+                                <i class="material-icons">
+                                    cancel
+                                </i>
+                                close
+                            </button>
+                        </li>
+                        <li class="list-inline-item">
+                            <div class="stats">
+                                <i class="material-icons">access_time</i> 
+                                <span class="created_at">added 4 minutes ago</span>
+                            </div>
+                        </li>
+                        <li class="list-inline-item">
+                            <div class="stats">
+                                <i class="material-icons">access_time</i> 
+                                <span class="updated_at">updated 4 minutes ago</span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -156,10 +171,7 @@
 </template>
 <script>
     export default {
-        props: [
-            'luPagination',
-            'liveUpdates'
-        ],
+        props: [],
         data() {
             return {
                 map: null,
@@ -168,66 +180,146 @@
                 },
                 info_window_active: false,
                 map_z_index: 1,
-                markers: []
+                markers: [],
+                map_first_init: true
+            }
+        },
+        computed: {
+            election() {
+                return this.$store.getters.getElection;
+            },
+            electionLoadStatus() {
+                return this.$store.getters.getElectionLoadStatus;
+            },
+            liveUpdates() {
+                return this.$store.getters.getLiveUpdates;
+            },
+            liveUpdatesLoadStatus() {
+                return this.$store.getters.getLiveUpdatesLoadStatus;
+            },
+            luPagination() {
+                return this.$store.getters.getLUPagination;
+            }
+        },
+        watch: {
+            electionLoadStatus: function() {
+                if(this.electionLoadStatus == 2 && this.map_first_init) {
+                    this.initMap();
+                    this.map_first_init = false;
+                }
+            },
+            liveUpdates: function() {
+                if(this.liveUpdatesLoadStatus == 2 && !this.map_first_init) {
+                    this.clearMarkers();
+                    this.buildMarkers(this.map);
+                }
             }
         },
         mounted() {
-            this.initMap();
+
         },
         created() {
-            
+            this.$store.dispatch('getElectionLiveUpdates', {
+                id: this.$route.params.id,
+                url: null
+            });
+
+            this.$store.dispatch('getElection', {
+                id: this.$route.params.id
+            });
         },
         methods: {
             initMap() {
-                this.map = L.map('map').setView([9.0765, 7.3986], 8);
+                let vm = this;
+
+                vm.map = L.map('map').setView(
+                    [
+                        vm.election.state.latitude, 
+                        vm.election.state.longitude
+                    ], 8
+                );
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(this.map);
+                }).addTo(vm.map);
 
-                //var marker = L.marker([9.0765, 7.3986]).addTo(mymap);
-
-                //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-
-                /*var popup = L.popup()
-                    .setLatLng([51.5, -0.09])
-                    .setContent("I am a standalone popup.")
-                    .openOn(mymap);*/
-                //marker.on('click', this.openInfoWindow);
-                this.buildMarkers(this.map);
+                vm.buildMarkers(vm.map);
             },
-            openInfoWindow() {
+            openInfoWindow(liveUpdate) {
+                let info_window = $("#info-window");
+                info_window.find(".card-title").text(liveUpdate.title);
+                info_window.find(".category").text(liveUpdate.location.name);
+                info_window.find(".card-body").text(liveUpdate.description);
+
+                let created_at = new Date(liveUpdate.created_at.date);
+                created_at = ""+created_at.getFullYear()+
+                    ("0" + (created_at.getMonth() + 1)).slice(-2)+
+                    ("0" + created_at.getDate()).slice(-2);
+                info_window.find(".stats .created_at").text( "added "+
+                    moment(
+                        created_at, 
+                        "YYYYMMDD"
+                    ).fromNow()
+                );
+
+                let updated_at = new Date(liveUpdate.updated_at.date);
+                updated_at = ""+updated_at.getFullYear()+
+                    ("0" + (updated_at.getMonth() + 1)).slice(-2)+
+                    ("0" + updated_at.getDate()).slice(-2);
+                info_window.find(".stats .updated_at").text( "updated "+
+                    moment(
+                        updated_at, 
+                        "YYYYMMDD"
+                    ).fromNow()
+                );
+
+
                 this.info_window_active = true;
             },
             closeInfoWindow() {
                 this.info_window_active = false;
-            },
-            onMarkerClicked(e) {
-                alert('marker clicked at '+e.latlng.toString());
             },
             buildMarkers(map) {
                 let vm = this;
 
                 for(let i = 0; i < vm.liveUpdates.length; i++) {
                     let liveUpdate = vm.liveUpdates[i];
-                    console.log(liveUpdate.location.latitude);
                     let marker = L.marker([
                         liveUpdate.location.latitude,
                         liveUpdate.location.longitude
                     ]).addTo(map);
-                    marker.on('click', vm.openInfoWindow);
+
+                    marker.id = liveUpdate.id;
+
+                    marker.on('click', function() {
+                        let liveUpdate = vm.searchLiveUpdates(this.id);
+                        vm.openInfoWindow(liveUpdate);
+                    });
 
                     vm.markers.push(marker);
                 }
             },
             clearMarkers() {
-
+                let vm = this;
+                vm.markers.forEach(function(marker, index) {
+                    if(marker) {
+                        vm.map.removeLayer(marker);
+                    }
+                })
             },
             getLiveUpdates(url) {
                 this.$store.dispatch('getElectionLiveUpdates', {
                     id: this.$route.params.id,
-                    url: null
+                    url: url
                 })
+            },
+            searchLiveUpdates(id) {
+                let vm = this;
+                for (let i = 0; i < vm.liveUpdates.length; i++) {
+                    if (vm.liveUpdates[i].id === id) {
+                        return vm.liveUpdates[i];
+                    }
+                }
             }
         }
     }

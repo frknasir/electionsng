@@ -6,7 +6,6 @@
 */
 
 import ElectionAPI from '../api/election.js';
-import { CONFIG } from '../config.js';
 
 export const election = {
     /*
@@ -14,12 +13,12 @@ export const election = {
     */
     state: {
         elections: [],
-        electionsLoadStatus: CONFIG.STATUSES.idle,
+        electionsLoadStatus: 0,
         election: {},
-        electionLoadStatus: CONFIG.STATUSES.idle,
-        addElectionLoadStatus: CONFIG.STATUSES.idle,
-        updateElectionLoadStatus: CONFIG.STATUSES.idle,
-        deleteElectionLoadStatus: CONFIG.STATUSES.idle,
+        electionLoadStatus: 0,
+        addElectionLoadStatus: 0,
+        updateElectionLoadStatus: 0,
+        deleteElectionLoadStatus: 0,
     },
 
     /*
@@ -30,16 +29,16 @@ export const election = {
          * loads all elections from the API
          */
         getElections({commit}) {
-            commit('setElectionsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setElectionsLoadStatus', 1);
 
             ElectionAPI.getElections()
                 .then( function(response) {
                     commit('setElections', response.data);
-                    commit('setElectionsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setElectionsLoadStatus', 2);
                 })
                 .catch( function() {
                     commit('setElections', []);
-                    commit('setElectionsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setElectionsLoadStatus', 3);
                 });
         },
 
@@ -47,16 +46,16 @@ export const election = {
          * Loads the ongoing elections from the API
          */
         getOngoing({commit}) {
-            commit('setElectionsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setElectionsLoadStatus', 1);
 
             ElectionAPI.getOngoing()
                 .then( function(response) {
                     commit('setElections', response.data);
-                    commit('setElectionsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setElectionsLoadStatus', 2);
                 })
                 .catch( function() {
                     commit('setElections', []);
-                    commit('setElectionsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setElectionsLoadStatus', 3);
                 });
         },
 
@@ -64,16 +63,16 @@ export const election = {
          * Loads upcoming elections from the API
          */
         getUpcoming({commit}) {
-            commit('setElectionsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setElectionsLoadStatus', 1);
 
             ElectionAPI.getUpcoming()
                 .then( function(response) {
                     commit('setElections', response.data);
-                    commit('setElectionsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setElectionsLoadStatus', 2);
                 })
                 .catch( function() {
                     commit('setElections', []);
-                    commit('setElectionsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setElectionsLoadStatus', 3);
                 });
         },
 
@@ -81,16 +80,16 @@ export const election = {
          * Loads archived elections from the API
          */
         getArchived({commit}) {
-            commit('setElectionsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setElectionsLoadStatus', 1);
 
             ElectionAPI.getArchived()
                 .then( function(response) {
                     commit('setElections', response.data);
-                    commit('setElectionsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setElectionsLoadStatus', 2);
                 })
                 .catch( function() {
                     commit('setElections', []);
-                    commit('setElectionsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setElectionsLoadStatus', 3);
                 });
         },
 
@@ -98,16 +97,16 @@ export const election = {
          * load election from the API
          */
         getElection({commit}, data) {
-            commit('setElectionLoadStatus', CONFIG.STATUSES.loading);
+            commit('setElectionLoadStatus', 1);
 
             ElectionAPI.getElection(data.id)
                 .then(function(response) {
-                    commit('setElection', response.data);
-                    commit('setElectionLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setElection', response.data.data);
+                    commit('setElectionLoadStatus', 2);
                 })
                 .catch(function() {
-                    commit('setElection', []);
-                    commit('setElectionLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setElection', {});
+                    commit('setElectionLoadStatus', 3);
                 });
         },
 
@@ -115,7 +114,7 @@ export const election = {
          * Add an election through the API
          */
         addElection({commit, state, dispatch}, data) {
-            commit('setAddElectionLoadStatus', CONFIG.STATUSES.loading);
+            commit('setAddElectionLoadStatus', 1);
 
             ElectionAPI.addElection(
                 data.title,
@@ -131,13 +130,13 @@ export const election = {
                 data.updated_by
             ) 
                 .then(function(response) {
-                    commit('setAddElectionLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setAddElectionLoadStatus', 2);
                     dispatch('loadOngoing');
                     dispatch('loadUpcoming');
                     dispatch('loadArchived');
                 })
                 .catch(function() {
-                    commit('setAddElectionLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setAddElectionLoadStatus', 3);
                 });
         },
 
@@ -145,7 +144,7 @@ export const election = {
          * Update election through the API
          */
         updateElection({commit, state, dispatch}, data) {
-            commit('setUpdateElectionLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdateElectionLoadStatus', 1);
 
             ElectionAPI.updateElection(
                 data.id,
@@ -160,12 +159,12 @@ export const election = {
                 data.date,
                 data.updated_by
             ).then(function(response) {
-                commit('setUpdateElectionLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdateElectionLoadStatus', 2);
                 dispatch('loadOngoing');
                 dispatch('loadUpcoming');
                 dispatch('loadArchived');
             }).catch(function() {
-                commit('setUpdateElectionLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdateElectionLoadStatus', 3);
             });
         },
 
@@ -173,17 +172,17 @@ export const election = {
          * delete election through the API
          */
         deleteElection({commit, state, dispatch}, data) {
-            commit('setDeleteElectionLoadStatus', CONFIG.STATUSES.loading);
+            commit('setDeleteElectionLoadStatus', 1);
 
             ElectionAPI.deleteElection(
                 data.id
             ).then(function(response) {
-                commit('setDeleteElectionLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setDeleteElectionLoadStatus', 2);
                 dispatch('loadOngoing');
                 dispatch('loadUpcoming');
                 dispatch('loadArchived');
             }).catch(function() {
-                commit('setDeleteElectionLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setDeleteElectionLoadStatus', 3);
             });
         }
     },
@@ -193,27 +192,11 @@ export const election = {
     */
     mutations: {
         setElectionsLoadStatus( state, status ) {
-            state.ongoingLoadStatus = status;
-        },
-
-        setElections(state, ongoing) {
-            state.ongoing = ongoing;
-        },
-
-        setElectionsLoadStatus(state, status) {
             state.setElectionsLoadStatus = status;
         },
 
-        setElections(state, upcoming) {
-            state.upcoming = upcoming;
-        },
-
-        setElectionsLoadStatus(state, status) {
-            state.archivedLoadStatus = status;
-        },
-
-        setElections(state, archived) {
-            state.archived = archived;
+        setElections(state, elections) {
+            state.elections = elections;
         },
 
         setElectionLoadStatus(state, status) {
@@ -241,28 +224,12 @@ export const election = {
         Defines the getters used by the module
     */
     getters: {
-        getOngoingLoadStatus(state) {
-            return state.ongoingLoadStatus;
+        getElectionsLoadStatus(state) {
+            return state.electionsLoadStatus;
         },
 
-        getOngoing(state) {
-            return state.ongoing;
-        },
-
-        getUpcomingLoadStatus(state) {
-            return state.upcomingLoadStatus;
-        },
-
-        getUpcoming(state) {
-            return state.upcoming;
-        },
-
-        getArchivedLoadStatus(state) {
-            return state.archivedLoadStatus;
-        },
-
-        getArchived(state) {
-            return state.archived;
+        getElections(state) {
+            return state.elections;
         },
 
         getElectionLoadStatus(state) {

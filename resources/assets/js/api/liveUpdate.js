@@ -70,6 +70,17 @@ export default {
         );
     },
 
+    /**
+     * GET /api/v1/liveUpdate/{id}
+     */
+    getLiveUpdate: function(id) {
+        return axios.get(
+            CONFIG.API_URL +
+            '/liveUpdate/' +
+            id
+        );
+    },
+
     /** 
      * POST  /api/v1/liveUpdate
     */

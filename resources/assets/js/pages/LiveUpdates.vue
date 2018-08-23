@@ -45,6 +45,12 @@
             }
         }, 
         computed: {
+            election() {
+                return this.$store.getters.getElection;
+            },
+            electionLoadStatus() {
+                return this.$store.getters.getElectionLoadStatus;
+            },
             liveUpdates() {
                 return this.$store.getters.getLiveUpdates;
             },
@@ -67,7 +73,11 @@
             this.$store.dispatch('getElectionLiveUpdates', {
                 id: this.$route.params.id,
                 url: null
-            })
+            });
+
+            this.$store.dispatch('getElection', {
+                id: this.$route.params.id
+            });
         },
         methods: {
             toggleComponent(component) {

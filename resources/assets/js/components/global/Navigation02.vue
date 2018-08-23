@@ -6,7 +6,7 @@
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand text-capitalize" href="#pablo">
-              {{ $route.name }}
+              {{ election.title + ": " + $route.name }}
             </a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,22 @@ export default {
       return {
         
       }
+    },
+    computed: {
+      election() {
+          return this.$store.getters.getElection;
+      },
+      electionLoadStatus() {
+          return this.$store.getters.getElectionLoadStatus;
+      }
+    },
+    mounted() {
+
+    },
+    created() {
+      this.$store.dispatch('getElection', {
+          id: this.$route.params.id
+      });
     }
 }
 </script>
