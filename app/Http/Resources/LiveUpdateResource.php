@@ -23,6 +23,7 @@ class LiveUpdateResource extends JsonResource
             'description' => $this->description,
             'election_id' => $this->election_id,
             'location' => LiveUpdate::find($this->id)->location,
+            'location_type' => $this->location_type,
             'added_by' => $this->added_by,
             'added_by_name' => User::find($this->added_by)->name,
             'updated_by' => $this->updated_by,

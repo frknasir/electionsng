@@ -6,7 +6,7 @@
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand text-capitalize" href="#pablo">
-              {{ election.title + ": " + $route.name }}
+              {{ election.title + ": " + $route.name || '...loading...' }}
             </a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">

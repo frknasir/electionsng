@@ -24,8 +24,8 @@
                 </button>
             </div>
         </div>
-        <map-component :luPagination="luPagination" :liveUpdates="liveUpdates" v-if="active_component === 'map'"></map-component>
-        <timeline :luPagination="luPagination" :liveUpdates="liveUpdates" v-else-if="active_component === 'timeline'"></timeline>
+        <map-component v-if="active_component === 'map'"></map-component>
+        <timeline v-else-if="active_component === 'timeline'"></timeline>
     </div>
 </template>
 <script>

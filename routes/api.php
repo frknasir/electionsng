@@ -24,6 +24,7 @@ Route::group(['prefix'=> 'v1'], function() {
   Route::get('/election/{id}/liveUpdates', 'LiveUpdateController@electionLiveUpdates');
   Route::get('/election/{id}', 'ElectionController@show');
   Route::get('/liveUpdate/{id}', 'LiveUpdateController@show');
+  Route::get('/election/{electionId}/location/{locationType}', 'LiveUpdateController@filterUpdatesBy');
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

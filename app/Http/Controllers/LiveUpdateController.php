@@ -24,7 +24,7 @@ class LiveUpdateController extends Controller {
     public function electionLiveUpdates($electionId) {
         $election = Election::findOrFail($electionId);
 
-        $liveUpdates = $election->liveUpdates()->paginate(5);
+        $liveUpdates = $election->liveUpdates()->paginate(10);
 
         return LiveUpdateResource::collection($liveUpdates);
     }
@@ -32,7 +32,7 @@ class LiveUpdateController extends Controller {
     public function stateLiveUpdates($electionId, $stateId) {
         $state = State::findOrFail($stateId);
 
-        $liveUpdates = $election->liveUpdates()->where('election_id', $electionId)->paginate(20);
+        $liveUpdates = $state->liveUpdates()->where('election_id', $electionId)->paginate(2);
 
         return LiveUpdateResource::collection($liveUpdates);
     }
@@ -40,7 +40,7 @@ class LiveUpdateController extends Controller {
     public function localGovernmentLiveUpdates($electionId, $localGovernmentId) {
         $localGovernment = LocalGovernment::findOrFail($localGovernmentId);
 
-        $liveUpdates = $election->liveUpdates()->where('election_id', $electionId)->paginate(20);
+        $liveUpdates = $localGovernment->liveUpdates()->where('election_id', $electionId)->paginate(2);
 
         return LiveUpdateResource::collection($liveUpdates);
     }
@@ -48,7 +48,7 @@ class LiveUpdateController extends Controller {
     public function registrationAreaLiveUpdates($electionId, $registrationAreaId) {
         $registrationArea = RegistrationArea::findOrFail($registrationAreaId);
 
-        $liveUpdates = $registrationArea->liveUpdates()->where('election_id', $electionId)->paginate(20);
+        $liveUpdates = $registrationArea->liveUpdates()->where('election_id', $electionId)->paginate(2);
 
         return LiveUpdateResource::collection($liveUpdates);
     }
@@ -56,7 +56,15 @@ class LiveUpdateController extends Controller {
     public function pollingUnitLiveUpdates($electionId, $pollingUnitId) {
         $pollingUnit = PollingUnit::findOrFail($pollingUnitId);
 
-        $liveUpdates = $pollingUnit->liveUpdates()->where('election_id', $electionId)->paginate(20);
+        $liveUpdates = $pollingUnit->liveUpdates()->where('election_id', $electionId)->paginate(2);
+
+        return LiveUpdateResource::collection($liveUpdates);
+    }
+
+    public function filterUpdatesBy($electionId, $locationType) {
+        $election = Election::findOrFail($electionId);
+
+        $liveUpdates = $election->liveUpdates()->where('location_type', $locationType)->paginate(2);
 
         return LiveUpdateResource::collection($liveUpdates);
     }

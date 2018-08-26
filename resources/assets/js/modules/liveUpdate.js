@@ -43,10 +43,11 @@ export const liveUpdate = {
 
             LiveUpdateAPI.getStateLiveUpdates(
                 data.electionId,
-                data.stateId
+                data.stateId,
+                data.url
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
-                commit('setLiveUpdates', response.data);
+                commit('setLiveUpdates', response.data.data);
             }).catch(function() {
                 commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
@@ -58,10 +59,11 @@ export const liveUpdate = {
 
             LiveUpdateAPI.getLocalGovernmentLiveUpdates(
                 data.electionId,
-                data.localGovernmentId
+                data.localGovernmentId,
+                data.url
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
-                commit('setLiveUpdates', response.data);
+                commit('setLiveUpdates', response.data.data);
             }).catch(function() {
                 commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
@@ -73,10 +75,11 @@ export const liveUpdate = {
 
             LiveUpdateAPI.getRegistrationAreaLiveUpdates(
                 data.electionId,
-                data.registrationAreaId
+                data.registrationAreaId,
+                data.url
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
-                commit('setLiveUpdates', response.data);
+                commit('setLiveUpdates', response.data.data);
             }).catch(function() {
                 commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
@@ -88,10 +91,31 @@ export const liveUpdate = {
 
             LiveUpdateAPI.getPollingUnitLiveUpdates(
                 data.electionId,
-                data.pollingUnitId
+                data.pollingUnitId,
+                data.url
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
-                commit('setLiveUpdates', response.data);
+                commit('setLiveUpdates', response.data.data);
+            }).catch(function() {
+                commit('setLiveUpdatesLoadStatus', 3);
+                commit('setLiveUpdates', []);
+            });
+        },
+
+        filterUpdatesBy({commit}, data) {
+            commit('setLiveUpdatesLoadStatus', 1);
+
+            LiveUpdateAPI.filterUpdatesBy(
+                data.electionId,
+                data.locationType,
+                data.url
+            ).then(function(response) {
+                commit('setLiveUpdatesLoadStatus', 2);
+                commit('setLiveUpdates', response.data.data);
+                commit('setLUPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
                 commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);

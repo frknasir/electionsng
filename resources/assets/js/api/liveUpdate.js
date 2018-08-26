@@ -17,56 +17,66 @@ export default {
     /* *
     GET /api/v1/election/{election_id}/state/{state_id}/liveUpdates
     */
-    getStateLiveUpdates: function(electionId, stateId) {
+    getStateLiveUpdates: function(electionId, stateId, url = null) {
+        url = url || CONFIG.API_URL + '/election/'  + electionId + '/state/' + stateId + '/liveUpdates';
         return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/state/' +
-            stateId +
-            '/liveUpdates'
+            url
         );
     },
 
     /* *
     GET /api/v1/election/{election_id}/localGovernment/{local_government_id}/liveUpdates
     */
-    getLocalGovernmentLiveUpdates: function(electionId, localGovernmentId) {
+    getLocalGovernmentLiveUpdates: function(electionId, localGovernmentId, url = null) {
+        url = url || CONFIG.API_URL + 
+                        '/election/'  +
+                        electionId +
+                        '/localGovernment/' +
+                        localGovernmentId +
+                        '/liveUpdates';
         return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/localGovernment/' +
-            localGovernmentId +
-            '/liveUpdates'
+            url
         );
     },
 
     /* *
     GET /api/v1/election/{election_id}/registrationArea/{registration_area_id}/liveUpdates
     */
-    getRegistrationAreaLiveUpdates: function(electionId, registrationAreaId) {
+    getRegistrationAreaLiveUpdates: function(electionId, registrationAreaId, url = null) {
+        url = url || CONFIG.API_URL + 
+                        '/election/'  +
+                        electionId +
+                        '/registrationArea/' +
+                        registrationAreaId +
+                        '/liveUpdates';
         return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/registrationArea/' +
-            registrationAreaId +
-            '/liveUpdates'
+            url
         );
     },
 
     /* *
     GET /api/v1/election/{election_id}/pollingUnit/{polling_unit_id}/liveUpdates
     */
-    getPollingUnitLiveUpdates: function(electionId, pollingUnitId) {
+    getPollingUnitLiveUpdates: function(electionId, pollingUnitId, url = null) {
+        url = url || CONFIG.API_URL + 
+                        '/election/'  +
+                        electionId +
+                        '/pollingUnit/' +
+                        pollingUnitId +
+                        '/liveUpdates';
+
         return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/pollingUnit/' +
-            pollingUnitId +
-            '/liveUpdates'
+            url
+        );
+    },
+
+    /**
+     * GET /api/v1/election/{election_id}/location/{location_type}
+     */
+    filterUpdatesBy: function(electionId, locationType, url = null) {
+        url = url || CONFIG.API_URL + '/election/' + electionId + '/location/' + locationType;
+        return axios.get(
+            url
         );
     },
 

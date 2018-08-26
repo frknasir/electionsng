@@ -1,4 +1,4 @@
-<style>
+<style scoped>
     #map {
         position:absolute;
         width: 100%;
@@ -65,7 +65,9 @@
             <button @click="getLiveUpdates(luPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.prev_page_url}]">
                 <i class="material-icons">chevron_left</i>
             </button>
-            <label for="">{{ luPagination.to }}/{{ luPagination.total }}</label>
+            <label>
+                showing to {{ luPagination.to }} of {{ luPagination.total }} updates
+            </label>
             <button @click="getLiveUpdates(luPagination.next_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.next_page_url}]">
                 <i class="material-icons">chevron_right</i>                        
             </button>
@@ -82,13 +84,32 @@
 
                     <li class="adjustments-line">
                         <a href="javascript:void(0)" class="switch-trigger">
+                            <p>All Updates</p>
+                            <label class="ml-auto">
+                                <div class="form-check form-check-radio form-check-inline">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" 
+                                        v-model="location_filter" id="all" 
+                                        value="all"> 
+                                        <span class="circle">
+                                            <span class="check"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                            </label>
+                            <div class="clearfix"></div>
+                        </a>
+                    </li>
+
+                    <li v-show="election.election_type_id == 1" class="adjustments-line">
+                        <a href="javascript:void(0)" class="switch-trigger">
                             <p>State</p>
                             <label class="ml-auto">
                                 <div class="form-check form-check-radio form-check-inline">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" 
-                                        name="location-filter" id="state" 
-                                        value="option1"> 
+                                        v-model="location_filter" id="state" 
+                                        value="state"> 
                                         <span class="circle">
                                             <span class="check"></span>
                                         </span>
@@ -106,8 +127,8 @@
                                 <div class="form-check form-check-radio form-check-inline">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" 
-                                        name="location-filter" id="localg" 
-                                        value="option2"> 
+                                        v-model="location_filter" id="localg" 
+                                        value="localGovernment"> 
                                         <span class="circle">
                                             <span class="check"></span>
                                         </span>
@@ -125,8 +146,8 @@
                                 <div class="form-check form-check-radio form-check-inline">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" 
-                                        name="location-filter" id="ra" 
-                                        value="option3"> 
+                                        v-model="location_filter" id="ra" 
+                                        value="registrationArea"> 
                                         <span class="circle">
                                             <span class="check"></span>
                                         </span>
@@ -144,8 +165,8 @@
                                 <div class="form-check form-check-radio form-check-inline">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" 
-                                        name="location-filter" id="pu" 
-                                        value="option3"> 
+                                        v-model="location_filter" id="pu" 
+                                        value="pollingUnit"> 
                                         <span class="circle">
                                             <span class="check"></span>
                                         </span>
@@ -181,7 +202,8 @@
                 info_window_active: false,
                 map_z_index: 1,
                 markers: [],
-                map_first_init: true
+                map_first_init: true,
+                location_filter: null
             }
         },
         computed: {
@@ -212,6 +234,20 @@
                 if(this.liveUpdatesLoadStatus == 2 && !this.map_first_init) {
                     this.clearMarkers();
                     this.buildMarkers(this.map);
+                }
+            },
+            location_filter: function() {
+                if(this.location_filter === "all") {
+                    this.$store.dispatch('getElectionLiveUpdates', {
+                        id: this.$route.params.id,
+                        url: null
+                    });
+                } else {
+                    this.$store.dispatch('filterUpdatesBy', {
+                        electionId: this.$route.params.id,
+                        locationType: this.location_filter,
+                        url: null
+                    });
                 }
             }
         },
@@ -248,7 +284,10 @@
             openInfoWindow(liveUpdate) {
                 let info_window = $("#info-window");
                 info_window.find(".card-title").text(liveUpdate.title);
-                info_window.find(".category").text(liveUpdate.location.name);
+                info_window.find(".category").text(
+                    liveUpdate.location_type + ": " +
+                    (liveUpdate.location.name || liveUpdate.location.code)
+                );
                 info_window.find(".card-body").text(liveUpdate.description);
 
                 let created_at = new Date(liveUpdate.created_at.date);
@@ -296,6 +335,9 @@
                         vm.openInfoWindow(liveUpdate);
                     });
 
+                    marker.bindPopup(liveUpdate.location.name || liveUpdate.location.code);
+                        //.openPopup();
+
                     vm.markers.push(marker);
                 }
             },
@@ -308,10 +350,18 @@
                 })
             },
             getLiveUpdates(url) {
-                this.$store.dispatch('getElectionLiveUpdates', {
-                    id: this.$route.params.id,
-                    url: url
-                })
+                if(this.location_filter && this.location_filter !== "all") {
+                    this.$store.dispatch('filterUpdatesBy', {
+                        electionId: this.$route.params.id,
+                        locationType: this.location_filter,
+                        url: url
+                    });
+                } else {
+                    this.$store.dispatch('getElectionLiveUpdates', {
+                        id: this.$route.params.id,
+                        url: url
+                    });
+                }
             },
             searchLiveUpdates(id) {
                 let vm = this;
