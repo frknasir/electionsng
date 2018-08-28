@@ -1,6 +1,7 @@
 <style scoped>
     #switch {
         position: relative;
+        left: 20px;
         z-index: 3;
     }
 

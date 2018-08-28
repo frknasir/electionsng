@@ -19,12 +19,17 @@ export const liveUpdate = {
         deleteLiveUpdateLoadStatus: 0
     },
     actions: {
-        getElectionLiveUpdates({commit}, data) {
+        getElectionLiveUpdates({commit, state}, data) {
             commit('setLiveUpdatesLoadStatus', 1);
+
+            if(state.liveUpdates.length > 0) {
+                state.liveUpdates.splice(0, state.liveUpdates.length);
+            }
 
             LiveUpdateAPI.getElectionLiveUpdates(
                 data.id,
-                data.url
+                data.url,
+                data.limit
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data.data);
@@ -38,8 +43,12 @@ export const liveUpdate = {
             });
         },
 
-        getStateLiveUpdates({commit}, data) {
+        getStateLiveUpdates({commit, state}, data) {
             commit('setLiveUpdatesLoadStatus', 1);
+
+            if(state.liveUpdates.length > 0) {
+                state.liveUpdates.splice(0, state.liveUpdates.length);
+            }
 
             LiveUpdateAPI.getStateLiveUpdates(
                 data.electionId,
@@ -58,8 +67,12 @@ export const liveUpdate = {
             });
         },
 
-        getLocalGovernmentLiveUpdates({commit}, data) {
+        getLocalGovernmentLiveUpdates({commit, state}, data) {
             commit('setLiveUpdatesLoadStatus', 1);
+
+            if(state.liveUpdates.length > 0) {
+                state.liveUpdates.splice(0, state.liveUpdates.length);
+            }
 
             LiveUpdateAPI.getLocalGovernmentLiveUpdates(
                 data.electionId,
@@ -78,8 +91,12 @@ export const liveUpdate = {
             });
         },
 
-        getRegistrationAreaLiveUpdates({commit}, data) {
+        getRegistrationAreaLiveUpdates({commit, state}, data) {
             commit('setLiveUpdatesLoadStatus', 1);
+
+            if(state.liveUpdates.length > 0) {
+                state.liveUpdates.splice(0, state.liveUpdates.length);
+            }
 
             LiveUpdateAPI.getRegistrationAreaLiveUpdates(
                 data.electionId,
@@ -98,8 +115,12 @@ export const liveUpdate = {
             });
         },
 
-        getPollingUnitLiveUpdates({commit}, data) {
+        getPollingUnitLiveUpdates({commit, state}, data) {
             commit('setLiveUpdatesLoadStatus', 1);
+
+            if(state.liveUpdates.length > 0) {
+                state.liveUpdates.splice(0, state.liveUpdates.length);
+            }
 
             LiveUpdateAPI.getPollingUnitLiveUpdates(
                 data.electionId,
@@ -118,12 +139,17 @@ export const liveUpdate = {
             });
         },
 
-        filterUpdatesBy({commit}, data) {
+        filterUpdatesBy({commit, state}, data) {
             commit('setLiveUpdatesLoadStatus', 1);
+
+            if(state.liveUpdates.length > 0) {
+                state.liveUpdates.splice(0, state.liveUpdates.length);
+            }
 
             LiveUpdateAPI.filterUpdatesBy(
                 data.electionId,
                 data.locationType,
+                data.url,
                 data.url
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);

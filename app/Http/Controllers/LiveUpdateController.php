@@ -21,10 +21,10 @@ class LiveUpdateController extends Controller {
      * @return \Illuminate\Http\Response
      */
 
-    public function electionLiveUpdates($electionId) {
+    public function electionLiveUpdates($electionId,$l) {
         $election = Election::findOrFail($electionId);
 
-        $liveUpdates = $election->liveUpdates()->paginate(10000);
+        $liveUpdates = $election->liveUpdates()->paginate($l);
 
         return LiveUpdateResource::collection($liveUpdates);
     }
@@ -61,10 +61,10 @@ class LiveUpdateController extends Controller {
         return LiveUpdateResource::collection($liveUpdates);
     }
 
-    public function filterUpdatesBy($electionId, $locationType) {
+    public function filterUpdatesBy($electionId, $locationType, $l) {
         $election = Election::findOrFail($electionId);
 
-        $liveUpdates = $election->liveUpdates()->where('location_type', $locationType)->paginate(10000);
+        $liveUpdates = $election->liveUpdates()->where('location_type', $locationType)->paginate($l);
 
         return LiveUpdateResource::collection($liveUpdates);
     }

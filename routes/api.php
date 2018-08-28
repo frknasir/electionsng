@@ -21,12 +21,29 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
 
 Route::group(['prefix'=> 'v1'], function() {
   Route::get('/election/{id}/candidates', 'CandidateController@electionCandidates');
-  Route::get('/election/{id}/liveUpdates', 'LiveUpdateController@electionLiveUpdates');
+
+  Route::get(
+    '/election/{id}/liveUpdates/limit/{limit}', 
+    'LiveUpdateController@electionLiveUpdates'
+  );
+
+  Route::get(
+    '/election/{electionId}/location/{locationType}/liveUpdates/limit/{limit}', 
+    'LiveUpdateController@filterUpdatesBy'
+  );
+  
   Route::get('/election/{id}', 'ElectionController@show');
   Route::get('/liveUpdate/{id}', 'LiveUpdateController@show');
-  Route::get('/election/{electionId}/location/{locationType}/liveUpdates', 'LiveUpdateController@filterUpdatesBy');
-  Route::get('/election/{id}/incidents', 'IncidentController@electionIncidents');
-  Route::get('/election/{electionId}/location/{locationType}/incidents', 'IncidentController@filterIncidentsBy');
+  
+  Route::get(
+    '/election/{id}/incidents/limit/{limit}', 
+    'IncidentController@electionIncidents'
+  );
+
+  Route::get(
+    '/election/{electionId}/location/{locationType}/incidents/limit/{limit}', 
+    'IncidentController@filterIncidentsBy'
+  );
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

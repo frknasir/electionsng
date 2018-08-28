@@ -1,6 +1,7 @@
 <style scoped>
     #switch {
         position: relative;
+        left: 20px;
         z-index: 3;
     }
 
@@ -48,39 +49,16 @@
             }
         }, 
         computed: {
-            election() {
-                return this.$store.getters.getElection;
-            },
-            electionLoadStatus() {
-                return this.$store.getters.getElectionLoadStatus;
-            },
-            liveUpdates() {
-                return this.$store.getters.getLiveUpdates;
-            },
-            liveUpdatesLoadStatus() {
-                return this.$store.getters.getLiveUpdatesLoadStatus;
-            },
-            luPagination() {
-                return this.$store.getters.getLUPagination;
-            }
+            
         },
         watch: {
-            liveUpdatesLoadStatus: function() {
 
-            }
         },
         mounted() {
 
         },
         created() {
-            this.$store.dispatch('getElectionLiveUpdates', {
-                id: this.$route.params.id,
-                url: null
-            });
 
-            this.$store.dispatch('getElection', {
-                id: this.$route.params.id
-            });
         },
         methods: {
             toggleComponent(component) {

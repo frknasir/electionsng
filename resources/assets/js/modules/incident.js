@@ -19,11 +19,17 @@ export const incident = {
         deleteIncidentLoadStatus: 0
     },
     actions: {
-        getElectionIncidents({commit}, data) {
+        getElectionIncidents({commit, state}, data) {
             commit('setIncidentsLoadStatus', 1);
 
+            if(state.incidents.length > 0) {
+                state.incidents.splice(0, state.incidents.length);
+            }
+
             IncidentAPI.getElectionIncidents(
-                data.id
+                data.id,
+                data.url,
+                data.limit
             ).then(function(response) {
                 commit('setIncidentsLoadStatus', 2);
                 commit('setIncidents', response.data.data);
@@ -37,8 +43,12 @@ export const incident = {
             });
         },
 
-        getStateIncidents({commit}, data) {
+        getStateIncidents({commit, state}, data) {
             commit('setIncidentsLoadStatus', 1);
+
+            if(state.incidents.length > 0) {
+                state.incidents.splice(0, state.incidents.length);
+            }
 
             IncidentAPI.getStateIncidents(
                 data.electionId,
@@ -56,8 +66,12 @@ export const incident = {
             });
         },
 
-        getLocalGovernmentIncidents({commit}, data) {
+        getLocalGovernmentIncidents({commit, state}, data) {
             commit('setIncidentsLoadStatus', 1);
+
+            if(state.incidents.length > 0) {
+                state.incidents.splice(0, state.incidents.length);
+            }
 
             IncidentAPI.getLocalGovernmentIncidents(
                 data.electionId,
@@ -75,8 +89,12 @@ export const incident = {
             });
         },
 
-        getRegistrationAreaIncidents({commit}, data) {
+        getRegistrationAreaIncidents({commit, state}, data) {
             commit('setIncidentsLoadStatus', 1);
+
+            if(state.incidents.length > 0) {
+                state.incidents.splice(0, state.incidents.length);
+            }
 
             IncidentAPI.getRegistrationAreaIncidents(
                 data.electionId,
@@ -94,8 +112,12 @@ export const incident = {
             });
         },
 
-        getPollingUnitIncidents({commit}, data) {
+        getPollingUnitIncidents({commit, state}, data) {
             commit('setIncidentsLoadStatus', 1);
+
+            if(state.incidents.length > 0) {
+                state.incidents.splice(0, state.incidents.length);
+            }
 
             IncidentAPI.getPollingUnitIncidents(
                 data.electionId,
@@ -113,12 +135,18 @@ export const incident = {
             });
         },
 
-        filterIncidentsBy({commit}, data) {
+        filterIncidentsBy({commit, state}, data) {
             commit('setIncidentsLoadStatus', 1);
+
+            if(state.incidents.length > 0) {
+                state.incidents.splice(0, state.incidents.length);
+            }
 
             IncidentAPI.filterIncidentsBy(
                 data.electionId,
-                data.locationType
+                data.locationType,
+                data.url,
+                data.limit
             ).then(function(response) {
                 commit('setIncidentsLoadStatus', 2);
                 commit('setIncidents', response.data.data);

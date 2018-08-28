@@ -8,11 +8,13 @@ export default {
     /*
     GET /api/v1/election/{election_id}/incidents
     */
-    getElectionIncidents: function(electionId, url = null) {
+    getElectionIncidents: function(electionId, url = null, limit = null) {
+        limit = limit || 10000;
+        
         url = url || CONFIG.API_URL + 
             '/election/' + 
             electionId + 
-            '/incidents';
+            '/incidents/limit/' + limit;
 
         return axios.get( 
             url
@@ -82,11 +84,13 @@ export default {
     /**
      * GET /api/v1/election/{election_id}/location/{location_type}
      */
-    filterIncidentsBy: function(electionId, locationType, url = null) {
+    filterIncidentsBy: function(electionId, locationType, url = null, limit = null) {
+        limit = limit || 10000;
+
         url = url || CONFIG.API_URL + 
             '/election/' + electionId + 
             '/location/' + locationType + 
-            '/incidents';
+            '/incidents/limit/' + limit;
         return axios.get(
             url
         );

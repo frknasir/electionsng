@@ -19,12 +19,16 @@
         top:12%;
         z-index: 3;
     }
+
+    #filter-by-location .dropdown-menu .dropdown-item:hover {
+        background-color: darkseagreen;
+    }
 </style>
 <template>
     <div>
         <div class="wrapper-full-page" id="map"></div>
 
-        <<!--info window-->
+        <!--info window-->
         <div v-show="info_window_active" id="info-window" class="col-md-4">
             <div class="card card-nav-tabs">
                 <div class="card-header card-header-success">
@@ -76,7 +80,7 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
-                <div class="dropdown-menu dropdown-success">
+                <div class="dropdown-menu">
                     <a @click="setLocationFilter('all')" class="dropdown-item">
                         All
                     </a>
@@ -132,13 +136,12 @@
             }
         },
         watch: {
-            electionLoadStatus: function() {
-                if(this.electionLoadStatus == 2 && this.map_first_init) {
+            incidents: function() {
+                if(this.map_first_init) {
                     this.initMap();
                     this.map_first_init = false;
                 }
-            },
-            incidents: function() {
+
                 if(this.incidentsLoadStatus == 2 && !this.map_first_init) {
                     this.clearMarkers();
                     this.buildMarkers(this.map);
@@ -148,13 +151,15 @@
                 if(this.location_filter === "all") {
                     this.$store.dispatch('getElectionIncidents', {
                         id: this.$route.params.id,
-                        url: null
+                        url: null,
+                        limit: null
                     });
                 } else {
                     this.$store.dispatch('filterIncidentsBy', {
                         electionId: this.$route.params.id,
                         locationType: this.location_filter,
-                        url: null
+                        url: null,
+                        limit: null
                     });
                 }
             }
@@ -165,11 +170,8 @@
         created() {
             this.$store.dispatch('getElectionIncidents', {
                 id: this.$route.params.id,
-                url: null
-            });
-
-            this.$store.dispatch('getElection', {
-                id: this.$route.params.id
+                url: null,
+                limit: null
             });
         },
         methods: {
@@ -180,7 +182,7 @@
                     [
                         vm.election.state.latitude, 
                         vm.election.state.longitude
-                    ], 8
+                    ], 9
                 );
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -280,12 +282,14 @@
                     this.$store.dispatch('filterIncidentsBy', {
                         electionId: this.$route.params.id,
                         locationType: this.location_filter,
-                        url: url
+                        url: url,
+                        limit: null
                     });
                 } else {
                     this.$store.dispatch('getElectionIncidents', {
                         id: this.$route.params.id,
-                        url: url
+                        url: url,
+                        limit: null
                     });
                 }
             },

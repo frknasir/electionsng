@@ -7,8 +7,12 @@ export default {
     /*
     GET /api/v1/election/{election_id}/liveUpdates
     */ 
-    getElectionLiveUpdates: function(electionId, url = null) {
-        url = url || CONFIG.API_URL + '/election/' + electionId + '/liveUpdates';
+    getElectionLiveUpdates: function(electionId, url = null, limit = null) {
+        limit = limit || 10000;
+
+        url = url || CONFIG.API_URL + 
+            '/election/' + electionId + 
+            '/liveUpdates/limit/'+limit;
         return axios.get( 
             url
         );
@@ -73,8 +77,13 @@ export default {
     /**
      * GET /api/v1/election/{election_id}/location/{location_type}
      */
-    filterUpdatesBy: function(electionId, locationType, url = null) {
-        url = url || CONFIG.API_URL + '/election/' + electionId + '/location/' + locationType + '/liveUpdates';
+    filterUpdatesBy: function(electionId, locationType, url = null, limit = null) {
+        limit = limit || 10000;
+
+        url = url || CONFIG.API_URL + 
+            '/election/' + electionId + '/location/' + 
+            locationType + '/liveUpdates/limit/' +
+            limit;
         return axios.get(
             url
         );

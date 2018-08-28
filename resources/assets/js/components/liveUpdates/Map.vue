@@ -19,6 +19,10 @@
         top:12%;
         z-index: 3;
     }
+
+    #filter-by-location .dropdown-menu .dropdown-item:hover {
+        background-color: darkseagreen;
+    }
 </style>
 <template>
     <div>
@@ -74,7 +78,7 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
-                <div class="dropdown-menu dropdown-success">
+                <div class="dropdown-menu">
                     <a @click="setLocationFilter('all')" class="dropdown-item">
                         All
                     </a>
@@ -131,13 +135,12 @@
             }
         },
         watch: {
-            electionLoadStatus: function() {
-                if(this.electionLoadStatus == 2 && this.map_first_init) {
+            liveUpdates: function() {
+                if(this.map_first_init) {
                     this.initMap();
                     this.map_first_init = false;
                 }
-            },
-            liveUpdates: function() {
+
                 if(this.liveUpdatesLoadStatus == 2 && !this.map_first_init) {
                     this.clearMarkers();
                     this.buildMarkers(this.map);
@@ -159,16 +162,13 @@
             }
         },
         mounted() {
-
+            
         },
         created() {
             this.$store.dispatch('getElectionLiveUpdates', {
                 id: this.$route.params.id,
-                url: null
-            });
-
-            this.$store.dispatch('getElection', {
-                id: this.$route.params.id
+                url: null,
+                limit: null
             });
         },
         methods: {
@@ -179,7 +179,7 @@
                     [
                         vm.election.state.latitude, 
                         vm.election.state.longitude
-                    ], 8
+                    ], 9
                 );
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -223,7 +223,7 @@
                         liveUpdate.location.longitude
                     ], {
                         icon : icon
-                    }).addTo(map);
+                    });
 
                     marker.id = liveUpdate.id;
 
@@ -277,12 +277,14 @@
                     this.$store.dispatch('filterUpdatesBy', {
                         electionId: this.$route.params.id,
                         locationType: this.location_filter,
-                        url: url
+                        url: url,
+                        limit: null
                     });
                 } else {
                     this.$store.dispatch('getElectionLiveUpdates', {
                         id: this.$route.params.id,
-                        url: url
+                        url: url,
+                        limit: null
                     });
                 }
             },
