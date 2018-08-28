@@ -1,157 +1,104 @@
-<style>
+<style scoped>
     #map {
         position:absolute;
         width: 100%;
         height: 89%;
+        z-index: 1;
     }
 
     #info-window {
         position: fixed;
         bottom:0;
         right:0;
-        z-index: 2;
+        z-index: 4;
     }
 
-    #pagination {
+    #filter-by-location {
         position: fixed;
         right:30px;
-        top:10%;
+        top:12%;
         z-index: 3;
     }
 </style>
 <template>
     <div>
-        <div class="wrapper-full-page" :style="{'z-index': map_z_index }" id="map"></div>
+        <div class="wrapper-full-page" id="map"></div>
 
-        <!--info window-->
+        <<!--info window-->
         <div v-show="info_window_active" id="info-window" class="col-md-4">
             <div class="card card-nav-tabs">
-                <div class="card-header card-header-danger">
-                    Featured  
+                <div class="card-header card-header-success">
+                    <h4 class="card-title"></h4>
+                    <p class="category"></p> 
+                    <span id="incident-type" class="badge badge-warning"></span>
                 </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
-                </ul>
+                <div class="card-body">
+
+                </div>
                 <div class="card-footer">
-                    <button @click="closeInfoWindow" class="btn btn-danger btn-sm">
-                        <i class="material-icons">
-                            cancel
-                        </i>
-                        close
-                    </button>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <button @click="closeInfoWindow" class="btn btn-success btn-sm">
+                                <i class="material-icons">
+                                    cancel
+                                </i>
+                                close
+                            </button>
+                        </li>
+                        <li class="list-inline-item">
+                            <div class="stats">
+                                <i class="material-icons">access_time</i> 
+                                <span class="created_at"></span>
+                            </div>
+                        </li>
+                        <li class="list-inline-item">
+                            <div class="stats">
+                                <i class="material-icons">flag</i> 
+                                <span class="updated_at"></span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
 
-        <!-- pagination -->
-        <div id="pagination">
-            <button class="btn btn-just-icon">
-                <i class="material-icons">chevron_left</i>
-            </button>
-            <label for="">1/3</label>
-            <button class="btn btn-just-icon">
-                <i class="material-icons">chevron_right</i>                        
-            </button>
-        </div>
-
-        <!-- Fixed -->
-        <div class="fixed-plugin">
-            <div class="dropdown show-dropdown">
-                <a href="#" data-toggle="dropdown">
-                    <i class="fa fa-cog fa-2x"> </i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="header-title">Filter by:</li>
-
-                    <li class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>State</p>
-                            <label class="ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        name="location-filter" id="state" 
-                                        value="option1"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-                    <li class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>Local Government</p>
-                            <label class="switch-mini ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        name="location-filter" id="localg" 
-                                        value="option2"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-                    <li class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>Registration Area</p>
-                            <label class="switch-mini ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        name="location-filter" id="ra" 
-                                        value="option3"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-                    <li class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>Polling Unit</p>
-                            <label class="switch-mini ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        name="location-filter" id="pu" 
-                                        value="option3"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-
-                    <li class="header-title">Thank you for 95 shares!</li>
-                    <li class="button-container text-center">
-                        <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot; 45</button>
-                        <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot; 50</button>
-                        <br>
-                        <br>
-                    </li>
-                </ul>
+        <!-- Filter dropdown -->
+        <!-- Split dropup button -->
+        <div id="filter-by-location">
+            <div class="btn-group">
+                <button type="button" class="btn btn-success">
+                    {{ filter_btn_label }} 
+                    <span class="badge badge-default">
+                        {{ iPagination.total }}
+                    </span>
+                </button>
+                <button type="button" class="btn btn-success dropdown-toggle" 
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu dropdown-success">
+                    <a @click="setLocationFilter('all')" class="dropdown-item">
+                        All
+                    </a>
+                    <a v-if="election.election_type_id == 1" @click="setLocationFilter('state')" 
+                        class="dropdown-item">
+                        State
+                    </a>
+                    <a @click="setLocationFilter('localGovernment')" class="dropdown-item">
+                        Local Government
+                    </a>
+                    <a @click="setLocationFilter('registrationArea')" class="dropdown-item">
+                        Registration Area
+                    </a>
+                    <a @click="setLocationFilter('pollingUnit')" class="dropdown-item">
+                        Polling Unit
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item disabled">Filter By Location</a>
+                </div>
             </div>
-        </div> 
+        </div>
+        <!-- End Filter dropdown -->
     </div>
 </template>
 <script>
@@ -159,52 +106,196 @@
         data() {
             return {
                 map: null,
-                liveUpdates: [],
-                liveUpdate: {
-
-                },
+                incident: {},
                 info_window_active: false,
-                map_z_index: 1
+                markers: null,
+                map_first_init: true,
+                location_filter: null,
+                filter_btn_label: "Filter By"
+            }
+        },
+        computed: {
+            election() {
+                return this.$store.getters.getElection;
+            },
+            electionLoadStatus() {
+                return this.$store.getters.getElectionLoadStatus;
+            },
+            incidents() {
+                return this.$store.getters.getIncidents;
+            },
+            incidentsLoadStatus() {
+                return this.$store.getters.getIncidentsLoadStatus;
+            },
+            iPagination() {
+                return this.$store.getters.getIPagination;
+            }
+        },
+        watch: {
+            electionLoadStatus: function() {
+                if(this.electionLoadStatus == 2 && this.map_first_init) {
+                    this.initMap();
+                    this.map_first_init = false;
+                }
+            },
+            incidents: function() {
+                if(this.incidentsLoadStatus == 2 && !this.map_first_init) {
+                    this.clearMarkers();
+                    this.buildMarkers(this.map);
+                }
+            },
+            location_filter: function() {
+                if(this.location_filter === "all") {
+                    this.$store.dispatch('getElectionIncidents', {
+                        id: this.$route.params.id,
+                        url: null
+                    });
+                } else {
+                    this.$store.dispatch('filterIncidentsBy', {
+                        electionId: this.$route.params.id,
+                        locationType: this.location_filter,
+                        url: null
+                    });
+                }
             }
         },
         mounted() {
-            this.initMap();
+
         },
         created() {
-            
+            this.$store.dispatch('getElectionIncidents', {
+                id: this.$route.params.id,
+                url: null
+            });
+
+            this.$store.dispatch('getElection', {
+                id: this.$route.params.id
+            });
         },
         methods: {
             initMap() {
-                var mymap = L.map('map').setView([9.0765, 7.3986], 8);
+                let vm = this;
+
+                vm.map = L.map('map').setView(
+                    [
+                        vm.election.state.latitude, 
+                        vm.election.state.longitude
+                    ], 8
+                );
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(mymap);
+                }).addTo(vm.map);
 
-                var marker = L.marker([9.0765, 7.3986]).addTo(mymap);
-
-                //marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-
-                /*var popup = L.popup()
-                    .setLatLng([51.5, -0.09])
-                    .setContent("I am a standalone popup.")
-                    .openOn(mymap);*/
-                marker.on('click', this.openInfoWindow);
+                vm.buildMarkers(vm.map);
             },
-            openInfoWindow() {
+            openInfoWindow(incident) {
+                let info_window = $("#info-window");
+                info_window.find(".card-title").text(incident.title);
+                info_window.find(".category").text(
+                    incident.location_type + ": " +
+                    (incident.location.name || incident.location.code)
+                );
+                info_window.find("#incident-type").text(incident.incident_type_name);
+                info_window.find(".card-body").text(incident.description);
+
+                info_window.find(".stats .created_at").text(
+                    moment(incident.created_at, 'DD MMM YYYY H:m:s').format('lll')
+                );
+
+                if(moment(incident.updated_at, 'DD MMM YYYY H:m:s').isValid()) {
+                    info_window.find(".stats .updated_at").text("Edited");
+                }
+
+
                 this.info_window_active = true;
             },
             closeInfoWindow() {
                 this.info_window_active = false;
             },
-            onMarkerClicked(e) {
-                alert('marker clicked at '+e.latlng.toString());
-            },
-            buildMarkers() {
+            buildMarkers(map) {
+                let vm = this;
+                vm.markers = L.markerClusterGroup({ chunkedLoading: true });
 
+                for(let i = 0; i < vm.incidents.length; i++) {
+                    let incident = vm.incidents[i];
+                    let icon = new L.Icon.Default();
+                    icon.options.shadowSize = [0,0];
+                    let marker = L.marker([
+                        incident.location.latitude,
+                        incident.location.longitude
+                    ], {
+                        icon : icon
+                    });
+
+                    marker.id = incident.id;
+
+                    marker.on('click', function() {
+                        let incident = vm.searchIncidents(this.id);
+                        vm.openInfoWindow(incident);
+                    });
+
+                    marker.bindPopup(incident.location.name || incident.location.code);
+                        //.openPopup();
+
+                    vm.markers.addLayer(marker);
+                }
+
+                map.addLayer(vm.markers);
             },
             clearMarkers() {
+                let vm = this;
+                vm.map.removeLayer(vm.markers);                
+            },
+            setLocationFilter(location_filter) {
+                this.location_filter = location_filter;
 
+                switch (this.location_filter) {
+                    case "all":
+                        this.filter_btn_label = "Filter By";
+                        break;
+
+                    case "state":
+                        this.filter_btn_label = "State Incidents";
+                        break;
+
+                    case "localGovernment":
+                        this.filter_btn_label = "LG Incidents";
+                        break;
+
+                    case "registrationArea":
+                        this.filter_btn_label = "RA Incidents";
+                        break;
+
+                    case "pollingUnit":
+                        this.filter_btn_label = "PU Incidents";
+                        break;
+                
+                    default:
+                        break;
+                }
+            },
+            getIncidents(url) {
+                if(this.location_filter && this.location_filter !== "all") {
+                    this.$store.dispatch('filterIncidentsBy', {
+                        electionId: this.$route.params.id,
+                        locationType: this.location_filter,
+                        url: url
+                    });
+                } else {
+                    this.$store.dispatch('getElectionIncidents', {
+                        id: this.$route.params.id,
+                        url: url
+                    });
+                }
+            },
+            searchIncidents(id) {
+                let vm = this;
+                for (let i = 0; i < vm.incidents.length; i++) {
+                    if (vm.incidents[i].id === id) {
+                        return vm.incidents[i];
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,5 @@
 <style scoped>
-
+    
 </style>
 
 <template>
@@ -38,10 +38,10 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="float-right text-muted small">
-                            {{ moment(liveUpdate.created_at.date).format('lll') }}
+                            {{ moment(liveUpdate.created_at, 'DD MMM YYYY H:m:s').format('lll') }}
                         </div>
                         <h4 class="card-title text-muted">
-                            Day 1 Orientation <br />
+                            {{ liveUpdate.title }} <br />
                             <small>
                                 {{ 
                                     liveUpdate.location_type + ": " +
@@ -54,6 +54,10 @@
                         <p class="card-text">
                             {{ liveUpdate.description }}
                         </p>
+                        <div v-if="moment(liveUpdate.updated_at, 'DD MMM YYYY H:m:s').isValid()" class="stats small">
+                            <i class="material-icons">flag</i> 
+                            <span class="updated_at">Edited</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,15 +143,6 @@
             }
         },
         watch: {
-            electionLoadStatus: function() {
-                
-            },
-            liveUpdates: function() {
-                
-            },
-            location_filter: function() {
-                
-            }
         },
         mounted() {
 

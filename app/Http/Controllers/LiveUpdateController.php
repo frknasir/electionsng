@@ -24,7 +24,7 @@ class LiveUpdateController extends Controller {
     public function electionLiveUpdates($electionId) {
         $election = Election::findOrFail($electionId);
 
-        $liveUpdates = $election->liveUpdates()->paginate(10);
+        $liveUpdates = $election->liveUpdates()->paginate(10000);
 
         return LiveUpdateResource::collection($liveUpdates);
     }
@@ -64,7 +64,7 @@ class LiveUpdateController extends Controller {
     public function filterUpdatesBy($electionId, $locationType) {
         $election = Election::findOrFail($electionId);
 
-        $liveUpdates = $election->liveUpdates()->where('location_type', $locationType)->paginate(2);
+        $liveUpdates = $election->liveUpdates()->where('location_type', $locationType)->paginate(10000);
 
         return LiveUpdateResource::collection($liveUpdates);
     }

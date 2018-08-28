@@ -1,9 +1,12 @@
 <style scoped>
     #switch {
-        position: fixed;
-        right:30px;
-        bottom:10%;
+        position: relative;
         z-index: 3;
+    }
+
+    #switch .btn-group {
+        position: fixed;
+        bottom: 10%;
     }
 </style>
 <template>

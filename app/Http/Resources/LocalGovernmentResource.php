@@ -23,8 +23,8 @@ class LocalGovernmentResource extends JsonResource
             'state_name' => State::find($this->state_id)->name,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
-            'created_at' => date('d M Y - H:i:s', $this->created_at->timestamp),
-            'updated_at' => date('d M Y - H:i:s', $this->updated_at->timestamp)
+            'created_at' => ($this->created_at == NULL) ? $this->created_at : date('d M Y - H:i:s', $this->created_at->timestamp),
+            'updated_at' => ($this->updated_at == NULL) ? $this->updated_at : date('d M Y - H:i:s', $this->updated_at->timestamp)
         ];
     }
 }

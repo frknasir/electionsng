@@ -2,11 +2,11 @@
 
 </style>
 <template>
-    <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-absolute fixed-top bg-success">
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand text-capitalize" href="#pablo">
-              {{ election.title + ": " + $route.name || '...loading...' }}
+              {{ title + ": " + $route.name }}
             </a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +32,7 @@
 export default {
     data() {
       return {
-        
+        title: '...loading'
       }
     },
     computed: {
@@ -41,6 +41,11 @@ export default {
       },
       electionLoadStatus() {
           return this.$store.getters.getElectionLoadStatus;
+      }
+    },
+    watch: {
+      election: function() {
+        this.title = this.election.title.substring(0, 19) + "... ";
       }
     },
     mounted() {

@@ -1,7 +1,50 @@
 <style scoped>
-    table {
-        overflow:scroll;
-    }
+    /*
+	Max width before this PARTICULAR table gets nasty. 
+    This query will take effect for any screen smaller 
+    than 760px and also iPads specifically.
+	*/
+	@media
+    only screen 
+    and (max-width: 760px), (min-device-width: 768px) 
+    and (max-device-width: 1024px)  {
+
+		/* Force table to not be like tables anymore */
+		table, thead, tbody, th, td, tr {
+			display: block;
+		}
+
+		/* Hide table headers (but not display: none;, for accessibility) */
+		thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+		td:before {
+			/* Now like a table header */
+			position: relative;
+			/* Top/left values mimic padding */
+			top: 0;
+			left: 6px;
+			width: 45%;
+			padding-right: 50px;
+			white-space: nowrap;
+		}
+
+		/*
+		Label the data
+        You could also use a data-* attribute and content 
+        for this. That way "bloats" the HTML, this way 
+        means you need to keep HTML and CSS in sync. 
+        Lea Verou has a clever way to handle with text-shadow.
+		*/
+		td:nth-of-type(1):before { content: "Id: "; }
+		td:nth-of-type(2):before { content: "Party: "; }
+		td:nth-of-type(3):before { content: "Aspirant: "; }
+		td:nth-of-type(4):before { content: "Deputy: "; }
+		td:nth-of-type(5):before { content: "Bio: "; }
+	}
 </style>
 <template>
     <div class="content">
@@ -12,13 +55,11 @@
                     <div class="card">
                         <div class="card-header card-header-icon card-header-success">
                             <div class="card-icon">
-                            <i class="material-icons">group</i>
+                                <i class="material-icons">group</i>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="toolbar">
+                            <div id="toolbar" class="mb-3">
                                 <ul class="list-inline">
-                                    <li class="list-inline-item col-md-4 mb-3 mt-3 pull-left">
+                                    <li style="color: black;" class="list-inline-item col-md-4 mb-3 mt-3 pull-left">
                                         showing {{ pagination.to }} of {{ pagination.total }} candidates
                                     </li>
                                     <li class="list-inline-item col-md-4 mb-3 mt-3 pull-right">
@@ -36,29 +77,31 @@
                                     </li>
                                 </ul>
                             </div>
-                            <table id="candidates-table" 
+                        </div>
+                        <div class="card-body">
+                            <table role="table" id="candidates-table" 
                                 class="table table-success table-striped table-bordered">
-                                <thead>
+                                <thead role="group">
                                     <tr>
-                                        <th class="text-center">Id</th>
-                                        <th>Party</th>
-                                        <th>Aspirant</th>
-                                        <th>Deputy</th>
-                                        <th>Bio</th>
+                                        <th role="columnheader">Id</th>
+                                        <th role="columnheader">Party</th>
+                                        <th role="columnheader">Aspirant</th>
+                                        <th role="columnheader">Deputy</th>
+                                        <th role="columnheader">Bio</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr v-for="candidate in candidates" v-bind:key="candidate.id">
-                                        <td class="text-center">
+                                <tbody role="rowgroup">
+                                    <tr role="row" v-for="candidate in candidates" v-bind:key="candidate.id">
+                                        <td role="cell">
                                             {{ candidate.id }}
                                         </td>
-                                        <td>
+                                        <td role="cell">
                                             {{ candidate.party_name +
                                             '[' +candidate.party_initials + 
                                             ']' }}</td>
-                                        <td>{{ candidate.aspirant }}</td>
-                                        <td>{{ candidate.deputy }}</td>
-                                        <td>
+                                        <td role="cell">{{ candidate.aspirant }}</td>
+                                        <td role="cell">{{ candidate.deputy }}</td>
+                                        <td role="cell">
                                             <button 
                                             v-bind:data-name="candidate.aspirant" 
                                             v-bind:data-bio="candidate.bio" 

@@ -1,9 +1,12 @@
 <style scoped>
     #switch {
-        position: fixed;
-        right:30px;
-        bottom:10%;
+        position: relative;
         z-index: 3;
+    }
+
+    #switch .btn-group {
+        position: fixed;
+        bottom: 10%;
     }
 </style>
 <template>
@@ -20,7 +23,7 @@
                     class="btn btn-just-icon" :class="{'btn-success': timeline_active}">
                     <i class="material-icons">
                         list_alt
-                    </i>
+                    </i> 
                 </button>
             </div>
         </div>

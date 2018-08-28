@@ -27,8 +27,8 @@ class ResultResource extends JsonResource {
             'added_by_name' => User::find($this->added_by)->name,
             'updated_by' => $this->updated_by,
             'updated_by_name' => User::find($this->updated_by)->name,
-            'created_at' => date('d M Y - H:i:s', $this->created_at->timestamp),
-            'updated_at' => date('d M Y - H:i:s', $this->updated_at->timestamp)
+            'created_at' => ($this->created_at == NULL) ? $this->created_at : date('d M Y - H:i:s', $this->created_at->timestamp),
+            'updated_at' => ($this->updated_at == NULL) ? $this->updated_at : date('d M Y - H:i:s', $this->updated_at->timestamp)
         ];
     }
 }

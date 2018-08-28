@@ -48,6 +48,10 @@ export const liveUpdate = {
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data.data);
+                commit('setLUPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
                 commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
@@ -64,6 +68,10 @@ export const liveUpdate = {
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data.data);
+                commit('setLUPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
                 commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
@@ -80,6 +88,10 @@ export const liveUpdate = {
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data.data);
+                commit('setLUPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
                 commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);
@@ -96,6 +108,10 @@ export const liveUpdate = {
             ).then(function(response) {
                 commit('setLiveUpdatesLoadStatus', 2);
                 commit('setLiveUpdates', response.data.data);
+                commit('setLUPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
                 commit('setLiveUpdatesLoadStatus', 3);
                 commit('setLiveUpdates', []);

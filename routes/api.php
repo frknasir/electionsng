@@ -24,7 +24,9 @@ Route::group(['prefix'=> 'v1'], function() {
   Route::get('/election/{id}/liveUpdates', 'LiveUpdateController@electionLiveUpdates');
   Route::get('/election/{id}', 'ElectionController@show');
   Route::get('/liveUpdate/{id}', 'LiveUpdateController@show');
-  Route::get('/election/{electionId}/location/{locationType}', 'LiveUpdateController@filterUpdatesBy');
+  Route::get('/election/{electionId}/location/{locationType}/liveUpdates', 'LiveUpdateController@filterUpdatesBy');
+  Route::get('/election/{id}/incidents', 'IncidentController@electionIncidents');
+  Route::get('/election/{electionId}/location/{locationType}/incidents', 'IncidentController@filterIncidentsBy');
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

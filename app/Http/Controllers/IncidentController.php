@@ -23,7 +23,7 @@ class IncidentController extends Controller {
     public function electionIncidents($electionId) {
         $election = Election::findOrFail($electionId);
 
-        $incidents = $election->incidents()->paginate(20);
+        $incidents = $election->incidents()->paginate(10000);
 
         return IncidentResource::collection($incidents);
     }
@@ -56,6 +56,14 @@ class IncidentController extends Controller {
         $pollingUnit = PollingUnit::findOrFail($pollingUnitId);
 
         $incidents = $pollingUnit->incidents()->where('election_id', $electionId)->paginate(20);
+
+        return IncidentResource::collection($incidents);
+    }
+
+    public function filterIncidentsBy($electionId, $locationType) {
+        $election = Election::findOrFail($electionId);
+
+        $incidents = $election->incidents()->where('location_type', $locationType)->paginate(10000);
 
         return IncidentResource::collection($incidents);
     }
@@ -101,8 +109,10 @@ class IncidentController extends Controller {
      * @param  \App\Incident  $incident
      * @return \Illuminate\Http\Response
      */
-    public function show(Incident $incident) {
-        //
+    public function show($id) {
+        $incident = Incident::findOrFail($id);
+
+        return new IncidentResource($incident);
     }
 
     /**

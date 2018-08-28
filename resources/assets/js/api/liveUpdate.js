@@ -74,7 +74,7 @@ export default {
      * GET /api/v1/election/{election_id}/location/{location_type}
      */
     filterUpdatesBy: function(electionId, locationType, url = null) {
-        url = url || CONFIG.API_URL + '/election/' + electionId + '/location/' + locationType;
+        url = url || CONFIG.API_URL + '/election/' + electionId + '/location/' + locationType + '/liveUpdates';
         return axios.get(
             url
         );

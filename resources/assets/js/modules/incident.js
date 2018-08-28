@@ -6,95 +6,148 @@
 */
 
 import IncidentAPI from '../api/incident.js';
-import { CONFIG } from '../config.js';
 
 export const incident = {
     state: {
         incidents: [],
-        incidentsLoadStatus: CONFIG.STATUSES.idle,
+        iPagination: {},
+        incidentsLoadStatus: 0,
         incident: {},
-        incidentLoadStatus: CONFIG.STATUSES.idle,
-        addIncidentLoadStatus: CONFIG.STATUSES.idle,
-        updateIncidentLoadStatus: CONFIG.STATUSES.idle,
-        deleteIncidentLoadStatus: CONFIG.STATUSES.idle
+        incidentLoadStatus: 0,
+        addIncidentLoadStatus: 0,
+        updateIncidentLoadStatus: 0,
+        deleteIncidentLoadStatus: 0
     },
     actions: {
         getElectionIncidents({commit}, data) {
-            commit('setIncidentsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setIncidentsLoadStatus', 1);
 
             IncidentAPI.getElectionIncidents(
                 data.id
             ).then(function(response) {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setIncidents', response.data);
+                commit('setIncidentsLoadStatus', 2);
+                commit('setIncidents', response.data.data);
+                commit('setIPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setIncidentsLoadStatus', 3);
                 commit('setIncidents', []);
             });
         },
 
         getStateIncidents({commit}, data) {
-            commit('setIncidentsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setIncidentsLoadStatus', 1);
 
             IncidentAPI.getStateIncidents(
                 data.electionId,
                 data.stateId
             ).then(function(response) {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setIncidentsLoadStatus', 2);
                 commit('setIncidents', response.data);
+                commit('setIPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setIncidentsLoadStatus', 3);
                 commit('setIncidents', []);
             });
         },
 
         getLocalGovernmentIncidents({commit}, data) {
-            commit('setIncidentsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setIncidentsLoadStatus', 1);
 
             IncidentAPI.getLocalGovernmentIncidents(
                 data.electionId,
                 data.localGovernmentId
             ).then(function(response) {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setIncidentsLoadStatus', 2);
                 commit('setIncidents', response.data);
+                commit('setIPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setIncidentsLoadStatus', 3);
                 commit('setIncidents', []);
             });
         },
 
         getRegistrationAreaIncidents({commit}, data) {
-            commit('setIncidentsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setIncidentsLoadStatus', 1);
 
             IncidentAPI.getRegistrationAreaIncidents(
                 data.electionId,
                 data.registrationAreaId
             ).then(function(response) {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setIncidentsLoadStatus', 2);
                 commit('setIncidents', response.data);
+                commit('setIPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setIncidentsLoadStatus', 3);
                 commit('setIncidents', []);
             });
         },
 
         getPollingUnitIncidents({commit}, data) {
-            commit('setIncidentsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setIncidentsLoadStatus', 1);
 
             IncidentAPI.getPollingUnitIncidents(
                 data.electionId,
                 data.pollingUnitId
             ).then(function(response) {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setIncidentsLoadStatus', 2);
                 commit('setIncidents', response.data);
+                commit('setIPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
             }).catch(function() {
-                commit('setIncidentsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setIncidentsLoadStatus', 3);
                 commit('setIncidents', []);
             });
         },
 
+        filterIncidentsBy({commit}, data) {
+            commit('setIncidentsLoadStatus', 1);
+
+            IncidentAPI.filterIncidentsBy(
+                data.electionId,
+                data.locationType
+            ).then(function(response) {
+                commit('setIncidentsLoadStatus', 2);
+                commit('setIncidents', response.data.data);
+                commit('setIPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
+                });
+            }).catch(function() {
+                commit('setIncidentsLoadStatus', 3);
+                commit('setIncidents', []);
+            });
+        },
+
+        getIncident({commit}, data) {
+            commit('setIncidentLoadStatus', 1);
+
+            IncidentAPI.getIncident(
+                data.id
+            ).then(function(response) {
+                commit('setIncidentLoadStatus', 2);
+                commit('setIncident', response.data.data);
+            }).catch(function() {
+                commit('setIncidentLoadStatus', 3);
+                commit('setIncident', {});
+            });
+        },
+
         addIncident({commit, state, dispatch}, data) {
-            commit('setAddIncidentLoadStatus', CONFIG.STATUSES.loading);
+            commit('setAddIncidentLoadStatus', 1);
 
             IncidentAPI.addIncident(
                 data.title,
@@ -106,14 +159,14 @@ export const incident = {
                 data.added_by,
                 data.updated_by
             ).then(function(response) {
-                commit('setAddIncidentLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setAddIncidentLoadStatus', 2);
             }).catch(function() {
-                commit('setAddIncidentLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setAddIncidentLoadStatus', 3);
             });
         },
 
         updateIncident({commit, state, dispatch}, data) {
-            commit('setUpdateIncidentLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdateIncidentLoadStatus', 1);
 
             IncidentAPI.updateIncident(
                 data.id,
@@ -122,21 +175,21 @@ export const incident = {
                 data.incident_type_id,
                 data.updated_by
             ).then(function(response) {
-                commit('setUpdateIncidentLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdateIncidentLoadStatus', 2);
             }).catch(function() {
-                commit('setUpdateIncidentLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdateIncidentLoadStatus', 3);
             });
         },
 
         deleteIncident({commit, state, dispatch}, data) {
-            commit('setDeleteIncidentLoadStatus', CONFIG.STATUSES.loading);
+            commit('setDeleteIncidentLoadStatus', 1);
 
             IncidentAPI.updateIncident(
                 data.id
             ).then(function(response) {
-                commit('setDeleteIncidentLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setDeleteIncidentLoadStatus', 2);
             }).catch(function() {
-                commit('setDeleteIncidentLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setDeleteIncidentLoadStatus', 3);
             });
         }
     },
@@ -147,6 +200,22 @@ export const incident = {
 
         setIncidents(state, incidents) {
             state.incidents = incidents;
+        },
+
+        setIPagination(state, data) {
+            let meta = data.meta;
+            let links = data.links;
+
+            let pagination = {
+                current_page: meta.current_page,
+                last_page: meta.last_page,
+                to: meta.to,
+                total: meta.total,
+                next_page_url: links.next,
+                prev_page_url: links.prev
+            };
+        
+            state.iPagination = pagination;
         },
 
         setIncidentLoadStatus(state, status) {
@@ -176,6 +245,10 @@ export const incident = {
 
         getIncidents(state) {
             return state.incidents;
+        },
+
+        getIPagination(state) {
+            return state.iPagination;
         },
 
         getIncidentLoadStatus(state) {

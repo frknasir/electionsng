@@ -3,26 +3,26 @@
         position:absolute;
         width: 100%;
         height: 89%;
+        z-index: 1;
     }
 
     #info-window {
         position: fixed;
         bottom:0;
         right:0;
-        z-index: 2;
+        z-index: 4;
     }
 
-    #pagination {
+    #filter-by-location {
         position: fixed;
         right:30px;
-        top:10%;
+        top:12%;
         z-index: 3;
     }
 </style>
 <template>
     <div>
-        <div class="wrapper-full-page" :style="{'z-index': map_z_index }" id="map"></div>
-
+        <div class="wrapper-full-page" id="map"></div>
         <!--info window-->
         <div v-show="info_window_active" id="info-window" class="col-md-4">
             <div class="card card-nav-tabs">
@@ -46,13 +46,13 @@
                         <li class="list-inline-item">
                             <div class="stats">
                                 <i class="material-icons">access_time</i> 
-                                <span class="created_at">added 4 minutes ago</span>
+                                <span class="created_at"></span>
                             </div>
                         </li>
                         <li class="list-inline-item">
                             <div class="stats">
-                                <i class="material-icons">access_time</i> 
-                                <span class="updated_at">updated 4 minutes ago</span>
+                                <i class="material-icons">flag</i> 
+                                <span class="updated_at"></span>
                             </div>
                         </li>
                     </ul>
@@ -60,134 +60,43 @@
             </div>
         </div>
 
-        <!-- pagination -->
-        <div id="pagination">
-            <button @click="getLiveUpdates(luPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.prev_page_url}]">
-                <i class="material-icons">chevron_left</i>
-            </button>
-            <label>
-                showing to {{ luPagination.to }} of {{ luPagination.total }} updates
-            </label>
-            <button @click="getLiveUpdates(luPagination.next_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.next_page_url}]">
-                <i class="material-icons">chevron_right</i>                        
-            </button>
-        </div>
-
-        <!-- Fixed -->
-        <div class="fixed-plugin">
-            <div class="dropdown show-dropdown">
-                <a href="#" data-toggle="dropdown">
-                    <i class="fa fa-cog fa-2x"> </i>
-                </a>
-                <ul class="dropdown-menu">
-                    <li class="header-title">Filter by:</li>
-
-                    <li class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>All Updates</p>
-                            <label class="ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        v-model="location_filter" id="all" 
-                                        value="all"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-                    <li v-show="election.election_type_id == 1" class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>State</p>
-                            <label class="ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        v-model="location_filter" id="state" 
-                                        value="state"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-                    <li class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>Local Government</p>
-                            <label class="switch-mini ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        v-model="location_filter" id="localg" 
-                                        value="localGovernment"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-                    <li class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>Registration Area</p>
-                            <label class="switch-mini ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        v-model="location_filter" id="ra" 
-                                        value="registrationArea"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-                    <li class="adjustments-line">
-                        <a href="javascript:void(0)" class="switch-trigger">
-                            <p>Polling Unit</p>
-                            <label class="switch-mini ml-auto">
-                                <div class="form-check form-check-radio form-check-inline">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="radio" 
-                                        v-model="location_filter" id="pu" 
-                                        value="pollingUnit"> 
-                                        <span class="circle">
-                                            <span class="check"></span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </label>
-                            <div class="clearfix"></div>
-                        </a>
-                    </li>
-
-
-                    <li class="header-title">Thank you for 95 shares!</li>
-                    <li class="button-container text-center">
-                        <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot; 45</button>
-                        <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot; 50</button>
-                        <br>
-                        <br>
-                    </li>
-                </ul>
+        <!-- Filter dropdown -->
+        <!-- Split dropup button -->
+        <div id="filter-by-location">
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-success">
+                    {{ filter_btn_label }}
+                    <span class="badge badge-default">
+                        {{ luPagination.total }}
+                    </span>
+                </button>
+                <button type="button" class="btn btn-success dropdown-toggle" 
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <div class="dropdown-menu dropdown-success">
+                    <a @click="setLocationFilter('all')" class="dropdown-item">
+                        All
+                    </a>
+                    <a v-if="election.election_type_id == 1" @click="setLocationFilter('state')" 
+                        class="dropdown-item">
+                        State
+                    </a>
+                    <a @click="setLocationFilter('localGovernment')" class="dropdown-item">
+                        Local Government
+                    </a>
+                    <a @click="setLocationFilter('registrationArea')" class="dropdown-item">
+                        Registration Area
+                    </a>
+                    <a @click="setLocationFilter('pollingUnit')" class="dropdown-item">
+                        Polling Unit
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item disabled">Filter By Location</a>
+                </div>
             </div>
-        </div> 
+        </div>
+        <!-- End Filter dropdown -->
     </div>
 </template>
 <script>
@@ -196,14 +105,12 @@
         data() {
             return {
                 map: null,
-                liveUpdate: {
-
-                },
+                liveUpdate: {},
                 info_window_active: false,
-                map_z_index: 1,
-                markers: [],
+                markers: null,
                 map_first_init: true,
-                location_filter: null
+                location_filter: null,
+                filter_btn_label: "Filter By"
             }
         },
         computed: {
@@ -290,28 +197,13 @@
                 );
                 info_window.find(".card-body").text(liveUpdate.description);
 
-                let created_at = new Date(liveUpdate.created_at.date);
-                created_at = ""+created_at.getFullYear()+
-                    ("0" + (created_at.getMonth() + 1)).slice(-2)+
-                    ("0" + created_at.getDate()).slice(-2);
-                info_window.find(".stats .created_at").text( "added "+
-                    moment(
-                        created_at, 
-                        "YYYYMMDD"
-                    ).fromNow()
+                info_window.find(".stats .created_at").text(
+                    moment(liveUpdate.created_at, 'DD MMM YYYY H:m:s').format('lll')
                 );
 
-                let updated_at = new Date(liveUpdate.updated_at.date);
-                updated_at = ""+updated_at.getFullYear()+
-                    ("0" + (updated_at.getMonth() + 1)).slice(-2)+
-                    ("0" + updated_at.getDate()).slice(-2);
-                info_window.find(".stats .updated_at").text( "updated "+
-                    moment(
-                        updated_at, 
-                        "YYYYMMDD"
-                    ).fromNow()
-                );
-
+                if(moment(liveUpdate.updated_at, 'DD MMM YYYY H:m:s').isValid()) {
+                    info_window.find(".stats .updated_at").text("Edited");
+                }
 
                 this.info_window_active = true;
             },
@@ -320,13 +212,18 @@
             },
             buildMarkers(map) {
                 let vm = this;
-
+                vm.markers = L.markerClusterGroup({ chunkedLoading: true });
+                
                 for(let i = 0; i < vm.liveUpdates.length; i++) {
                     let liveUpdate = vm.liveUpdates[i];
+                    let icon = new L.Icon.Default();
+                    icon.options.shadowSize = [0,0];
                     let marker = L.marker([
                         liveUpdate.location.latitude,
                         liveUpdate.location.longitude
-                    ]).addTo(map);
+                    ], {
+                        icon : icon
+                    }).addTo(map);
 
                     marker.id = liveUpdate.id;
 
@@ -338,16 +235,42 @@
                     marker.bindPopup(liveUpdate.location.name || liveUpdate.location.code);
                         //.openPopup();
 
-                    vm.markers.push(marker);
+                    vm.markers.addLayer(marker);
                 }
+
+                map.addLayer(vm.markers);
             },
             clearMarkers() {
                 let vm = this;
-                vm.markers.forEach(function(marker, index) {
-                    if(marker) {
-                        vm.map.removeLayer(marker);
-                    }
-                })
+                vm.map.removeLayer(vm.markers);  
+            },
+            setLocationFilter(location_filter) {
+                this.location_filter = location_filter;
+
+                switch (this.location_filter) {
+                    case "all":
+                        this.filter_btn_label = "Filter By";
+                        break;
+
+                    case "state":
+                        this.filter_btn_label = "State Updates";
+                        break;
+
+                    case "localGovernment":
+                        this.filter_btn_label = "LG Updates";
+                        break;
+
+                    case "registrationArea":
+                        this.filter_btn_label = "RA Updates";
+                        break;
+
+                    case "pollingUnit":
+                        this.filter_btn_label = "PU Updates";
+                        break;
+                
+                    default:
+                        break;
+                }
             },
             getLiveUpdates(url) {
                 if(this.location_filter && this.location_filter !== "all") {

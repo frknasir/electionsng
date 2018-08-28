@@ -1,6 +1,7 @@
 window.Popper = require('popper.js').default;
 window._ = require('lodash');
 window.L = require('leaflet');
+require('leaflet.markercluster');
 window.Chartist = require('chartist');
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

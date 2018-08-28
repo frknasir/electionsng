@@ -4,29 +4,34 @@
 import { CONFIG } from '../config.js';
 
 export default {
+
     /*
     GET /api/v1/election/{election_id}/incidents
     */
-    getElectionIncidents: function(electionId) {
-        return axios.get( 
-            CONFIG.API_URL + 
+    getElectionIncidents: function(electionId, url = null) {
+        url = url || CONFIG.API_URL + 
             '/election/' + 
             electionId + 
-            '/incidents' 
+            '/incidents';
+
+        return axios.get( 
+            url
         );
     },
-
+ 
     /* *
     GET /api/v1/election/{election_id}/state/{state_id}/incidents
     */
-    getStateIncidents: function(electionId, stateId) {
+    getStateIncidents: function(electionId, stateId, url = null) {
+        url = url || CONFIG.API_URL + 
+                        '/election/'  +
+                        electionId +
+                        '/state/' +
+                        stateId +
+                        '/incidents';
+        
         return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/state/' +
-            stateId +
-            '/incidents'
+            url
         );
     },
 
@@ -47,28 +52,54 @@ export default {
     /* *
     GET /api/v1/election/{election_id}/registrationArea/{registration_area_id}/incidents
     */
-    getRegistrationAreaIncidents: function(electionId, registrationAreaId) {
+    getRegistrationAreaIncidents: function(electionId, registrationAreaId, url = null) {
+        url = url || CONFIG.API_URL + 
+                        '/election/'  +
+                        electionId +
+                        '/registrationArea/' +
+                        registrationAreaId +
+                        '/incidents';
         return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/registrationArea/' +
-            registrationAreaId +
-            '/incidents'
+            url
         );
     },
 
     /* *
     GET /api/v1/election/{election_id}/pollingUnit/{polling_unit_id}/incidents
     */
-    getPollingUnitIncidents: function(electionId, pollingUnitId) {
+    getPollingUnitIncidents: function(electionId, pollingUnitId, url = null) {
+        url = url || CONFIG.API_URL + 
+                '/election/'  +
+                electionId +
+                '/pollingUnit/' +
+                pollingUnitId +
+                '/incidents';
         return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/pollingUnit/' +
-            pollingUnitId +
-            '/incidents'
+            url
+        );
+    },
+
+    /**
+     * GET /api/v1/election/{election_id}/location/{location_type}
+     */
+    filterIncidentsBy: function(electionId, locationType, url = null) {
+        url = url || CONFIG.API_URL + 
+            '/election/' + electionId + 
+            '/location/' + locationType + 
+            '/incidents';
+        return axios.get(
+            url
+        );
+    },
+
+    /**
+     * GET /api/v1/liveUpdate/{id}
+     */
+    getIncident: function(id) {
+        return axios.get(
+            CONFIG.API_URL +
+            '/incident/' +
+            id
         );
     },
 
