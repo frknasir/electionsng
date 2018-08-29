@@ -19,7 +19,7 @@ export default {
     /* *
     GET /api/v1/election/{election_id}/state/{state_id}/results
     */
-    getStateLiveUpdates: function(electionId, stateId) {
+    getStateResults: function(electionId, stateId) {
         return axios.get( 
             CONFIG.API_URL + 
             '/election/'  +

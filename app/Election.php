@@ -48,8 +48,4 @@ class Election extends Model
     public function state() {
         return $this->belongsTo(State::class);
     }
-
-    public function results() {
-        return $this->hasMany(Result::class);
-    }
 }

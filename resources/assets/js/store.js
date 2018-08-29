@@ -35,6 +35,7 @@ import { politicalParty } from './modules/politicalParty.js';
 import { pollingUnit } from './modules/pollingUnit.js';
 import { registrationArea } from './modules/registrationArea.js';
 import { result } from './modules/result.js';
+import { finalResult } from './modules/finalResult.js';
 import { role } from './modules/role.js';
 import { state } from './modules/state.js';
 
@@ -54,6 +55,7 @@ export default new Vuex.Store({
         pollingUnit,
         registrationArea,
         result,
+        finalResult,
         role,
         state
     }

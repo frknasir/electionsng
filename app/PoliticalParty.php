@@ -18,10 +18,6 @@ class PoliticalParty extends Model
         return $this->belongsTo(User::class, 'added_by');
     }
 
-    public function results() {
-        return $this->hasMany(Result::class);
-    }
-
     public function candidates() {
         return $this->hasMany(Candidate::class);
     }

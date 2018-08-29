@@ -4,9 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
-use App\Election;
+use App\Candidate;
 use App\LocationType;
-use App\PoliticalParty;
 use App\State;
 use App\LocalGovernment;
 use App\RegistrationArea;
@@ -23,16 +22,12 @@ class Result extends Model
         return $this->belongsTo(User::class, 'added_by');
     }
 
-    public function election() {
-        return $this->belongstTo(Election::class);
+    public function candidate() {
+        return $this->belongsTo(Candidate::class);
     }
 
     public function locationType() {
         return $this->belongsTo(LocationType::class);
-    }
-
-    public function politicalParty() {
-        return $this->belongsTo(PoliticalParty::class);  
     }
 
     public function location() {

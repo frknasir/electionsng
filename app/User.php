@@ -12,6 +12,7 @@ use App\Candidate;
 use App\Incident;
 use App\LiveUpdate;
 use App\Result;
+use App\FinalResult;
 use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
@@ -66,6 +67,10 @@ class User extends Authenticatable
 
     public function results() {
         return $this->hasMany(Result::class, 'added_by');
+    }
+
+    public function finalResult() {
+        return $this->hasMany(FinalResult::class, 'added_by');
     }
 
     /**

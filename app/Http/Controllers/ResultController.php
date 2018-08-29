@@ -7,6 +7,7 @@ use App\State;
 use App\LocalGovernment;
 use App\RegistrationArea;
 use App\PollingUnit;
+use App\Candidate;
 use Illuminate\Http\Request;
 use App\Http\Resources\ResultResource;
 use App\Http\Requests\Result\NewRequest;
@@ -20,9 +21,9 @@ class ResultController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function electionResults($electionId) {
-        $election = Election::findOrFail($electionId);
+        $candidates = Candidate::where('election_id', $electionId);
 
-        $results = $election->results()->paginate(20);
+        $results = $candidates->results;
 
         return ResultResource::collection($results);
     }
@@ -85,7 +86,7 @@ class ResultController extends Controller {
         $result->added_by = $request->input('added_by');
         $result->updated_by = $request->input('updated_by');
 
-        if($request->save()) {
+        if($result->save()) {
             return response()->json([
                 'success' => 1,
                 'message' => 'result added successfully'

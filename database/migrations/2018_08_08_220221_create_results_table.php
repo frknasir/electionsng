@@ -33,9 +33,9 @@ class CreateResultsTable extends Migration
             $table->unsignedInteger('updated_by'); 
             $table->timestamps();
 
-            $table->unique(['political_party_id', 'election_id']);
             $table->foreign('political_party_id')->references('id')->on('political_parties');
             $table->foreign('election_id')->references('id')->on('elections');
+            $table->unique(['political_party_id', 'election_id']);
             $table->foreign('added_by')->references('id')->on('users');
             $table->foreign('updated_by')->references('id')->on('users');
 
