@@ -125,12 +125,14 @@
                     <div v-show="location_type === 'pu'" class="col">
                         <label for="pu">Polling Unit</label>
                         <select v-model="pu_slct" class="form-control">
-                            <option value="1">1</option>
+                            <option v-for="pu in pollingUnits" v-bind:key="pu.id" :value="pu.id">
+                                {{ pu.code }}
+                            </option>
                         </select>
                     </div>
                 </div>
                 <button v-show="location_type !== null" 
-                    type="submit" class="btn btn-success">
+                    type="button" class="btn btn-success">
                     Get Results
                 </button>
             </form>
@@ -148,11 +150,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(finalResult,index) in finalResults" v-bind:key="finalResult.id">
+                <tr v-for="(result,index) in results" v-bind:key="result.id">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ finalResult.party }}</td>
-                    <td>{{ finalResult.candidate_name }}</td>
-                    <td>{{ finalResult.votes }}</td>
+                    <td>{{ result.party }}</td>
+                    <td>{{ result.candidate_name }}</td>
+                    <td>{{ result.votes }}</td>
                 </tr>
             </tbody>
         </table>
@@ -209,8 +211,8 @@
             election() {
                 return this.$store.getters.getElection;
             },
-            finalResults() {
-                return this.$store.getters.getFinalResults;
+            results() {
+                return this.$store.getters.getResults;
             },
             states() {
                 return this.$store.getters.getStates;
@@ -238,7 +240,43 @@
             }
         },
         methods: {
+            getResults(location_type) {
+                switch (location_type) {
+                    case "state":
+                        this.$store.dispatch('getStateResults', {
+                            electionId: this.election.id,
+                            stateId: this.state_slct
+                        });
+                        break;
 
+                    case "lg":
+                        this.$store.dispatch('getLocalGovernmentResults', {
+                            electionId: this.election.id,
+                            localGovernmentId: this.lg_slct
+                        });
+                        break;
+
+                    case "ra":
+                        this.$store.dispatch('getRegistrationAreaResults', {
+                            electionId: this.election.id,
+                            registrationAreaId: this.ra_slct
+                        });
+                        break;
+
+                    case "pu":
+                        this.$store.dispatch('getPollingUnitResults', {
+                            electionId: this.election.id,
+                            pollingUnitId: this.pu_slct
+                        });
+                        break;
+                
+                    default:
+                        this.$store.dispatch('getFinalResults', {
+                            id: this.$route.params.id
+                        });
+                        break;
+                }
+            }
         }
     }
 </script>

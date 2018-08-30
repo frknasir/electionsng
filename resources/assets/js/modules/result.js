@@ -6,7 +6,8 @@
 */
 
 import ResultAPI from '../api/result.js';
-import { CONFIG } from '../config.js';
+import FinalResultAPI from '../api/finalResult.js';
+import { CONFIG } from '../config.js'; 
 
 export const result = {
     state: {
@@ -16,23 +17,12 @@ export const result = {
         resultLoadStatus: CONFIG.STATUSES.idle,
         addResultLoadStatus: CONFIG.STATUSES.idle,
         updateResultLoadStatus: CONFIG.STATUSES.idle,
-        deleteResultLoadStatus: CONFIG.STATUSES.idle
+        deleteResultLoadStatus: CONFIG.STATUSES.idle,
+        addFinalResultLoadStatus: 0,
+        updateFinalResultLoadStatus: 0,
+        deleteFinalResultLoadStatus: 0
     },
     actions: {
-        getElectionResults({commit}, data) {
-            commit('setResultsLoadStatus', CONFIG.STATUSES.loading);
-
-            ResultAPI.getElectionResults(
-                data.id
-            ).then(function(response) {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setResults', response.data);
-            }).catch(function() {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_failure);
-                commit('setResults', []);
-            });
-        },
-
         getStateResults({commit}, data) {
             commit('setResultsLoadStatus', CONFIG.STATUSES.loading);
 
@@ -135,6 +125,59 @@ export const result = {
             }).catch(function() {
                 commit('setDeleteResultLoadStatus', CONFIG.STATUSES.completed_with_failure);
             });
+        }, 
+
+        getFinalResults({commit}, data) {
+            commit('setResultsLoadStatus', 1);
+
+            FinalResultAPI.getFinalResults(
+                data.id
+            ).then(function(response) {
+                commit('setResultsLoadStatus', 2);
+                commit('setResults', response.data.data);
+            }).catch(function() {
+                commit('setResultsLoadStatus', 3);
+            });
+        },
+        addFinalResult({commit, state, dispatch}, data) {
+            commit('setAddFinalResultLoadStatus', 1);
+
+            FinalResultAPI.addFinalResult(
+                data.candidate_id,
+                data.votes,
+                data.added_by,
+                data.updated_by
+            ).then(function(response) {
+                commit('setAddFinalResultLoadStatus', 2);
+            }).catch(function() {
+                commit('setAddFinalResultLoadStatus', 3);
+            });
+        },
+
+        updateFinalResult({commit, state, dispatch}, data) {
+            commit('setUpdateFinalResultLoadStatus', 1);
+
+            FinalResultAPI.updateFinalResult(
+                data.id,
+                data.votes,
+                data.updated_by
+            ).then(function(response) {
+                commit('setUpdateFinalResultLoadStatus', 2);
+            }).catch(function() {
+                commit('setUpdateFinalResultLoadStatus', 3);
+            });
+        },
+
+        deleteFinalResult({commit, state, dispatch}, data) {
+            commit('setDeleteFinalResultLoadStatus', 1);
+
+            FinalResultAPI.deleteFinalResult(
+                data.id
+            ).then(function(response) {
+                commit('setDeleteFinalResultLoadStatus', 2);
+            }).catch(function() {
+                commit('setDeleteFinalResultLoadStatus', 3);
+            });
         }
     },
     mutations: {
@@ -164,6 +207,18 @@ export const result = {
 
         setDeleteResultLoadStatus(state, status) {
             state.deleteResultLoadStatus = status;
+        },
+
+        setAddFinalResultLoadStatus(state, status) {
+            state.addFinalResultLoadStatus = status;
+        },
+
+        setUpdateFinalResultLoadStatus(state, status) {
+            state.updateFinalResultLoadStatus = status;
+        },
+
+        setDeleteFinalResultLoadStatus(state, status) {
+            state.deleteFinalResultLoadStatus = status;
         }
     },
     getters: {
@@ -193,6 +248,18 @@ export const result = {
 
         getDeleteResultLoadStatus(state) {
             return state.deleteResultLoadStatus;
+        },
+
+        getAddFinalResultLoadStatus(state) {
+            return state.addFinalResultLoadStatus;
+        },
+
+        getUpdateFinalResultLoadStatus(state) {
+            return state.updateFinalResultLoadStatus;
+        },
+
+        getDeleteFinalResultLoadStatus(state) {
+            return state.deleteFinalResultLoadStatus;
         }
     }
 };

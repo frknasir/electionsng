@@ -23,7 +23,7 @@ export const pollingUnit = {
                 data.id
             ).then(function(response) {
                 commit('setPollingUnitsLoadStatus', 2);
-                commit('setPollingUnits', response.data);
+                commit('setPollingUnits', response.data.data);
             }).catch(function() {
                 commit('setPollingUnitsLoadStatus', 3);
                 commit('setPollingUnits', []);
