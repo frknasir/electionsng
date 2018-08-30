@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Candidate;
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FinalResultResource extends JsonResource
@@ -14,13 +16,15 @@ class FinalResultResource extends JsonResource
      */
     public function toArray($request)
     {
+        $candidate = Candidate::findOrFail($this->candidate_id);
+        $party = $candidate->politicalParty;
         //return parent::toArray($request); 
         return [
             'id' => $this->id,
             'candidate_id' => $this->candidate_id,
-            'party' => App\Candidate::findOrFail($this->candidate_id)->politicalParty,
-            'election' => App\Candidate::findOrFail($this->election_id)->election,
-            'votes' => $this->votes,
+            'candidate_name' => $candidate->aspirant,
+            'party' => $party->name.'['.$party->initials.']',
+            'votes' => number_format($this->votes),
             'added_by' => $this->added_by,
             'added_by_name' => User::find($this->added_by)->name,
             'updated_by' => $this->updated_by,

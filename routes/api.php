@@ -44,6 +44,11 @@ Route::group(['prefix'=> 'v1'], function() {
     '/election/{electionId}/location/{locationType}/incidents/limit/{limit}', 
     'IncidentController@filterIncidentsBy'
   );
+
+  Route::get(
+    '/election/{electionId}/finalResults', 
+    'FinalResultController@index'
+  );
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

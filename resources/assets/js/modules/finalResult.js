@@ -17,7 +17,16 @@ export const finalResult = {
     },
     actions: {
         getFinalResults({commit}, data) {
-            
+            commit('setFinalResultsLoadStatus', 1);
+
+            FinalResultAPI.getFinalResults(
+                data.id
+            ).then(function(response) {
+                commit('setFinalResultsLoadStatus', 2);
+                commit('setFinalResults', response.data.data);
+            }).catch(function() {
+                commit('setFinalResultsLoadStatus', 3);
+            });
         },
         addFinalResult({commit, state, dispatch}, data) {
             commit('setAddFinalResultLoadStatus', 1);
@@ -49,14 +58,14 @@ export const finalResult = {
         },
 
         deleteFinalResult({commit, state, dispatch}, data) {
-            commit('setDeleteResultLoadStatus', 1);
+            commit('setDeleteFinalResultLoadStatus', 1);
 
             FinalResultAPI.deleteFinalResult(
                 data.id
             ).then(function(response) {
-                commit('setDeleteResultLoadStatus', 2);
+                commit('setDeleteFinalResultLoadStatus', 2);
             }).catch(function() {
-                commit('setDeleteResultLoadStatus', 3);
+                commit('setDeleteFinalResultLoadStatus', 3);
             });
         }
     },
@@ -81,7 +90,7 @@ export const finalResult = {
             state.deleteFinalResultLoadStatus = status;
         }
     },
-    setters: {
+    getters: {
         getFinalResults(state) {
             return state.finalResults;
         },

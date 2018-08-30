@@ -17,13 +17,14 @@ class FinalResultController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index($electionId) { 
-        $results = [];
-        $candidates = Candidate::where('election_id', $electionId);
+        $candidates = Candidate::select('id')->where('election_id', $electionId)->get();
 
-        for($i = 0; $i < count($candidates); $i++) {
-            $result = $candidates[$i]->finalResult();
-            array_push($results, $result);
-        }
+        $results = FinalResult::rightJoin(
+            'candidates', 
+            'final_results.candidate_id', 
+            '=', 
+            'candidates.id'
+        )->whereIn('candidate_id', $candidates)->get();
 
         return FinalResultResource::collection($results);
     }

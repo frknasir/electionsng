@@ -61,13 +61,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        1
-                    </td>
-                    <td>Andrew Mike</td>
-                    <td>Develop</td>
-                    <td>2013</td>
+                <tr v-for="(finalResult,index) in finalResults" v-bind:key="finalResult.id">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ finalResult.party }}</td>
+                    <td>{{ finalResult.candidate_name }}</td>
+                    <td>{{ finalResult.votes }}</td>
                 </tr>
             </tbody>
         </table>
@@ -78,7 +76,9 @@
         mounted() {
         },
         created() {
-
+            this.$store.dispatch('getFinalResults', {
+                id: this.$route.params.id
+            });
         },
         data() {
             return {
@@ -86,7 +86,9 @@
             }
         },
         computed: {
-
+            finalResults() {
+                return this.$store.getters.getFinalResults;
+            }
         },
         methods: {
 
