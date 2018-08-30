@@ -9,6 +9,7 @@ use App\Http\Resources\FinalResultResource;
 use App\Http\Requests\FinalResult\NewRequest;
 use App\Http\Requests\FinalResult\UpdateRequest;
 use App\Http\Requests\FinalResult\DelRequest;
+use DB;
 
 class FinalResultController extends Controller {
     /**
@@ -19,12 +20,21 @@ class FinalResultController extends Controller {
     public function index($electionId) { 
         $candidates = Candidate::select('id')->where('election_id', $electionId)->get();
 
-        $results = FinalResult::rightJoin(
+        $results = FinalResult::select(
+            DB::raw(
+                'final_results.id, '.
+                'candidates.id as candidate_id, '.
+                'final_results.votes, '.
+                'final_results.added_by, '.
+                'final_results.created_at, '.
+                'final_results.updated_at'
+            )
+        )->rightJoin(
             'candidates', 
             'final_results.candidate_id', 
             '=', 
             'candidates.id'
-        )->whereIn('candidate_id', $candidates)->get();
+        )->whereIn('candidates.id', $candidates)->get();
 
         return FinalResultResource::collection($results);
     }

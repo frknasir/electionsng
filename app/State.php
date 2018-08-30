@@ -19,6 +19,10 @@ class State extends Model {
         return $this->hasMany(Election::class);
     }
 
+    public function localGovernments() {
+        return $this->hasMany(LocalGovernment::class);
+    }
+
     public function results() {
         return $this->morphMany(Result::class, 'location');
     }

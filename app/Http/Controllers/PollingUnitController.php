@@ -17,7 +17,7 @@ class PollingUnitController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getPollingUnitsFor($registrationAreaId) {
+    public function index($registrationAreaId) {
         $registrationArea = RegistrationArea::findOrFail($registrationAreaId);
 
         $pollingUnits = $registrationArea->pollingUnits;

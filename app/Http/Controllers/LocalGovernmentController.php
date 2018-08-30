@@ -36,11 +36,10 @@ class LocalGovernmentController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function localGovernmentsFor($stateId) {
+    public function index($stateId) {
         $state = State::findOrFail($stateId);
 
         $localGovernments = $state->localGovernments;
-
         return LocalGovernmentResource::collection($localGovernments);
     }
 

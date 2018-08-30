@@ -6,39 +6,38 @@
 */
 
 import LocalGovernmentAPI from '../api/localGovernment.js';
-import { CONFIG } from '../config.js';
 
 export const localGovernment = {
     state: {
         localGovernments: [],
-        localGovernmentsLoadStatus: CONFIG.STATUSES.idle,
-        updateLocalGovernmentLoadStatus: CONFIG.STATUSES.idle
+        localGovernmentsLoadStatus: 0,
+        updateLocalGovernmentLoadStatus: 0
     },
     actions: {
         getLocalGovernments({commit}, data) {
-            commit('setLocalGovernmentsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setLocalGovernmentsLoadStatus', 1);
 
             LocalGovernmentAPI.getLocalGovernmentsFor(
                 data.id
             ).then(function(response) {
-                commit('setLocalGovernmentsLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setLocalGovernments', response.data);
+                commit('setLocalGovernmentsLoadStatus', 2);
+                commit('setLocalGovernments', response.data.data);
             }).catch(function(){
-                commit('setLocalGovernmentsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setLocalGovernmentsLoadStatus', 3);
             });
         },
         updateLocalGovernment({commit, state, dispatch}, data) {
-            commit('setUpdateLocalGovernmentLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdateLocalGovernmentLoadStatus', 1);
         
             LocalGovernmentAPI.UpdateLocalGovernment(
                 data.id,
                 data.latitude,
                 data.longitude
             ).then(function(response) {
-                commit('setUpdateLocalGovernmentLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdateLocalGovernmentLoadStatus', 2);
                 dispatch('getLocalGovernments', data);
             }).then(function(){
-                commit('setUpdateLocalGovernmentLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdateLocalGovernmentLoadStatus', 3);
             });
         }
     },

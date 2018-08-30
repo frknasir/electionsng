@@ -10,7 +10,7 @@ export default {
     getPollingUnitsFor: function(registrationAreaId) {
         return axios.get( 
             CONFIG.API_URL + 
-            'registrationArea' +
+            '/registrationArea/' +
             registrationAreaId +
             '/pollingUnits' 
         );

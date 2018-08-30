@@ -16,11 +16,6 @@
                                         Browse Results
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#final-results" data-toggle="tab">
-                                        Final Results
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -29,9 +24,6 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="browse-results">
                             <browse-results :election_id="''"></browse-results>
-                        </div>
-                        <div class="tab-pane" id="final-results">
-                            <final-results :election_id="''"></final-results>                            
                         </div>
                     </div>
                 </div>
@@ -113,12 +105,10 @@
 </template>
 <script>
     import BrowseResults from '../components/results/BrowseResults.vue';
-    import FinalResults from '../components/results/FinalResults.vue';
 
     export default {
         components: {
-            BrowseResults,
-            FinalResults
+            BrowseResults
         }
     }
 </script>

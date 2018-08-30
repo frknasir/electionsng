@@ -6,33 +6,32 @@
 */
 
 import PollingUnitAPI from '../api/pollingUnit.js';
-import { CONFIG } from '../config.js';
 
 export const pollingUnit = {
     state: {
         pollingUnits: [],
-        pollingUnitsLoadStatus: CONFIG.STATUSES.idle,
-        addPollingUnitLoadStatus: CONFIG.STATUSES.idle,
-        updatePollingUnitLoadStatus: CONFIG.STATUSES.idle,
-        deletePollingUnitLoadStatus: CONFIG.STATUSES.idle
+        pollingUnitsLoadStatus: 0,
+        addPollingUnitLoadStatus: 0,
+        updatePollingUnitLoadStatus: 0,
+        deletePollingUnitLoadStatus: 0
     },
     actions: {
         getPollingUnits({commit, state, dispatch}, data) {
-            commit('setPollingUnitsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setPollingUnitsLoadStatus', 1);
 
             PollingUnitAPI.getPollingUnitsFor(
                 data.id
             ).then(function(response) {
-                commit('setPollingUnitsLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setPollingUnitsLoadStatus', 2);
                 commit('setPollingUnits', response.data);
             }).catch(function() {
-                commit('setPollingUnitsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setPollingUnitsLoadStatus', 3);
                 commit('setPollingUnits', []);
             });
         },
 
-        addPollingUnit({commit, state, dispatch}, data) {
-            commit('setPollingUnitLoadStatus', CONFIG.STATUSES.loading);
+        addPollingUnit({commit, state, dispatch}, data) { 
+            commit('setPollingUnitLoadStatus', 1);
 
             PollingUnitAPI.addPollingUnit(
                 data.code,
@@ -43,15 +42,15 @@ export const pollingUnit = {
                 data.added_by,
                 data.updated_by
             ).then(function(response) {
-                commit('setAddPollingUnitLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setAddPollingUnitLoadStatus', 2);
                 dispatch('getPollingUnits');
             }).catch(function() {
-                commit('setAddPollingUnitLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setAddPollingUnitLoadStatus', 3);
             });
         },
 
         updatePollingUnit({commit, state, dispatch}, data) {
-            commit('setUpdatePollingUnitLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdatePollingUnitLoadStatus', 1);
 
             PollingUnitAPI.updatePollingUnit(
                 data.id,
@@ -61,23 +60,23 @@ export const pollingUnit = {
                 data.longitude,
                 data.updated_by
             ).then(function(response) {
-                commit('setUpdatePollingUnitLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdatePollingUnitLoadStatus', 2);
                 dispatch('getPollingUnits');
             }).catch(function() {
-                commit('setUpdatePollingUnitLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdatePollingUnitLoadStatus', 3);
             });
         },
 
         deletePollingUnit({commit, state, dispatch}, data) {
-            commit('setDeletePollingUnitLoadStatus', CONFIG.STATUSES.loading);
+            commit('setDeletePollingUnitLoadStatus', 1);
 
             PollingUnitAPI.deletePollingUnit(
                 data.id
             ).then(function(response) {
-                commit('setDeletePollingUnitLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setDeletePollingUnitLoadStatus', 2);
                 dispatch('getPollingUnits');
             }).catch(function() {
-                commit('setDeletePollingUnitLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setDeletePollingUnitLoadStatus', 3);
             });
         }
     },

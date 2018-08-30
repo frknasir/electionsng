@@ -17,12 +17,12 @@ class RegistrationAreaController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getRegistrationAreaFor($localGovernmentId) {
+    public function index($localGovernmentId) {
         $localGovernment = LocalGovernment::findOrFail($localGovernmentId);
 
         $registrationAreas = $localGovernment->registrationAreas;
 
-        return RegistrationArea::collection($registrationAreas);
+        return RegistrationAreaResource::collection($registrationAreas);
     }
 
     /**

@@ -41,19 +41,18 @@
 		*/
 		td:nth-of-type(1):before { content: "Id: "; }
 		td:nth-of-type(2):before { content: "Party: "; }
-		td:nth-of-type(3):before { content: "Aspirant: "; }
-		td:nth-of-type(4):before { content: "Deputy: "; }
-		td:nth-of-type(5):before { content: "Bio: "; }
+		td:nth-of-type(3):before { content: "Candidate: "; }
+		td:nth-of-type(4):before { content: "Votes: "; }
 	}
-</style> 
+</style>
 <template>
     <div>
         <div id="toolbar">
-            <div class="form-check form-check-radio form-check-inline disabled">
+            <div v-if="election.election_type_id == 1" class="form-check form-check-radio form-check-inline">
                 <label class="form-check-label">
                     <input class="form-check-input" type="radio" 
                         name="pu-location_type"  
-                        value="state" v-model="location_type" disabled> State
+                        value="state" v-model="location_type"> State
                     <span class="circle">
                         <span class="check"></span>
                     </span>
@@ -93,87 +92,153 @@
         <div class="mb-3">
             <form>
                 <div class="form-row">
-                    <div v-show="location_type === 'state' || location_type === 'lg' || location_type === 'ra' || location_type === 'pu'" 
+                    <div v-show="election.election_type_id == 1 && (location_type === 'state' || location_type === 'lg' || location_type === 'ra' || location_type === 'pu')" 
                         class="col">
                         <label for="state">State</label>
-                        <select class="form-control form-control-success" name="state" id="state">
-                            <option value="1">1</option>
+                        <select v-model="state_slct" class="form-control">
+                            <option class="disabled" disabled>choose state</option>
+                            <option v-for="state in states" v-bind:key="state.id" :value="state.id">
+                                {{ state.name }}
+                            </option>
                         </select>
                     </div>
                     <div v-show="location_type === 'lg' || location_type === 'ra' || location_type === 'pu'" 
                         class="col">
                         <label for="lg">Local Government</label>
-                        <select class="form-control form-control-success" name="state" id="lg">
-                            <option value="1">1</option>
+                        <select v-model="lg_slct" class="form-control">
+                            <option class="disabled" disabled>choose Local Government</option>
+                            <option v-for="lg in localGovernments" v-bind:key="lg.id" :value="lg.id">
+                                {{ lg.name }}
+                            </option>
                         </select>
                     </div>
                     <div v-show="location_type === 'ra' || location_type === 'pu'"
                         class="col">
                         <label for="ra">Registration Area</label>
-                        <select class="form-control form-control-success" name="state" id="ra">
-                            <option value="1">1</option>
+                        <select v-model="ra_slct" class="form-control">
+                            <option class="disabled" disabled>choose Registration Area</option>
+                            <option v-for="ra in registrationAreas" v-bind:key="ra.id" :value="ra.id">
+                                {{ ra.name }}
+                            </option>
                         </select>
                     </div>
                     <div v-show="location_type === 'pu'" class="col">
                         <label for="pu">Polling Unit</label>
-                        <select class="form-control form-control-success" name="state" id="pu">
+                        <select v-model="pu_slct" class="form-control">
                             <option value="1">1</option>
                         </select>
                     </div>
                 </div>
-                <button v-show="location_type === 'state' || location_type === 'lg' || location_type === 'ra' || location_type === 'pu'" 
+                <button v-show="location_type !== null" 
                     type="submit" class="btn btn-success">
                     Get Results
                 </button>
             </form>
         </div>
-        <div>
-            <div class="text-center">
-                <h2 class="title title-modern">Showing results from: </h2>
-            </div>
-            <table id="browse-results-dt" class="table table-success table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">#</th>
-                        <th>Party</th>
-                        <th>Candidate</th>
-                        <th>Votes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-center">
-                            1
-                        </td>
-                        <td>Andrew Mike</td>
-                        <td>Develop</td>
-                        <td>2013</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="text-center">
+            <h2 class="title title-modern">Final results</h2>
         </div>
+        <table id="final-results-dt" class="table table-success table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Party</th>
+                    <th>Candidate</th>
+                    <th>Votes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(finalResult,index) in finalResults" v-bind:key="finalResult.id">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ finalResult.party }}</td>
+                    <td>{{ finalResult.candidate_name }}</td>
+                    <td>{{ finalResult.votes }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 <script>
     export default {
-        components: {
-        },
         mounted() {
         },
         created() {
-
+            this.$store.dispatch('getFinalResults', {
+                id: this.$route.params.id
+            });
         },
         data() {
             return {
-                location_type: ''
+                location_type: null,
+                state_slct: null,
+                lg_slct: null,
+                ra_slct: null,
+                pu_slct: null
             }
         },
-        computed: {
+        watch: {
+            location_type: function() {
+                if(this.election.election_type_id == 1) {
+                    this.$store.dispatch('getStates');
+                } else {
+                    this.$store.dispatch('getLocalGovernments', {
+                        id: this.election.state.id
+                    });
+                }
+            },
 
+            state_slct: function() {
+                this.$store.dispatch('getLocalGovernments', {
+                    id: this.state_slct
+                });
+            },
+
+            lg_slct: function() {
+                this.$store.dispatch('getRegistrationAreas', {
+                    id: this.lg_slct
+                });
+            },
+
+            ra_slct: function() {
+                this.$store.dispatch('getPollingUnits', {
+                    id: this.ra_slct
+                })
+            },
+        },
+        computed: {
+            election() {
+                return this.$store.getters.getElection;
+            },
+            finalResults() {
+                return this.$store.getters.getFinalResults;
+            },
+            states() {
+                return this.$store.getters.getStates;
+            },
+            statesLoadStatus() {
+                return this.$store.getters.getStatesLoadStatus;
+            },
+            localGovernments() {
+                return this.$store.getters.getLocalGovernments;
+            },
+            localGovernmentsLoadStatus() {
+                return this.$store.getters.getLocalGovernmentsLoadStatus;
+            },
+            registrationAreas() {
+                return this.$store.getters.getRegistrationAreas;
+            },
+            registrationAreasLoadStatus() {
+                return this.$store.getters.getRegistrationAreasLoadStatus;
+            },
+            pollingUnits() {
+                return this.$store.getters.getPollingUnits;
+            },
+            pollingUnitsLoadStatus() {
+                return this.$store.getters.getPollingUnitsLoadStatus;
+            }
         },
         methods: {
 
         }
     }
 </script>
-

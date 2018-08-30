@@ -6,41 +6,40 @@
 */
 
 import StateAPI from '../api/state.js';
-import { CONFIG } from '../config.js';
 
 export const state = { 
     state: {
         states: [],
-        stateLoadStatus: CONFIG.STATUSES.idle,
-        updateStateLoadStatus: CONFIG.STATUSES.idle,
+        stateLoadStatus: 0,
+        updateStateLoadStatus: 0,
     },
     actions: {
         getStates({commit}) {
-            commit('setStateLoadStatus', CONFIG.STATUSES.loading);
+            commit('setStateLoadStatus', 1);
 
             StateAPI.getStates()
                 .then(function(response) {
-                    commit('setStateLoadStatus', CONFIG.STATUSES.completed_with_success);
-                    commit('setStates', response.data);
+                    commit('setStateLoadStatus', 2);
+                    commit('setStates', response.data.data);
                 })
                 .catch(function() {
-                    commit('setStateLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setStateLoadStatus', 3);
                     commit('setStates', []);
                 });
         },
         updateState({commit, state, dispatch}, data) {
-            commit('setUpdateStateLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdateStateLoadStatus', 1);
 
             StateAPI.updateState(
                 data.id,
                 data.latitude,
                 data.longitude
             ).then(function(response) {
-                commit('setUpdateStateLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdateStateLoadStatus', 2);
                 dispatch('getStates');
             })
             .catch(function() {
-                commit('setUpdateStateLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdateStateLoadStatus', 3);
             });
         }
     },

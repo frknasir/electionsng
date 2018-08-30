@@ -6,33 +6,32 @@
 */
 
 import RegistrationAreaAPI from '../api/registrationArea.js';
-import { CONFIG } from '../config.js';
 
 export const registrationArea = {
     state: {
         registrationAreas: [],
-        registrationAreasLoadStatus: CONFIG.STATUSES.idle,
-        addRegistrationAreaLoadStatus: CONFIG.STATUSES.idle,
-        updateRegistrationAreaLoadStatus: CONFIG.STATUSES.idle,
-        deleteRegistrationAreaLoadStatus: CONFIG.STATUSES.idle
+        registrationAreasLoadStatus: 0,
+        addRegistrationAreaLoadStatus: 0,
+        updateRegistrationAreaLoadStatus: 0,
+        deleteRegistrationAreaLoadStatus: 0
     },
     actions: {
         getRegistrationAreas({commit, state, dispatch}, data) {
-            commit('setRegistrationAreasLoadStatus', CONFIG.STATUSES.loading);
+            commit('setRegistrationAreasLoadStatus', 1);
 
             RegistrationAreaAPI.getRegistrationAreasFor(
                 data.id
             ).then(function(response) {
-                commit('setRegistrationAreasLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setRegistrationAreas', response.data);
+                commit('setRegistrationAreasLoadStatus', 2);
+                commit('setRegistrationAreas', response.data.data);
             }).catch(function() {
-                commit('setRegistrationAreasLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setRegistrationAreasLoadStatus', 3);
                 commit('setRegistrationAreas', []);
             });
         },
 
         addRegistrationArea({commit, state, dispatch}, data) {
-            commit('setRegistrationAreaLoadStatus', CONFIG.STATUSES.loading);
+            commit('setRegistrationAreaLoadStatus', 1);
 
             RegistrationAreaAPI.addRegistrationArea(
                 data.name,
@@ -42,15 +41,15 @@ export const registrationArea = {
                 data.added_by,
                 data.updated_by
             ).then(function(response) {
-                commit('setAddRegistrationAreaLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setAddRegistrationAreaLoadStatus', 2);
                 dispatch('getRegistrationAreas');
             }).catch(function() {
-                commit('setAddRegistrationAreaLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setAddRegistrationAreaLoadStatus', 3);
             });
         },
 
         updateRegistrationArea({commit, state, dispatch}, data) {
-            commit('setUpdateRegistrationAreaLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdateRegistrationAreaLoadStatus', 1);
 
             RegistrationAreaAPI.updateRegistrationArea(
                 data.id,
@@ -59,23 +58,23 @@ export const registrationArea = {
                 data.longitude,
                 data.updated_by
             ).then(function(response) {
-                commit('setUpdateRegistrationAreaLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdateRegistrationAreaLoadStatus', 2);
                 dispatch('getRegistrationAreas');
             }).catch(function() {
-                commit('setUpdateRegistrationAreaLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdateRegistrationAreaLoadStatus', 3);
             });
         },
 
         deleteRegistrationArea({commit, state, dispatch}, data) {
-            commit('setDeleteRegistrationAreaLoadStatus', CONFIG.STATUSES.loading);
+            commit('setDeleteRegistrationAreaLoadStatus', 1);
 
             RegistrationAreaAPI.deleteRegistrationArea(
                 data.id
             ).then(function(response) {
-                commit('setDeleteRegistrationAreaLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setDeleteRegistrationAreaLoadStatus', 2);
                 dispatch('getRegistrationAreas');
             }).catch(function() {
-                commit('setDeleteRegistrationAreaLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setDeleteRegistrationAreaLoadStatus', 3);
             });
         }
     },

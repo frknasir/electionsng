@@ -49,6 +49,26 @@ Route::group(['prefix'=> 'v1'], function() {
     '/election/{electionId}/finalResults', 
     'FinalResultController@index'
   );
+
+  Route::get(
+    '/states',
+    'StateController@index'
+  );
+
+  Route::get(
+    '/state/{stateId}/localGovernments',
+    'LocalGovernmentController@index'
+  );
+
+  Route::get(
+    '/localGovernment/{lgId}/registrationAreas',
+    'RegistrationAreaController@index'
+  );
+
+  Route::get(
+    '/registrationArea/{raId}/pollingUnits',
+    'PollingUnitController@index'
+  );
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');
