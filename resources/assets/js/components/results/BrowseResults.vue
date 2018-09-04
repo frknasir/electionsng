@@ -131,7 +131,7 @@
                         </select>
                     </div>
                 </div>
-                <button v-show="location_type !== null" 
+                <button @click="getResults(location_type)" v-show="location_type !== null" 
                     type="button" class="btn btn-success">
                     Get Results
                 </button>

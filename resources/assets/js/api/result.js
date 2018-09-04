@@ -4,18 +4,6 @@
 import { CONFIG } from '../config.js';
 
 export default {
-    /*
-    GET /api/v1/election/{election_id}/results
-    */
-    getElectionResults: function(electionId) {
-        return axios.get( 
-            CONFIG.API_URL + 
-            '/election/' + 
-            electionId + 
-            '/results' 
-        );
-    },
-
     /* *
     GET /api/v1/election/{election_id}/state/{state_id}/results
     */

@@ -13,6 +13,7 @@ use App\Http\Resources\ResultResource;
 use App\Http\Requests\Result\NewRequest;
 use App\Http\Requests\Result\UpdateRequest;
 use App\Http\Requests\Result\DelRequest;
+use DB;
 
 class ResultController extends Controller {
     /**
@@ -20,28 +21,59 @@ class ResultController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function electionResults($electionId) {
-        $candidates = Candidate::where('election_id', $electionId);
-
-        $results = $candidates->results;
-
-        return ResultResource::collection($results);
-    }
-
     public function stateResults($electionId, $stateId) {
+        $candidates = Candidate::select('id')->where('election_id', $electionId)->get();
         $state = State::findOrFail($stateId);
 
-        $results = $state->results()->where('election_id', $electionId)->paginate(20);
-
-        return ResultResource::collection($results);
+        $results = $state->results()->select(
+            DB::raw(
+                'results.id, '.
+                'candidates.id as candidate_id, '.
+                'results.location_type, '.
+                'results.location_id, '.
+                'results.votes, '.
+                'results.added_by, '.
+                'results.created_at, '.
+                'results.updated_at'
+            )
+        )->rightJoin(
+            'candidates',
+            'results.candidate_id',
+            '=',
+            'candidates.id'
+        )->whereIn('candidates.id', $candidates)->get();
+        
+        return $results;
+        //return ResultResource::collection($results);
     }
 
     public function localGovernmentResults($electionId, $localGovernmentId) {
+        $candidates = Candidate::select('id')->where(
+            'election_id', 
+            $electionId
+        )->get();
         $localGovernment = LocalGovernment::findOrFail($localGovernmentId);
 
-        $results = $localGovernment->results()->where('election_id', $electionId)->paginate(20);
+        $results = Result::select(
+            DB::raw(
+                'results.id, '.
+                'candidates.id as candidate_id, '.
+                'results.location_type, '.
+                'results.location_id, '.
+                'results.votes, '.
+                'results.added_by, '.
+                'results.created_at, '.
+                'results.updated_at'
+            )
+        )->rightJoin(
+            'candidates',
+            'results.candidate_id',
+            '=',
+            'candidates.id'
+        )->whereIn('candidates.id', $candidates)->get();
 
-        return ResultsResource::collection($results);
+        return $results;
+        //return ResultsResource::collection($results);
     }
 
     public function registrationAreaResults($electionId, $registrationAreaId) {

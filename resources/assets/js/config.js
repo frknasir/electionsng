@@ -11,13 +11,3 @@ switch( process.env.NODE_ENV ){
         api_url = 'https://electionsng.com/api/v1';
     break;
 }
-
-export const CONFIG = {
-    API_URL: api_url,
-    STATUSES: {
-        'idle': 0,
-        'loading': 1,
-        'completed_with_success': 2,
-        'completed_with_failure': 3
-    }
-};

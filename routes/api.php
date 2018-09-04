@@ -46,11 +46,6 @@ Route::group(['prefix'=> 'v1'], function() {
   );
 
   Route::get(
-    '/election/{electionId}/finalResults', 
-    'FinalResultController@index'
-  );
-
-  Route::get(
     '/states',
     'StateController@index'
   );
@@ -69,6 +64,37 @@ Route::group(['prefix'=> 'v1'], function() {
     '/registrationArea/{raId}/pollingUnits',
     'PollingUnitController@index'
   );
+
+  /**
+   * Results Routes
+   */
+  Route::get(
+    '/election/{electionId}/finalResults', 
+    'FinalResultController@index'
+  );
+
+  Route::get(
+    '/election/{electionId}/state/{stateId}/results',
+    'ResultController@stateResults'
+  );
+
+  Route::get(
+    '/election/{electionId}/localGovernment/{lgId}/results',
+    'ResultController@localGovernmentResults'
+  );
+
+  Route::get(
+    '/election/{electionId}/registrationArea/{raId}/results',
+    'ResultController@registrationAreaResults'
+  );
+
+  Route::get(
+    '/election/{electionId}/pollingUnit/{puId}/results',
+    'ResultController@pollingUnitResults'
+  );
+  /**
+   * End Results Routes
+   */
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

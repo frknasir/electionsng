@@ -7,84 +7,85 @@
 
 import ResultAPI from '../api/result.js';
 import FinalResultAPI from '../api/finalResult.js';
-import { CONFIG } from '../config.js'; 
 
 export const result = {
+    
     state: {
         results: [],
-        resultsLoadStatus: CONFIG.STATUSES.idle,
+        resultsLoadStatus: 0,
         result: {},
-        resultLoadStatus: CONFIG.STATUSES.idle,
-        addResultLoadStatus: CONFIG.STATUSES.idle,
-        updateResultLoadStatus: CONFIG.STATUSES.idle,
-        deleteResultLoadStatus: CONFIG.STATUSES.idle,
+        resultLoadStatus: 0,
+        addResultLoadStatus: 0,
+        updateResultLoadStatus: 0,
+        deleteResultLoadStatus: 0,
         addFinalResultLoadStatus: 0,
         updateFinalResultLoadStatus: 0,
         deleteFinalResultLoadStatus: 0
     },
+
     actions: {
         getStateResults({commit}, data) {
-            commit('setResultsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setResultsLoadStatus', 1);
 
             ResultAPI.getStateResults(
                 data.electionId,
                 data.stateId
             ).then(function(response) {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setResults', response.data);
+                commit('setResultsLoadStatus', 2);
+                commit('setResults', response.data.data);
             }).catch(function() {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
             });
         },
 
         getLocalGovernmentResults({commit}, data) {
-            commit('setResultsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setResultsLoadStatus', 1);
 
             ResultAPI.getLocalGovernmentResults(
                 data.electionId,
                 data.localGovernmentId
             ).then(function(response) {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setResults', response.data);
+                commit('setResultsLoadStatus', 2);
+                commit('setResults', response.data.data);
             }).catch(function() {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
             });
         },
 
         getRegistrationAreaResults({commit}, data) {
-            commit('setResultsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setResultsLoadStatus', 1);
 
             ResultAPI.getRegistrationAreaResults(
                 data.electionId,
                 data.registrationAreaId
             ).then(function(response) {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setResults', response.data);
+                commit('setResultsLoadStatus', 2);
+                commit('setResults', response.data.data);
             }).catch(function() {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
             });
         },
 
         getPollingUnitResults({commit}, data) {
-            commit('setResultsLoadStatus', CONFIG.STATUSES.loading);
+            commit('setResultsLoadStatus', 1);
 
             ResultAPI.getPollingUnitResults(
                 data.electionId,
                 data.pollingUnitId
             ).then(function(response) {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_success);
-                commit('setResults', response.data);
+                commit('setResultsLoadStatus', 2);
+                commit('setResults', response.data.data);
             }).catch(function() {
-                commit('setResultsLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
             });
         },
 
         addResult({commit, state, dispatch}, data) {
-            commit('setAddResultLoadStatus', CONFIG.STATUSES.loading);
+            commit('setAddResultLoadStatus', 1);
 
             ResultAPI.addResult(
                 data.political_party_id,
@@ -95,35 +96,35 @@ export const result = {
                 data.added_by,
                 data.updated_by
             ).then(function(response) {
-                commit('setAddResultLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setAddResultLoadStatus', 2);
             }).catch(function() {
-                commit('setAddResultLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setAddResultLoadStatus', 3);
             });
         },
 
         updateResult({commit, state, dispatch}, data) {
-            commit('setUpdateResultLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdateResultLoadStatus', 1);
 
             ResultAPI.updateResult(
                 data.id,
                 data.votes,
                 data.updated_by
             ).then(function(response) {
-                commit('setUpdateResultLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdateResultLoadStatus', 2);
             }).catch(function() {
-                commit('setUpdateResultLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdateResultLoadStatus', 3);
             });
         },
 
         deleteResult({commit, state, dispatch}, data) {
-            commit('setDeleteResultLoadStatus', CONFIG.STATUSES.loading);
+            commit('setDeleteResultLoadStatus', 1);
 
             ResultAPI.deleteResult(
                 data.id
             ).then(function(response) {
-                commit('setDeleteResultLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setDeleteResultLoadStatus', 2);
             }).catch(function() {
-                commit('setDeleteResultLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setDeleteResultLoadStatus', 3);
             });
         }, 
 
@@ -139,6 +140,7 @@ export const result = {
                 commit('setResultsLoadStatus', 3);
             });
         },
+
         addFinalResult({commit, state, dispatch}, data) {
             commit('setAddFinalResultLoadStatus', 1);
 
@@ -180,6 +182,7 @@ export const result = {
             });
         }
     },
+
     mutations: {
         setResultsLoadStatus(state, status) {
             state.resultsLoadStatus = status;
@@ -221,6 +224,7 @@ export const result = {
             state.deleteFinalResultLoadStatus = status;
         }
     },
+
     getters: {
         getResultsLoadStatus(state) {
             return state.resultsLoadStatus;
