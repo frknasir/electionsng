@@ -6,24 +6,23 @@
 */
 
 import IncidentTypeAPI from '../api/incidentType.js';
-import { CONFIG } from '../config.js';
 
 export const incidentType = { 
     state: {
         incidentTypes: [],
-        incidentTypesLoadStatus: CONFIG.STATUSES.idle,
+        incidentTypesLoadStatus: 0,
     },
     actions: {
         getIncidentTypes({commit}) {
-            commit('setIncidentTypesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setIncidentTypesLoadStatus', 1);
 
             IncidentTypeAPI.getIncidentTypes()
                 .then(function(response) {
-                    commit('setIncidentTypesLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setIncidentTypesLoadStatus', 2);
                     commit('setIncidentTypes', response.data);
                 })
                 .catch(function() {
-                    commit('setIncidentTypesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setIncidentTypesLoadStatus', 3);
                     commit('setIncidentTypes', []);
                 });
         }

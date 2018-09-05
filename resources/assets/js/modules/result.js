@@ -15,6 +15,10 @@ export const result = {
         resultsLoadStatus: 0,
         result: {},
         resultLoadStatus: 0,
+        forr: {
+            location_type: null,
+            location_name: null
+        },
         addResultLoadStatus: 0,
         updateResultLoadStatus: 0,
         deleteResultLoadStatus: 0,
@@ -33,9 +37,18 @@ export const result = {
             ).then(function(response) {
                 commit('setResultsLoadStatus', 2);
                 commit('setResults', response.data.data);
+                let l = response.data.data[0].location.name;
+                commit('setForr', {
+                    location_type: "For State: ",
+                    location_name: l
+                });
             }).catch(function() {
                 commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
+                commit('setForr', {
+                    location_type: "",
+                    location_name: ""
+                });
             });
         },
 
@@ -48,9 +61,18 @@ export const result = {
             ).then(function(response) {
                 commit('setResultsLoadStatus', 2);
                 commit('setResults', response.data.data);
+                let l = response.data.data[0].location.name;
+                commit('setForr', {
+                    location_type: "For Local Government: ",
+                    location_name: l
+                });
             }).catch(function() {
                 commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
+                commit('setForr', {
+                    location_type: "",
+                    location_name: ""
+                });
             });
         },
 
@@ -63,9 +85,18 @@ export const result = {
             ).then(function(response) {
                 commit('setResultsLoadStatus', 2);
                 commit('setResults', response.data.data);
+                let l = response.data.data[0].location.name;
+                commit('setForr', {
+                    location_type: "For Registration Area: ",
+                    location_name: l
+                });
             }).catch(function() {
                 commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
+                commit('setForr', {
+                    location_type: "",
+                    location_name: ""
+                });
             });
         },
 
@@ -78,9 +109,17 @@ export const result = {
             ).then(function(response) {
                 commit('setResultsLoadStatus', 2);
                 commit('setResults', response.data.data);
+                commit('setForr', {
+                    location_type: "For Polling Unit: ",
+                    location_name: response.data.data[0].location.code
+                });
             }).catch(function() {
                 commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
+                commit('setForr', {
+                    location_type: "",
+                    location_name: ""
+                });
             });
         },
 
@@ -200,6 +239,11 @@ export const result = {
             state.result = result;
         }, 
 
+        setForr(state, forr) {
+            state.forr.location_type = forr.location_type;
+            state.forr.location_name = forr.location_name;
+        },
+
         setAddResultLoadStatus(state, status) {
             state.addResultLoadStatus = status;
         },
@@ -241,6 +285,10 @@ export const result = {
         getResult(state) {
             return state.result;
         }, 
+
+        getForr(state) {
+            return state.forr;
+        },
 
         getAddResultLoadStatus(state) {
             return state.addResultLoadStatus;

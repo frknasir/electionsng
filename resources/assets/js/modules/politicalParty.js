@@ -11,27 +11,27 @@ import { CONFIG } from '../config.js';
 export const politicalParty = {
     state: {
         politicalParties: [],
-        politicalPartiesLoadStatus: CONFIG.STATUSES.idle,
-        addPoliticalPartyLoadStatus: CONFIG.STATUSES.idle,
-        updatePoliticalPartyLoadStatus: CONFIG.STATUSES.idle,
-        deletePoliticalPartyLoadStatus: CONFIG.STATUSES.idle
+        politicalPartiesLoadStatus: 0,
+        addPoliticalPartyLoadStatus: 0,
+        updatePoliticalPartyLoadStatus: 0,
+        deletePoliticalPartyLoadStatus: 0
     },
     actions: {
         getPoliticalParties({commit}) {
-            commit('setPoliticalPartiesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setPoliticalPartiesLoadStatus', 1);
 
             PoliticalPartyAPI.getPoliticalParties()
                 .then(function(response) {
-                    commit('setPoliticalPartiesLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setPoliticalPartiesLoadStatus', 2);
                     commit('setPoliticalParties', response.data);
                 }).catch(function() {
-                    commit('setPoliticalPartiesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setPoliticalPartiesLoadStatus', 3);
                     commit('setPoliticalParties', []);
                 });
         },
 
         addPoliticalParty({commit, state, dispatch}, data) {
-            commit('setAddPoliticalPartyLoadStatus', CONFIG.STATUSES.loading);
+            commit('setAddPoliticalPartyLoadStatus', 1);
 
             PoliticalPartyAPI.AddPoliticalParty(
                 data.initials,
@@ -39,15 +39,15 @@ export const politicalParty = {
                 data.added_by,
                 data.updated_by
             ).then(function(response) {
-                commit('setAddPoliticalPartyLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setAddPoliticalPartyLoadStatus', 2);
                 dispatch('getPoliticalParties');
             }).catch(function() {
-                commit('setAddPoliticalPartyLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setAddPoliticalPartyLoadStatus', 3);
             });
         },
 
         updatePoliticalParty({commit, state, dispatch}, data) {
-            commit('setUpdatePoliticalPartyLoadStatus', CONFIG.STATUSES.loading);
+            commit('setUpdatePoliticalPartyLoadStatus', 1);
 
             PoliticalPartyAPI.updatePoliticalParty(
                 data.id,
@@ -55,23 +55,23 @@ export const politicalParty = {
                 data.name,
                 data.updated_by
             ).then(function(response) {
-                commit('setUpdatePoliticalPartyLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setUpdatePoliticalPartyLoadStatus', 2);
                 dispatch('getPoliticalParties');
             }).catch(function() {
-                commit('setUpdatePoliticalPartyLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setUpdatePoliticalPartyLoadStatus', 3);
             });
         },
 
         deletePoliticalParty({commit, state, dispatch}, data) {
-            commit('setDeletePoliticalPartyLoadStatus', CONFIG.STATUSES.loading);
+            commit('setDeletePoliticalPartyLoadStatus', 1);
 
             PoliticalPartyAPI.deletePoliticalParty(
                 data.id
             ).then(function(response) {
-                commit('setDeletePoliticalPartyLoadStatus', CONFIG.STATUSES.completed_with_success);
+                commit('setDeletePoliticalPartyLoadStatus', 2);
                 dispatch('getPoliticalParties');
             }).catch(function() {
-                commit('setDeletePoliticalPartyLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                commit('setDeletePoliticalPartyLoadStatus', 3);
             });
         }
     },

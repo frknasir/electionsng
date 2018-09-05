@@ -42,9 +42,8 @@ class ResultController extends Controller {
             '=',
             'candidates.id'
         )->whereIn('candidates.id', $candidates)->get();
-        
-        return $results;
-        //return ResultResource::collection($results);
+
+        return ResultResource::collection($results);
     }
 
     public function localGovernmentResults($electionId, $localGovernmentId) {
@@ -54,7 +53,7 @@ class ResultController extends Controller {
         )->get();
         $localGovernment = LocalGovernment::findOrFail($localGovernmentId);
 
-        $results = Result::select(
+        $results = $localGovernment->results()->select(
             DB::raw(
                 'results.id, '.
                 'candidates.id as candidate_id, '.
@@ -72,22 +71,61 @@ class ResultController extends Controller {
             'candidates.id'
         )->whereIn('candidates.id', $candidates)->get();
 
-        return $results;
-        //return ResultsResource::collection($results);
+        return ResultResource::collection($results);
     }
 
     public function registrationAreaResults($electionId, $registrationAreaId) {
+        $candidates = Candidate::select('id')->where(
+            'election_id', 
+            $electionId
+        )->get();
         $registrationArea = RegistrationArea::findOrFail($registrationAreaId);
 
-        $results = $registrationArea->results()->where('election_id', $electionId)->paginate(20);
+        $results = $registrationArea->results()->select(
+            DB::raw(
+                'results.id, '.
+                'candidates.id as candidate_id, '.
+                'results.location_type, '.
+                'results.location_id, '.
+                'results.votes, '.
+                'results.added_by, '.
+                'results.created_at, '.
+                'results.updated_at'
+            )
+        )->rightJoin(
+            'candidates',
+            'results.candidate_id',
+            '=',
+            'candidates.id'
+        )->whereIn('candidates.id', $candidates)->get();
 
         return ResultResource::collection($results);
     }
 
     public function pollingUnitResults($electionId, $pollingUnitId) {
+        $candidates = Candidate::select('id')->where(
+            'election_id', 
+            $electionId
+        )->get();
         $pollingUnit = PollingUnit::findOrFail($pollingUnitId);
 
-        $results = $pollingUnit->results()->where('election_id', $electionId)->paginate(20);
+        $results = $pollingUnit->results()->select(
+            DB::raw(
+                'results.id, '.
+                'candidates.id as candidate_id, '.
+                'results.location_type, '.
+                'results.location_id, '.
+                'results.votes, '.
+                'results.added_by, '.
+                'results.created_at, '.
+                'results.updated_at'
+            )
+        )->rightJoin(
+            'candidates',
+            'results.candidate_id',
+            '=',
+            'candidates.id'
+        )->whereIn('candidates.id', $candidates)->get();
 
         return ResultResource::collection($results);
     }

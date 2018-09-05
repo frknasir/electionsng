@@ -138,7 +138,7 @@
             </form>
         </div>
         <div class="text-center">
-            <h2 class="title title-modern">Final results</h2>
+            <h2 class="title title-modern">{{ forr.location_type + forr.location_name }}</h2>
         </div>
         <table id="final-results-dt" class="table table-success table-striped table-bordered">
             <thead>
@@ -213,6 +213,12 @@
             },
             results() {
                 return this.$store.getters.getResults;
+            },
+            resultsLoadStatus() {
+                return this.$store.getters.getResultsLoadStatus;
+            },
+            forr() {
+                return this.$store.getters.getForr;
             },
             states() {
                 return this.$store.getters.getStates;

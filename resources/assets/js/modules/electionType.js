@@ -6,24 +6,23 @@
 */
 
 import ElectionTypeAPI from '../api/electionType.js';
-import { CONFIG } from '../config.js';
 
 export const electionType = { 
     state: {
         electionTypes: [],
-        electionTypesLoadStatus: CONFIG.STATUSES.idle,
+        electionTypesLoadStatus: 0,
     },
     actions: {
         getElectionTypes({commit}) {
-            commit('setElectionTypesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setElectionTypesLoadStatus', 1);
 
             ElectionTypeAPI.getElectionTypes()
                 .then(function(response) {
-                    commit('setElectionTypesLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setElectionTypesLoadStatus', 2);
                     commit('setElectionTypes', response.data);
                 })
                 .catch(function() {
-                    commit('setElectionTypesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setElectionTypesLoadStatus', 3);
                     commit('setElectionTypes', []);
                 });
         }

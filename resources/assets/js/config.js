@@ -11,3 +11,7 @@ switch( process.env.NODE_ENV ){
         api_url = 'https://electionsng.com/api/v1';
     break;
 }
+
+export const CONFIG = {
+    API_URL: api_url
+};

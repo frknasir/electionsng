@@ -6,24 +6,23 @@
 */
 
 import RoleAPI from '../api/role.js';
-import { CONFIG } from '../config.js';
 
 export const role = { 
     state: {
         roles: [],
-        rolesLoadStatus: CONFIG.STATUSES.idle,
+        rolesLoadStatus: 0,
     },
     actions: {
         getRoles({commit}) {
-            commit('setRolesLoadStatus', CONFIG.STATUSES.loading);
+            commit('setRolesLoadStatus', 1);
 
             RoleAPI.getRoles()
                 .then(function(response) {
-                    commit('setRolesLoadStatus', CONFIG.STATUSES.completed_with_success);
+                    commit('setRolesLoadStatus', 2);
                     commit('setRoles', response.data);
                 })
                 .catch(function() {
-                    commit('setRolesLoadStatus', CONFIG.STATUSES.completed_with_failure);
+                    commit('setRolesLoadStatus', 3);
                     commit('setRoles', []);
                 });
         }
