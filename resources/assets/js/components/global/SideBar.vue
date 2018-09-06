@@ -55,11 +55,11 @@
                     </router-link>
                 </li>
                 <li class="nav-item active">
-                    <router-link class="nav-link" :to="'/election/'+$route.params.id+'/gallery'">
+                    <router-link class="nav-link" :to="'/election/'+$route.params.id+'/pictures'">
                         <i class="material-icons">
                             image
                         </i>
-                        <p>Gallery</p>
+                        <p>Pictures</p>
                     </router-link>
                 </li>
                 <li class="nav-item active">

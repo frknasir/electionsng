@@ -137,10 +137,6 @@ class LiveUpdateController extends Controller {
 
         $liveUpdate->title = $request->input('title');
         $liveUpdate->description = $request->input('description');
-        $liveUpdate->election_id = $request->input('election_id');
-        $liveUpdate->location_id = $request->input('location_id');
-        $liveUpdate->location_type = $request->input('location_type');
-        $liveUpdate->added_by = $request->input('added_by');
         $liveUpdate->updated_by = $request->input('updated_by');
 
         if($liveUpdate->save()) {
@@ -160,7 +156,7 @@ class LiveUpdateController extends Controller {
     public function destroy(DelLiveUpdateRequest $request) {
         $liveUpdate = LiveUpdate::findOrFail($request->input('id'));
 
-        if($liveUpdate->save()) {
+        if($liveUpdate->delete()) {
             return response()->json([
                 'success' => 1,
                 'message' => 'update deleted successfully'

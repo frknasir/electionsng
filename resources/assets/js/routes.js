@@ -64,9 +64,9 @@ export default new VueRouter({
                     component: Vue.component('Results', require('./pages/Results.vue'))
                 },
                 {
-                    path: 'gallery',
-                    name: 'gallery',
-                    component: Vue.component('Gallery', require('./pages/Gallery.vue'))
+                    path: 'pictures',
+                    name: 'pictures',
+                    component: Vue.component('Pictures', require('./pages/Pictures.vue'))
                 },
                 {
                     path: 'charts',

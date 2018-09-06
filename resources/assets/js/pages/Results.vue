@@ -30,19 +30,21 @@
             </div>
 
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
+                <div v-if="election.election_type_id == 1" class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card card-stats">
                         <div class="card-header card-header-warning card-header-icon">
                             <div class="card-icon">
                                 <i class="material-icons">ballot</i>
                             </div>
                             <p class="card-category">State</p>
-                            <h3 class="card-title">2/184</h3>
+                            <h3 class="card-title">
+                                {{ collationStats.state.collated }}/{{ collationStats.state.total }}
+                            </h3>
                         </div>
                         <div class="card-footer">
                             <div class="stats">
                                 <i class="material-icons text-danger">warning</i>
-                                Results collected from State level
+                                Results collated from State level
                             </div>
                         </div>
                     </div>
@@ -54,12 +56,14 @@
                                 <i class="material-icons">ballot</i>
                             </div>
                             <p class="card-category">Local Gov</p>
-                            <h3 class="card-title">75/344</h3>
+                            <h3 class="card-title">
+                                {{ collationStats.localGovernment.collated}}/{{ collationStats.localGovernment.total }}
+                            </h3>
                         </div>
                         <div class="card-footer">
                             <div class="stats">
                                 <i class="material-icons text-danger">warning</i>
-                                Results collected from LG level
+                                Results collated from LG level
                             </div>
                         </div>
                     </div>
@@ -71,12 +75,14 @@
                                 <i class="material-icons">ballot</i>
                             </div>
                             <p class="card-category">Reg. Area</p>
-                            <h3 class="card-title">24/40</h3>
+                            <h3 class="card-title">
+                                {{ collationStats.registrationArea.collated }}/{{ collationStats.registrationArea.total }}
+                            </h3>
                         </div>
                         <div class="card-footer">
                             <div class="stats">
                                 <i class="material-icons text-danger">warning</i>
-                                Results collected from LG level
+                                Results collated from LG level
                             </div>
                         </div>
                     </div>
@@ -88,12 +94,14 @@
                                 <i class="material-icons">ballot</i>
                             </div>
                             <p class="card-category">P. Unit</p>
-                            <h3 class="card-title">24/50</h3>
+                            <h3 class="card-title">
+                                {{ collationStats.pollingUnit.collated }}/{{ collationStats.pollingUnit.total }}
+                            </h3>
                         </div>
                         <div class="card-footer">
                             <div class="stats">
                                 <i class="material-icons text-danger">warning</i> 
-                                Just Updated
+                                Results collated from PU level
                             </div>
                         </div>
                     </div>
