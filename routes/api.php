@@ -92,6 +92,11 @@ Route::group(['prefix'=> 'v1'], function() {
     '/election/{electionId}/pollingUnit/{puId}/results',
     'ResultController@pollingUnitResults'
   );
+
+  Route::get(
+    '/election/{electionId}/collationStats',
+    'ResultController@collationStats'
+  );
   /**
    * End Results Routes
    */

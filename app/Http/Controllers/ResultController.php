@@ -8,6 +8,7 @@ use App\LocalGovernment;
 use App\RegistrationArea;
 use App\PollingUnit;
 use App\Candidate;
+use App\Election;
 use Illuminate\Http\Request;
 use App\Http\Resources\ResultResource;
 use App\Http\Requests\Result\NewRequest;
@@ -51,6 +52,7 @@ class ResultController extends Controller {
             'election_id', 
             $electionId
         )->get();
+
         $localGovernment = LocalGovernment::findOrFail($localGovernmentId);
 
         $results = $localGovernment->results()->select(
@@ -128,6 +130,158 @@ class ResultController extends Controller {
         )->whereIn('candidates.id', $candidates)->get();
 
         return ResultResource::collection($results);
+    }
+
+    public function collationStats($electionId) {
+        $stats = array();
+        $stats['state'] = array();
+        $stats['localGovernment'] = array();
+        $stats['registrationArea'] = array();
+        $stats['pollingUnit'] = array();
+
+        $election = Election::findOrFail($electionId);
+        $candidates = $election->candidates()->select('id')->get();
+
+        
+
+        if($election->election_type_id == 1) {
+            #Presidential Elections
+
+            /**
+             * State
+             */
+            $stats['state']['total'] = State::count();
+            $stats['state']['collated'] = Result::where(
+                'location_type',
+                'state'
+            )->whereIn(
+                'candidate_id',
+                $candidates
+            )->count();
+
+            /**
+             * Local Governments
+             */
+            $states = State::select('id')->get();
+            $stats['localGovernment']['total'] = LocalGovernment::whereIn(
+                'state_id',
+                $states
+            )->count();
+
+            $stats['localGovernment']['collated'] = Result::where(
+                'location_type',
+                'localGovernment'
+            )->whereIn(
+                'candidate_id',
+                $candidates
+            )->count();
+
+            /**
+             * Registration Area
+             */
+            $lgs = LocalGovernment::select('id')->whereIn(
+                'state_id',
+                $states
+            )->get();
+
+            $stats['registrationArea']['total'] = RegistrationArea::whereIn(
+                'local_government_id',
+                $lgs
+            )->count();
+
+            $stats['registrationArea']['collated'] = Result::where(
+                'location_type',
+                'registrationArea'
+            )->whereIn(
+                'candidate_id',
+                $candidates
+            )->count();
+
+            /**
+             * Polling Unit
+             */
+            $ras = RegistrationArea::select('id')->whereIn(
+                'local_government_id',
+                $lgs
+            );
+
+            $stats['pollingUnit']['total'] = PollingUnit::whereIn(
+                'registration_area_id',
+                $ras
+            )->count();
+
+            $stats['pollingUnit']['collated'] = Result::where(
+                'location_type',
+                'pollingUnit'
+            )->whereIn(
+                'candidate_id',
+                $candidates
+            )->count();
+        } else if($election->election_type_id == 2) {
+            #Gubernatorial Elections
+
+            /**
+             * Local Governments
+             */
+            $stats['localGovernment']['total'] = State::findOrFail(
+                $election->state_id
+            )->localGovernments()->count();
+
+            $stats['localGovernment']['collated'] = Result::where(
+                'location_type',
+                'localGovernment'
+            )->whereIn(
+                'candidate_id',
+                $candidates
+            )->count();
+
+            /**
+             * Registration Area
+             */
+            $lgs = State::findOrFail(
+                $election->state_id
+            )->localGovernments()->select('id')->get();
+
+            $stats['registrationArea']['total'] = RegistrationArea::whereIn(
+                'local_government_id',
+                $lgs
+            )->count();
+
+            $stats['registrationArea']['collated'] = Result::where(
+                'location_type',
+                'registrationArea'
+            )->whereIn(
+                'candidate_id',
+                $candidates
+            )->count();
+
+            /**
+             * Polling Unit
+             */
+            $ras = RegistrationArea::select('id')->whereIn(
+                'local_government_id',
+                $lgs
+            );
+
+            $stats['pollingUnit']['total'] = PollingUnit::whereIn(
+                'registration_area_id',
+                $ras
+            )->count();
+
+            $stats['pollingUnit']['collated'] = Result::where(
+                'location_type',
+                'pollingUnit'
+            )->whereIn(
+                'candidate_id',
+                $candidates
+            )->count();
+        } else if($election->election_type_id == 3) {
+            /**
+             * Local Government elections
+             */
+        }
+
+        return $stats;
     }
 
     /**

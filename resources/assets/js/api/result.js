@@ -60,6 +60,20 @@ export default {
         );
     },
 
+    /**
+     * GET /api/v1/election/{id}/collationStats
+     */
+    getCollationStats: function(
+        election_id
+    ) {
+        return axios.get(
+            CONFIG.API_URL + 
+            '/election/' + 
+            election_id + 
+            '/collationStats'
+        );
+    },
+
     /** 
      * POST  /api/v1/result
     */

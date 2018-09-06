@@ -109,6 +109,22 @@
     export default {
         components: {
             BrowseResults
+        },
+        created() {
+            this.$store.dispatch('getCollationStats', {
+                election_id: this.election.id
+            });
+        },
+        computed: {
+            election() {
+                return this.$store.getters.getElection;
+            },
+            collationStats() {
+                return this.$store.getters.getCollationStats;
+            },
+            collationStatsLoadStatus() {
+                return this.$store.getters.getCollationStatsLoadStatus;
+            }
         }
     }
 </script>

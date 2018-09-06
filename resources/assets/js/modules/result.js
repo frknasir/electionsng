@@ -16,9 +16,11 @@ export const result = {
         result: {},
         resultLoadStatus: 0,
         forr: {
-            location_type: null,
-            location_name: null
+            location_type: "For: ",
+            location_name: "Final Result"
         },
+        collationStats: {},
+        collationStatsLoadStatus: 0,
         addResultLoadStatus: 0,
         updateResultLoadStatus: 0,
         deleteResultLoadStatus: 0,
@@ -46,8 +48,8 @@ export const result = {
                 commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
                 commit('setForr', {
-                    location_type: "",
-                    location_name: ""
+                    location_type: "No Results ",
+                    location_name: "Available For This Location"
                 });
             });
         },
@@ -70,8 +72,8 @@ export const result = {
                 commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
                 commit('setForr', {
-                    location_type: "",
-                    location_name: ""
+                    location_type: "No Results ",
+                    location_name: "Available For This Location"
                 });
             });
         },
@@ -94,8 +96,8 @@ export const result = {
                 commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
                 commit('setForr', {
-                    location_type: "",
-                    location_name: ""
+                    location_type: "No Results ",
+                    location_name: "Available For This Location"
                 });
             });
         },
@@ -109,17 +111,32 @@ export const result = {
             ).then(function(response) {
                 commit('setResultsLoadStatus', 2);
                 commit('setResults', response.data.data);
+                let l = response.data.data[0].location.name;
                 commit('setForr', {
                     location_type: "For Polling Unit: ",
-                    location_name: response.data.data[0].location.code
+                    location_name: l
                 });
             }).catch(function() {
                 commit('setResultsLoadStatus', 3);
                 commit('setResults', []);
                 commit('setForr', {
-                    location_type: "",
-                    location_name: ""
+                    location_type: "No Results ",
+                    location_name: "Available For This Location"
                 });
+            });
+        },
+
+        getCollationStats({commit}, data) {
+            commit('setCollationStatsLoadStatus', 1);
+
+            ResultAPI.getCollationStats(
+                data.election_id
+            ).then(function(response) {
+                commit('setCollationStatsLoadStatus', 2);
+                commit('setCollationStats', response.data);
+            }).catch(function() {
+                commit('setCollationStatsLoadStatus', 3);
+                commit('setCollationStats', {});
             });
         },
 
@@ -175,8 +192,16 @@ export const result = {
             ).then(function(response) {
                 commit('setResultsLoadStatus', 2);
                 commit('setResults', response.data.data);
+                commit('setForr', {
+                    location_type: "For: ",
+                    location_name: "Final Result"
+                });
             }).catch(function() {
                 commit('setResultsLoadStatus', 3);
+                commit('setForr', {
+                    location_type: "No Results ",
+                    location_name: "Available For This Location"
+                });
             });
         },
 
@@ -244,6 +269,14 @@ export const result = {
             state.forr.location_name = forr.location_name;
         },
 
+        setCollationStats(state, collationStats) {
+            state.collationStats = collationStats;
+        },
+
+        setCollationStatsLoadStatus(state, status) {
+            state.collationStatsLoadStatus = status;
+        },
+
         setAddResultLoadStatus(state, status) {
             state.addResultLoadStatus = status;
         },
@@ -288,6 +321,14 @@ export const result = {
 
         getForr(state) {
             return state.forr;
+        },
+
+        getCollationStats(state) {
+            return state.collationStats;
+        },
+
+        getCollationStatsLoadStatus(state) {
+            return state.collationStatsLoadStatus;
         },
 
         getAddResultLoadStatus(state) {
