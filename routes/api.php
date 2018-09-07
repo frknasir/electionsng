@@ -13,15 +13,39 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function(){
-    Route::get('/user', function( Request $request ){
+Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
+    Route::get('/user', function( Request $request ) {
       return $request->user();
     });
 });
 
 Route::group(['prefix'=> 'v1'], function() {
-  Route::get('/election/{id}/candidates', 'CandidateController@electionCandidates');
 
+  /**
+   * Elections Routes
+   */
+  Route::get(
+    '/election/{id}', 
+    'ElectionController@show'
+  );
+  /**
+   * End Elections Routes
+   */
+
+  /**
+   * Candidates Routes
+   */
+  Route::get(
+    '/election/{id}/candidates', 
+    'CandidateController@electionCandidates'
+  );
+  /**
+   * End Candidates Routes
+   */
+
+  /**
+   * Live Updates Routes
+   */
   Route::get(
     '/election/{id}/liveUpdates/limit/{limit}', 
     'LiveUpdateController@electionLiveUpdates'
@@ -31,10 +55,29 @@ Route::group(['prefix'=> 'v1'], function() {
     '/election/{electionId}/location/{locationType}/liveUpdates/limit/{limit}', 
     'LiveUpdateController@filterUpdatesBy'
   );
+
+  Route::get(
+    '/liveUpdate/{id}', 
+    'LiveUpdateController@show'
+  );
+  /**
+   * End Live Updates Routes
+   */
+
+  /**
+   * Pictures Routes
+   */
+  Route::get(
+    '/election/{id}/pictures', 
+    'PictureController@index'
+  );
+  /**
+   * End Pictures Routes
+   */
   
-  Route::get('/election/{id}', 'ElectionController@show');
-  Route::get('/liveUpdate/{id}', 'LiveUpdateController@show');
-  
+  /**
+   * Incidents Routes
+   */
   Route::get(
     '/election/{id}/incidents/limit/{limit}', 
     'IncidentController@electionIncidents'
@@ -44,7 +87,13 @@ Route::group(['prefix'=> 'v1'], function() {
     '/election/{electionId}/location/{locationType}/incidents/limit/{limit}', 
     'IncidentController@filterIncidentsBy'
   );
+  /**
+   * End Incidents Routes
+   */
 
+  /**
+   * Locations Routes
+   */
   Route::get(
     '/states',
     'StateController@index'
@@ -64,6 +113,9 @@ Route::group(['prefix'=> 'v1'], function() {
     '/registrationArea/{raId}/pollingUnits',
     'PollingUnitController@index'
   );
+  /**
+   * End Location Routes
+   */
 
   /**
    * Results Routes

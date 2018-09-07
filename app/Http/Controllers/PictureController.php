@@ -68,6 +68,7 @@ class PictureController extends Controller
 
         $picture->title = $request->input('title');
         $picture->description = $request->input('description');
+        $picture->url = "pictures/".$filenameToStore;
         $picture->election_id = $request->input('election_id');
         $picture->location_id = $request->input('location_id');
         $picture->location_type = $request->input('location_type');

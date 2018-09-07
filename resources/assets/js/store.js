@@ -30,6 +30,7 @@ import { electionType } from './modules/electionType.js';
 import { incident } from './modules/incident.js';
 import { incidentType } from './modules/incidentType.js';
 import { liveUpdate } from './modules/liveUpdate.js';
+import { picture } from './modules/picture.js';
 import { localGovernment } from './modules/localGovernment.js';
 import { politicalParty } from './modules/politicalParty.js';
 import { pollingUnit } from './modules/pollingUnit.js';
@@ -49,6 +50,7 @@ export default new Vuex.Store({
         incident,
         incidentType,
         liveUpdate,
+        picture,
         localGovernment,
         politicalParty,
         pollingUnit,
