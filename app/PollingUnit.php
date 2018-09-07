@@ -7,6 +7,7 @@ use App\RegistrationArea;
 use App\Result;
 use App\Incident;
 use App\LiveUpdate;
+use App\Picture;
 use Laravel\Scout\Searchable;
 
 class PollingUnit extends Model
@@ -29,5 +30,9 @@ class PollingUnit extends Model
 
     public function liveUpdates() {
         return $this->morphMany(LiveUpdate::class, 'location');
+    }
+
+    public function pictures() {
+        return $this->morphMany(Picture::class, 'location');
     }
 }

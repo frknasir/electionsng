@@ -11,6 +11,7 @@ use App\PoliticalParty;
 use App\Candidate;
 use App\Incident;
 use App\LiveUpdate;
+use App\Picture;
 use App\Result;
 use App\FinalResult;
 use Laravel\Scout\Searchable;
@@ -63,6 +64,10 @@ class User extends Authenticatable
 
     public function liveUpdates() {
         return $this->hasMany(LiveUpdate::class, 'added_by');
+    }
+
+    public function pictures() {
+        return $this->hasMany(Picture::class, 'added_by');
     }
 
     public function results() {

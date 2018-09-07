@@ -9,7 +9,6 @@ use App\Http\Requests\Picture\NewRequest;
 use App\Http\Requests\Picture\UpdateRequest;
 use App\Http\Requests\Picture\DelRequest;
 use Illuminate\Support\Str;
-use App\Http\Requests\PollingUnit\UpdateRequest;
 
 class PictureController extends Controller
 {
@@ -18,9 +17,12 @@ class PictureController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($electionId)
     {
-        $pictures = Picture::orderBy('created_at', 'desc')->paginate();
+        $pictures = Picture::where(
+            'election_id', 
+            $electionId
+        )->orderBy('created_at', 'desc')->paginate();
 
         return PictureResource::collection($pictures);
     }

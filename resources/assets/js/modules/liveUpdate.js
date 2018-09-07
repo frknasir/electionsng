@@ -1,8 +1,8 @@
 /*
 |-------------------------------------------------------------------------------
-| VUEX modules/incident.js
+| VUEX modules/liveUpdate.js
 |-------------------------------------------------------------------------------
-| The Vuex data store for the incident
+| The Vuex data store for the liveUpdate
 */
 
 import LiveUpdateAPI from '../api/liveUpdate.js';
@@ -252,8 +252,8 @@ export const liveUpdate = {
             state.liveUpdateLoadStatus = status;
         },
 
-        setLiveUpdate(state, incident) {
-            state.liveUpdate = incident;
+        setLiveUpdate(state, liveUpdate) {
+            state.liveUpdate = liveUpdate;
         }, 
 
         setAddLiveUpdateLoadStatus(state, status) {

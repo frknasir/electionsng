@@ -8,6 +8,7 @@ use App\LocalGovernment;
 use App\Result;
 use App\Incident;
 use App\LiveUpdate;
+use App\Picture;
 use Laravel\Scout\Searchable;
 
 class State extends Model {
@@ -33,5 +34,9 @@ class State extends Model {
 
     public function liveUpdates() {
         return $this->morphMany(LiveUpdate::class, 'location');
+    }
+
+    public function pictures() {
+        return $this->morphMany(Picture::class, 'location');
     }
 }

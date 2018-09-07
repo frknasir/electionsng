@@ -8,6 +8,7 @@ use App\RegistrationArea;
 use App\Result;
 use App\Incident;
 use App\LiveUpdate;
+use App\Picture;
 use Laravel\Scout\Searchable;
 
 class LocalGovernment extends Model {
@@ -33,5 +34,9 @@ class LocalGovernment extends Model {
 
     public function liveUpdates() {
         return $this->morphMany(LiveUpdate::class, 'location');
+    }
+
+    public function pictures() {
+        return $this->morphMany(Picture::class, 'location');
     }
 }
