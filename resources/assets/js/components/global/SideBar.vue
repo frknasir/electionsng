@@ -1,4 +1,4 @@
-<style>
+<style scoped>
 
 </style>
 
@@ -22,7 +22,7 @@
                         <p>Dashboard</p>
                     </router-link>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id+'/candidates'">
                         <i class="material-icons">
                             group
@@ -30,7 +30,7 @@
                         <p>Candidates</p>
                     </router-link>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id+'/liveUpdates'">
                         <i class="material-icons">
                             sync
@@ -38,7 +38,7 @@
                         <p>Live Updates</p>
                     </router-link>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id+'/incidents'">
                         <i class="material-icons">
                             event_note
@@ -46,7 +46,7 @@
                         <p>Incidents</p>
                     </router-link>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id+'/results'">
                         <i class="material-icons">
                             ballot
@@ -54,7 +54,7 @@
                         <p>Results</p>
                     </router-link>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id+'/pictures'">
                         <i class="material-icons">
                             image
@@ -62,7 +62,7 @@
                         <p>Pictures</p>
                     </router-link>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id+'/charts'">
                         <i class="material-icons">
                             bar_chart
@@ -70,13 +70,13 @@
                         <p>Charts</p>
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#liveUpdatesCollapse">
                         <i class="material-icons">
-                            sync
+                            settings
                         </i>
                         <p>
-                            Live Updates
+                            Configuration
                             <b class="caret"></b>
                         </p>
                     </a>
@@ -103,7 +103,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>-->
+                </li>
             <!-- your sidebar here -->
             </ul>
             <hr>
@@ -121,6 +121,7 @@
         data() {
             return {
                 bg: bg,
+                active: this.$route.name
             }
         }
     }
