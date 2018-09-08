@@ -38,6 +38,7 @@ import { registrationArea } from './modules/registrationArea.js';
 import { result } from './modules/result.js';
 import { role } from './modules/role.js';
 import { state } from './modules/state.js';
+import { user } from './modules/user.js';
 
 /*
 Exports our data store.
@@ -57,6 +58,7 @@ export default new Vuex.Store({
         registrationArea,
         result,
         role,
-        state
+        state,
+        user
     }
 });

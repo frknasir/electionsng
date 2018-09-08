@@ -39,12 +39,6 @@ class LoginController extends Controller
     }
 
     public function authenticated(Request $request) {
-        if($request->user()->hasAnyRole(['admin', 'tracking officer'])) {
-            return redirect("/admin");
-        }
-
-        if($request->user()->hasRole(['user'])) {
-            return redirect("/");
-        }
+        return redirect("/");
     }
 }

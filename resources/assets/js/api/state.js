@@ -1,5 +1,5 @@
 /*
-    Imports the Roast API URL from the config.
+    Imports the API URL from the config.
 */
 import { CONFIG } from '../config.js';
 

@@ -16,6 +16,28 @@
         </div>
         <div class="sidebar-wrapper">
             <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" href="#liveUpdatesCollapse">
+                        <i class="material-icons">
+                            settings
+                        </i>
+                        <p>
+                            {{ user.name }}
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="liveUpdatesCollapse">
+                        <ul class="nav">
+                            <li class="nav-item ">
+                                <router-link class="nav-link" :to="'/election/'+$route.params.id">
+                                    <span class="sidebar-mini"> L </span>
+                                    <span class="sidebar-normal"> Logout </span>
+                                </router-link>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
                 <li class="nav-item active">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id">
                         <i class="material-icons">dashboard</i>
@@ -122,6 +144,17 @@
             return {
                 bg: bg,
                 active: this.$route.name
+            } 
+        },
+        created() {
+            this.$store.dispatch('getAuthUser');
+        },
+        computed: {
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
             }
         }
     }
