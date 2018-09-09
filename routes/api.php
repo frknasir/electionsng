@@ -150,6 +150,17 @@ Route::group(['prefix'=> 'v1'], function() {
   /**
    * End Results Routes
    */
+
+  /**
+   * Political Party Routes
+   */
+  Route::get(
+    '/politicalParties',
+    'PoliticalPartyController@index'
+  );
+  /**
+   * End Political Party Routes
+   */
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

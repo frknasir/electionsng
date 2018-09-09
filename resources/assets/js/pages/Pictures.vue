@@ -13,7 +13,7 @@
 </style>
 <template>
     <div class="content">
-        <div class="container-fPicid">
+        <div class="container-fluid">
             <div class="row">
                 <div v-for="(picture, index) in pictures" v-bind:key="index" class="col-md-6">
                     <div class="card">

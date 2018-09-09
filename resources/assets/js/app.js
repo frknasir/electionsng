@@ -10,7 +10,8 @@ require('./bootstrap');
 window.Vue = require('vue');
 import router from './routes.js';
 import store from './store.js';
-export const EventBus = new Vue();
+import { writeHistory } from 'vue-router-back-button';
+//export const EventBus = new Vue();
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -23,6 +24,8 @@ export const EventBus = new Vue();
 const app = new Vue({
     el: '#app'
 });*/
+
+router.afterEach(writeHistory);
 
 new Vue({
     router,

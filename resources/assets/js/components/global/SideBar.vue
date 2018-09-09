@@ -16,7 +16,7 @@
         </div>
         <div class="sidebar-wrapper">
             <ul class="nav">
-                <li class="nav-item">
+                <li v-if="userLoadStatus == 2 && user != {}" class="nav-item">
                     <a class="nav-link" data-toggle="collapse" href="#liveUpdatesCollapse">
                         <i class="material-icons">
                             settings
@@ -37,6 +37,12 @@
                             </li>
                         </ul>
                     </div>
+                </li>
+                <li v-else class="nav-item">
+                    <router-link class="nav-link" :to="'/login'">
+                        <i class="material-icons">person</i>
+                        <p>Login</p>
+                    </router-link>
                 </li>
                 <li class="nav-item active">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id">

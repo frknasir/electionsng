@@ -51,7 +51,7 @@ export const candidate = {
                 commit('setCandidateLoadStatus', 3);
                 commit('setCandidate', {});
             });
-        },
+        }, 
 
         addCandidate({commit, state, dispatch}, data) {
             commit('setAddCandidateLoadStatus', 1);

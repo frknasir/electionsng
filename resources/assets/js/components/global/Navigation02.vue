@@ -4,6 +4,11 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-absolute fixed-top bg-success">
         <div class="container-fluid">
+          <router-link class="btn btn-white btn-link"
+              v-if="$routerHistory.hasPrevious()"
+              :to="{ path: $routerHistory.previous().path }">
+              <i class="material-icons">arrow_back</i>
+          </router-link>
           <div class="navbar-wrapper">
             <a class="navbar-brand text-capitalize" href="#pablo">
               {{ title + ": " + $route.name }}

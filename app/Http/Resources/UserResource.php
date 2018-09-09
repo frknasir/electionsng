@@ -17,7 +17,14 @@ class UserResource extends JsonResource
     {
         //return parent::toArray($request);
         $user = User::find($this->id);
-        $roles = $user->roles ;
+        $roles = $user->roles()->select('name')->get();
+        $user_roles = array();
+
+        for($i = 0; $i < count($roles); $i++) {
+            $role = $roles[$i];
+
+            array_push($user_roles, $role["name"]);
+        }
 
         return [
             'id' => $this->id,
@@ -25,7 +32,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'about' => $this->about,
             'thumbnail' => $this->thumbnail,
-            'roles' => $roles,
+            'roles' => $user_roles,
             'created_at' => ($this->created_at == NULL) ? $this->created_at : date('d M Y - H:i:s', $this->created_at->timestamp),
             'updated_at' => ($this->updated_at == NULL) ? $this->updated_at : date('d M Y - H:i:s', $this->updated_at->timestamp)
         ];

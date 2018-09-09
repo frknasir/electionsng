@@ -23,7 +23,7 @@ export const politicalParty = {
             PoliticalPartyAPI.getPoliticalParties()
                 .then(function(response) {
                     commit('setPoliticalPartiesLoadStatus', 2);
-                    commit('setPoliticalParties', response.data);
+                    commit('setPoliticalParties', response.data.data);
                 }).catch(function() {
                     commit('setPoliticalPartiesLoadStatus', 3);
                     commit('setPoliticalParties', []);

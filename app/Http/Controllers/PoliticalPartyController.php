@@ -14,8 +14,8 @@ class PoliticalPartyController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        $politicalParties = PoliticalParty::paginate(20);
+    public function index() { 
+        $politicalParties = PoliticalParty::all();
 
         return PoliticalPartyResource::collection($politicalParties);
     }
