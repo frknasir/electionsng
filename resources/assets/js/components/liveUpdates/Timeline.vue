@@ -135,7 +135,7 @@
         },
         watch: {
             deleteLiveUpdateLoadStatus: function() {
-                let vm = this;
+                let vm = this; 
                 
                 if(vm.deleteLiveUpdateLoadStatus == 3 && vm.deleteLiveUpdateResult.success == 0) {
                     vm.HF.showNotification(

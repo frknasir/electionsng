@@ -168,8 +168,32 @@ export default new VueRouter({
                 },
                 {
                     path: 'incidents',
-                    name: 'Incidents',
-                    component: Vue.component('Incidents', require('./pages/Incidents.vue'))
+                    component: Vue.component('Incidents', require('./pages/Incidents.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Browse Incidents',
+                            component: Vue.component('BrowseIncidents', require('./components/incidents/BrowseIncidents.vue'))
+                        },
+                        {
+                            path: 'edit/:incidentId',
+                            name: 'Edit Incident',
+                            component: Vue.component('EditIncident', require('./components/incidents/EditIncident.vue')),
+                            beforeEnter: requireAuth,
+                            meta: {
+                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
+                            }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add Incident',
+                            component: Vue.component('AddIncident', require('./components/incidents/AddIncident.vue')),
+                            beforeEnter: requireAuth,
+                            meta: {
+                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
+                            }
+                        }
+                    ]
                 },
                 {
                     path: 'results',

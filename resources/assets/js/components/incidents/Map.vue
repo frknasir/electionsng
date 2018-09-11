@@ -35,10 +35,17 @@
                     <h4 class="card-title"></h4>
                     <p class="category"></p> 
                     <span id="incident-type" class="badge badge-warning"></span>
+                    <router-link class="btn btn-sm btn-warning" 
+                        :to="'/election/'+election.id+'/incidents/edit/'+incident.id">
+                        <i class="material-icons">create</i>
+                        Edit
+                    </router-link>
+                    <button @click="deleteIncident(incident.id)" class="btn btn-sm btn-danger">
+                        <i class="material-icons">clear</i>
+                        Delete
+                    </button>
                 </div>
-                <div class="card-body">
-
-                </div>
+                <div v-html="info_desc" class="card-body"></div>
                 <div class="card-footer">
                     <ul class="list-inline">
                         <li class="list-inline-item">
@@ -106,16 +113,21 @@
     </div>
 </template>
 <script>
-    export default {
+    import { HELPERS } from '../../helpers.js';
+    export default { 
         data() {
             return {
                 map: null,
-                incident: {},
+                incident: {
+                    id: ''
+                },
                 info_window_active: false,
                 markers: null,
                 map_first_init: true,
                 location_filter: null,
-                filter_btn_label: "Filter By"
+                filter_btn_label: "Filter By",
+                info_desc: '',
+                HF: HELPERS
             }
         },
         computed: {
@@ -133,6 +145,12 @@
             },
             iPagination() {
                 return this.$store.getters.getIPagination;
+            },
+            deleteIncidentLoadStatus() {
+                return this.$store.getters.getDeleteIncidentLoadStatus;
+            },
+            deleteIncidentResult() {
+                return this.$store.getters.getDeleteIncidentResult;
             }
         },
         watch: {
@@ -162,6 +180,32 @@
                         limit: null
                     });
                 }
+            },
+            deleteIncidentLoadStatus: function() {
+                let vm = this;
+                
+                if(vm.deleteIncidentLoadStatus == 3 && vm.deleteIncidentResult.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteIncidentResult.message, 
+                        'danger'
+                    );
+                } else if(vm.deleteIncidentLoadStatus == 2 && vm.deleteIncidentResult.success == 1) {
+                    //reload updates
+                    this.closeInfoWindow();
+                    this.$store.dispatch('getElectionIncidents', {
+                        id: this.$route.params.id,
+                        url: null,
+                        limit: null
+                    });
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteIncidentResult.message, 
+                        'success'
+                    );
+                } 
             }
         },
         mounted() {
@@ -199,7 +243,8 @@
                     (incident.location.name || incident.location.code)
                 );
                 info_window.find("#incident-type").text(incident.incident_type_name);
-                info_window.find(".card-body").text(incident.description);
+                //info_window.find(".card-body").text(incident.description);
+                this.info_desc = incident.description;
 
                 info_window.find(".stats .created_at").text(
                     moment(incident.created_at, 'DD MMM YYYY H:m:s').format('lll')
@@ -208,7 +253,6 @@
                 if(moment(incident.updated_at, 'DD MMM YYYY H:m:s').isValid()) {
                     info_window.find(".stats .updated_at").text("Edited");
                 }
-
 
                 this.info_window_active = true;
             },
@@ -299,6 +343,13 @@
                     if (vm.incidents[i].id === id) {
                         return vm.incidents[i];
                     }
+                }
+            },
+            deleteIncident(data) {
+                if(confirm("are you sure?")){
+                    this.$store.dispatch('deleteIncident', {
+                        id: data
+                    });
                 }
             }
         }

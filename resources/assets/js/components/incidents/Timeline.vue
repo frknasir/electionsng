@@ -6,7 +6,7 @@
         z-index: 4;
     }
 </style>
-
+ 
 <template>
     <div class="container py-2 px-5">
         <!-- pagination -->
@@ -73,6 +73,17 @@
                             <i class="material-icons">flag</i> 
                             <span class="updated_at">Edited</span>
                         </div>
+                        <div>
+                            <router-link class="btn btn-sm btn-warning" 
+                                :to="'/election/'+election.id+'/incidents/edit/'+incident.id">
+                                <i class="material-icons">create</i>
+                                Edit
+                            </router-link>
+                            <button @click="deleteIncident(incident.id)" class="btn btn-sm btn-danger">
+                                <i class="material-icons">clear</i>
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -132,12 +143,14 @@
 </template>
 
 <script>
+    import { HELPERS } from '../../helpers.js';
     export default {
         props: [],
         data() {
             return {
                 moment: window.moment,
-                location_filter: null
+                location_filter: null,
+                HF: HELPERS
             }
         },
         computed: {
@@ -155,9 +168,41 @@
             },
             iPagination() {
                 return this.$store.getters.getIPagination;
+            },
+            deleteIncidentLoadStatus() {
+                return this.$store.getters.getDeleteIncidentLoadStatus;
+            },
+            deleteIncidentResult() {
+                return this.$store.getters.getDeleteIncidentResult;
             }
         },
         watch: {
+            deleteIncidentLoadStatus: function() {
+                let vm = this;
+                
+                if(vm.deleteIncidentLoadStatus == 3 && vm.deleteIncidentResult.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteIncidentResult.message, 
+                        'danger'
+                    );
+                } else if(vm.deleteIncidentLoadStatus == 2 && vm.deleteIncidentResult.success == 1) {
+                    //reload updates
+                    this.closeInfoWindow();
+                    this.$store.dispatch('getElectionIncidents', {
+                        id: this.$route.params.id,
+                        url: null,
+                        limit: 10
+                    });
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteIncidentResult.message, 
+                        'success'
+                    );
+                } 
+            }
         },
         mounted() {
 
@@ -177,6 +222,13 @@
                     limit: 10
                 });
             },
+            deleteIncident(data) {
+                if(confirm("are you sure?")){
+                    this.$store.dispatch('deleteIncident', {
+                        id: data
+                    });
+                }
+            }
         }
     }
 </script>
