@@ -23,7 +23,7 @@ try {
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.bootstrap-wizard.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-selectpicker.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-datetimepicker.min.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.dataTables.min.js');
+    //require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.dataTables.min.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-tagsinput.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jasny-bootstrap.min.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/fullcalendar.min.js');
@@ -33,8 +33,6 @@ try {
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/arrive.min.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/buttons.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-notify.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/material-dashboard.min.js?v=2.0.2');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.sharrre.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/material-dashboard.min.js?v=2.0.2');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.sharrre.js');
 } catch (e) {}

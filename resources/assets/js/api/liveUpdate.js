@@ -108,18 +108,14 @@ export default {
         description, 
         election_id, 
         location_id,
-        location_type,
-        added_by,
-        updated_by 
+        location_type
     ) {
         return axios.post( CONFIG.API_URL + '/liveUpdate', {
             title: title,
             description: description,
             election_id: election_id,
             location_id: location_id,
-            location_type: location_type,
-            added_by: added_by,
-            updated_by: updated_by
+            location_type: location_type
         });
     },
 
@@ -129,14 +125,12 @@ export default {
     updateLiveUpdate: function ( 
         id,
         title, 
-        description,
-        updated_by 
+        description
     ) {
         return axios.put( CONFIG.API_URL + '/liveUpdate', {
             id: id,
             title: title,
-            description: description,
-            updated_by: updated_by
+            description: description
         });
     },
 
@@ -147,7 +141,9 @@ export default {
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/liveUpdate', {
-            id: id
+            params: {
+                id: id
+            }
         });
     }
 };

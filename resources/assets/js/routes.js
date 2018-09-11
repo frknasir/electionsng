@@ -139,8 +139,32 @@ export default new VueRouter({
                 },
                 {
                     path: 'liveUpdates',
-                    name: 'Live Updates',
-                    component: Vue.component('LiveUpdates', require('./pages/LiveUpdates.vue'))
+                    component: Vue.component('LiveUpdates', require('./pages/LiveUpdates.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Browse Updates',
+                            component: Vue.component('BrowseLiveUpdates', require('./components/liveUpdates/BrowseLiveUpdates.vue'))
+                        },
+                        {
+                            path: 'edit/:liveUpdateId',
+                            name: 'Edit Update',
+                            component: Vue.component('EditLiveUpdate', require('./components/liveUpdates/EditLiveUpdate.vue')),
+                            beforeEnter: requireAuth,
+                            meta: {
+                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
+                            }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add Update',
+                            component: Vue.component('AddLiveUpdate', require('./components/liveUpdates/AddLiveUpdate.vue')),
+                            beforeEnter: requireAuth,
+                            meta: {
+                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
+                            }
+                        }
+                    ]
                 },
                 {
                     path: 'incidents',

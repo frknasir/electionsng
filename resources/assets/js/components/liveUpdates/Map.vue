@@ -33,8 +33,17 @@
                 <div class="card-header card-header-success">
                     <h4 class="card-title"></h4>
                     <p class="category"></p> 
+                    <router-link class="btn btn-sm btn-warning" 
+                        :to="'/election/'+election.id+'/liveUpdates/edit/'+liveUpdate.id">
+                        <i class="material-icons">create</i>
+                        Edit
+                    </router-link>
+                    <button @click="deleteLiveUpdate(liveUpdate.id)" class="btn btn-sm btn-danger">
+                        <i class="material-icons">clear</i>
+                        Delete
+                    </button>
                 </div>
-                <div class="card-body">
+                <div v-html="info_desc" class="card-body">
 
                 </div>
                 <div class="card-footer">
@@ -104,17 +113,22 @@
     </div>
 </template>
 <script>
+    import { HELPERS } from '../../helpers.js';
     export default {
         props: [],
         data() {
             return {
                 map: null,
-                liveUpdate: {},
+                liveUpdate: {
+                    id: ''
+                },
                 info_window_active: false,
                 markers: null,
                 map_first_init: true,
                 location_filter: null,
-                filter_btn_label: "Filter By"
+                filter_btn_label: "Filter By",
+                info_desc: '',
+                HF: HELPERS
             }
         },
         computed: {
@@ -132,6 +146,12 @@
             },
             luPagination() {
                 return this.$store.getters.getLUPagination;
+            },
+            deleteLiveUpdateLoadStatus() {
+                return this.$store.getters.getDeleteLiveUpdateLoadStatus;
+            },
+            deleteLiveUpdateResult() {
+                return this.$store.getters.getDeleteLiveUpdateResult;
             }
         },
         watch: {
@@ -159,6 +179,32 @@
                         url: null
                     });
                 }
+            },
+            deleteLiveUpdateLoadStatus: function() {
+                let vm = this;
+                
+                if(vm.deleteLiveUpdateLoadStatus == 3 && vm.deleteLiveUpdateResult.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteLiveUpdateResult.message, 
+                        'danger'
+                    );
+                } else if(vm.deleteLiveUpdateLoadStatus == 2 && vm.deleteLiveUpdateResult.success == 1) {
+                    //reload updates
+                    this.closeInfoWindow();
+                    this.$store.dispatch('getElectionLiveUpdates', {
+                        id: this.$route.params.id,
+                        url: null,
+                        limit: null
+                    });
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteLiveUpdateResult.message, 
+                        'success'
+                    );
+                } 
             }
         },
         mounted() {
@@ -190,12 +236,15 @@
             },
             openInfoWindow(liveUpdate) {
                 let info_window = $("#info-window");
+                this.liveUpdate.id = liveUpdate.id;
                 info_window.find(".card-title").text(liveUpdate.title);
                 info_window.find(".category").text(
                     liveUpdate.location_type + ": " +
                     (liveUpdate.location.name || liveUpdate.location.code)
                 );
-                info_window.find(".card-body").text(liveUpdate.description);
+
+                //info_window.find(".card-body").text(liveUpdate.description);
+                this.info_desc = liveUpdate.description;
 
                 info_window.find(".stats .created_at").text(
                     moment(liveUpdate.created_at, 'DD MMM YYYY H:m:s').format('lll')
@@ -294,6 +343,13 @@
                     if (vm.liveUpdates[i].id === id) {
                         return vm.liveUpdates[i];
                     }
+                }
+            },
+            deleteLiveUpdate(data) {
+                if(confirm("are you sure?")){
+                    this.$store.dispatch('deleteLiveUpdate', {
+                        id: data
+                    });
                 }
             }
         }

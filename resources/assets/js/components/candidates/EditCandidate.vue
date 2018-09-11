@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-</template>
+</template> 
 <script>
     import { HELPERS } from '../../helpers.js';
 

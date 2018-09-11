@@ -13,7 +13,7 @@ class UpdateLiveUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,8 +26,7 @@ class UpdateLiveUpdateRequest extends FormRequest
         return [
             'id' => 'required',
             'title' => 'required',
-            'description' => 'required',
-            'updated_by' => 'required'
+            'description' => 'required'
         ];
     }
 
@@ -41,8 +40,7 @@ class UpdateLiveUpdateRequest extends FormRequest
         return [
             'id.required' => 'live update id can not be empty',
             'title.required' => 'live update title can not be empty',
-            'description.required' => 'live update description can not be empty',
-            'updated_by.required' => 'Who is updating this live update?'
+            'description.required' => 'live update description can not be empty'
         ];
     }
 }

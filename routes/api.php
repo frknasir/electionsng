@@ -34,6 +34,25 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     /**
      * End Candidates Routes
      */
+    Route::post(
+      '/liveUpdate',
+      'LiveUpdateController@store'
+    );
+    Route::put(
+      '/liveUpdate',
+      'LiveUpdateController@update'
+    );
+    Route::delete(
+      '/liveUpdate',
+      'LiveUpdateController@destroy'
+    );
+    /**
+     * Live Updates Routes
+     */
+
+    /**
+     * End Live Updates Routes
+     */
 });
 
 Route::group(['prefix'=> 'v1'], function() {

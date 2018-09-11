@@ -13,6 +13,7 @@ use App\Http\Resources\LiveUpdateResource;
 use App\Http\Requests\LiveUpdate\NewLiveUpdateRequest;
 use App\Http\Requests\LiveUpdate\UpdateLiveUpdateRequest;
 use App\Http\Requests\LiveUpdate\DelLiveUpdateRequest;
+use Auth;
 
 class LiveUpdateController extends Controller {
     /**
@@ -86,14 +87,14 @@ class LiveUpdateController extends Controller {
      */
     public function store(NewLiveUpdateRequest $request) {
         $liveUpdate = new LiveUpdate();
+        $user = Auth::user()->id;
 
         $liveUpdate->title = $request->input('title');
         $liveUpdate->description = $request->input('description');
         $liveUpdate->election_id = $request->input('election_id');
         $liveUpdate->location_id = $request->input('location_id');
         $liveUpdate->location_type = $request->input('location_type');
-        $liveUpdate->added_by = $request->input('added_by');
-        $liveUpdate->updated_by = $request->input('updated_by');
+        $liveUpdate->added_by = $liveUpdate->updated_by = $user; 
 
         if($liveUpdate->save()) {
             return response()->json([
@@ -134,15 +135,16 @@ class LiveUpdateController extends Controller {
      */
     public function update(UpdateLiveUpdateRequest $request) {
         $liveUpdate = LiveUpdate::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
 
         $liveUpdate->title = $request->input('title');
         $liveUpdate->description = $request->input('description');
-        $liveUpdate->updated_by = $request->input('updated_by');
+        $liveUpdate->updated_by = $user;
 
         if($liveUpdate->save()) {
             return response()->json([
                 'success' => 1,
-                'message' => 'update updated successfully'
+                'message' => 'update has been updated successfully'
             ]);
         }
     }

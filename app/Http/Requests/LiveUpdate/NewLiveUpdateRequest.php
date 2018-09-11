@@ -13,7 +13,7 @@ class NewLiveUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -28,9 +28,7 @@ class NewLiveUpdateRequest extends FormRequest
             'description' => 'required',
             'election_id' => 'required',
             'location_id' => 'required',
-            'location_type' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'location_type' => 'required'
         ];
     }
 
@@ -46,9 +44,7 @@ class NewLiveUpdateRequest extends FormRequest
             'description.required' => 'live update description can not be empty',
             'election_id.required' => 'Election id can not be empty',
             'location_id.required' => 'Specify the location id.',
-            'location_type.required' => 'Location type must be specified',
-            'added_by.required' => 'Who is adding this live update?',
-            'updated_by.required' => 'Who is updating this live update?'
+            'location_type.required' => 'Location type must be specified'
         ];
     }
 }

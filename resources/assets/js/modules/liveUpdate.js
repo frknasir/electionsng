@@ -15,8 +15,13 @@ export const liveUpdate = {
         liveUpdate: {},
         liveUpdateLoadStatus: 0,
         addLiveUpdateLoadStatus: 0,
+        addLiveUpdateResult: {
+            success: 0
+        },
         updateLiveUpdateLoadStatus: 0,
-        deleteLiveUpdateLoadStatus: 0
+        updateLiveUpdateResult: {},
+        deleteLiveUpdateLoadStatus: 0,
+        deleteLiveUpdateResult: {}
     },
     actions: {
         getElectionLiveUpdates({commit, state}, data) {
@@ -186,13 +191,16 @@ export const liveUpdate = {
                 data.description,
                 data.election_id,
                 data.location_id,
-                data.location_type,
-                data.added_by,
-                data.updated_by
+                data.location_type
             ).then(function(response) {
                 commit('setAddLiveUpdateLoadStatus', 2);
+                commit('setAddLiveUpdateResult', response.data);
             }).catch(function() {
                 commit('setAddLiveUpdateLoadStatus', 3);
+                commit('setAddLiveUpdateResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
@@ -202,12 +210,16 @@ export const liveUpdate = {
             LiveUpdateAPI.updateLiveUpdate(
                 data.id,
                 data.title,
-                data.description,
-                data.updated_by
+                data.description
             ).then(function(response) {
                 commit('setUpdateLiveUpdateLoadStatus', 2);
+                commit('setUpdateLiveUpdateResult', response.data);
             }).catch(function() {
                 commit('setUpdateLiveUpdateLoadStatus', 3);
+                commit('setUpdateLiveUpdateResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
@@ -218,8 +230,13 @@ export const liveUpdate = {
                 data.id
             ).then(function(response) {
                 commit('setDeleteLiveUpdateLoadStatus', 2);
+                commit('setDeleteLiveUpdateResult', response.data);
             }).catch(function() {
                 commit('setDeleteLiveUpdateLoadStatus', 3);
+                commit('setDeleteLiveUpdateResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         }
     },
@@ -260,12 +277,24 @@ export const liveUpdate = {
             state.addLiveUpdateLoadStatus = status;
         },
 
+        setAddLiveUpdateResult(state, result) {
+            state.addLiveUpdateResult = result;
+        },
+
         setUpdateLiveUpdateLoadStatus(state, status) {
             state.updateLiveUpdateLoadStatus = status;
         },
 
+        setUpdateLiveUpdateResult(state, result) {
+            state.updateLiveUpdateResult = result;
+        },
+
         setDeleteLiveUpdateLoadStatus(state, status) {
             state.deleteLiveUpdateLoadStatus = status;
+        },
+
+        setDeleteLiveUpdateResult(state, result) {
+            state.deleteLiveUpdateResult = result;
         }
     },
     getters: {
@@ -293,12 +322,24 @@ export const liveUpdate = {
             return state.addLiveUpdateLoadStatus;
         },
 
+        getAddLiveUpdateResult(state) {
+            return state.addLiveUpdateResult;
+        },
+
         getUpdateLiveUpdateLoadStatus(state) {
             return state.updateLiveUpdateLoadStatus;
         },
 
+        getUpdateLiveUpdateResult(state) {
+            return state.updateLiveUpdateResult;
+        },
+
         getDeleteLiveUpdateLoadStatus(state) {
             return state.deleteLiveUpdateLoadStatus;
+        },
+
+        getDeleteLiveUpdateResult(state) {
+            return state.deleteLiveUpdateResult;
         }
     }
 };
