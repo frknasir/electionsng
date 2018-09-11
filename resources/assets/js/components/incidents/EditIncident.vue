@@ -21,8 +21,24 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input v-model="liveUpdate.election_id" type="text" class="form-control" disabled />
+                                    <input v-model="incident.election_id" type="text" class="form-control" disabled />
                                     <small class="form-text text-muted">{{ election.title + "["+ election.id + "]" }}</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        Incident Type
+                                        <sup>
+                                            <i class="fa fa-asterisk small" style="color:red"></i>
+                                        </sup>
+                                    </label>
+                                    <select v-model="inci.incident_type_id" class="form-control">
+                                        <option v-for="type in incidentTypes" v-bind:key="type.id" :value="type.id">
+                                            {{ type.name }}
+                                        </option>
+                                    </select>
+                                    <small v-show="!validations.incident_type_id.is_valid" class="form-text text-muted text-danger">
+                                        {{ validations.incident_type_id.text }}
+                                    </small>
                                 </div>
                                 <div class="form-group">
                                     <label for="">
@@ -31,7 +47,7 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="text" class="form-control" v-model="update.title" />
+                                    <input type="text" class="form-control" v-model="inci.title" />
                                     <small v-show="!validations.title.is_valid" class="form-text text-muted text-danger">
                                         {{ validations.title.text }}
                                     </small>
@@ -60,12 +76,12 @@
                                         {{ location_type }}
                                     </small>
                                 </div>
-                                <button @click="editLiveUpdate(update)" type="button" class="btn btn-success">Submit</button>
+                                <button @click="editIncident(inci)" type="button" class="btn btn-success">Submit</button>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
-                                {{ updateLiveUpdateResult.message }}
+                                {{ updateIncidentResult.message }}
                                 <a @click="addAnother()" class="alert-link">
-                                    &nbsp;Add Another Update
+                                    &nbsp;Add Another inci
                                 </a>
                             </div>
                         </div>
@@ -82,10 +98,11 @@
     export default {
         data() {
             return {
-                update: {
-                    id: this.$route.params.liveUpdateId,
+                inci: {
+                    id: this.$route.params.incidentId,
                     title: '',
-                    description: ''
+                    description: '',
+                    incident_type_id: ''
                 },
                 location_name: '',
                 location_type: '',
@@ -102,6 +119,10 @@
                         text: ''
                     },
                     description: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    incident_type_id: {
                         is_valid: true,
                         text: ''
                     }
@@ -121,54 +142,60 @@
             userLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
             },
-            updateLiveUpdateLoadStatus() {
-                return this.$store.getters.getUpdateLiveUpdateLoadStatus;
+            incidentTypes() {
+                return this.$store.getters.getIncidentTypes;
             },
-            updateLiveUpdateResult() {
-                return this.$store.getters.getUpdateLiveUpdateResult;
+            updateIncidentLoadStatus() {
+                return this.$store.getters.getUpdateIncidentLoadStatus;
             },
-            liveUpdate() {
-                return this.$store.getters.getLiveUpdate;
+            updateIncidentResult() {
+                return this.$store.getters.getUpdateIncidentResult;
             },
-            liveUpdateLoadStatus() {
-                return this.$store.getters.getLiveUpdateLoadStatus;
+            incident() {
+                return this.$store.getters.getIncident;
+            },
+            incidentLoadStatus() {
+                return this.$store.getters.getIncidentLoadStatus;
             }
         },
         watch: {
-            updateLiveUpdateLoadStatus: function() {
+            updateIncidentLoadStatus: function() {
                 let vm = this;
-                if(vm.updateLiveUpdateLoadStatus == 3 && vm.updateLiveUpdateResult.success == 0) {
+                if(vm.updateIncidentLoadStatus == 3 && vm.updateIncidentResult.success == 0) {
                     vm.show_form = true;
                     vm.HF.showNotification(
                         'top', 
                         'center', 
-                        vm.updateLiveUpdateResult.message, 
+                        vm.updateIncidentResult.message, 
                         'danger'
                     );
-                } else if(vm.updateLiveUpdateLoadStatus == 2 && vm.updateLiveUpdateResult.success == 1) {
+                } else if(vm.updateIncidentLoadStatus == 2 && vm.updateIncidentResult.success == 1) {
                     vm.show_form = true;
                     vm.HF.showNotification(
                         'top', 
                         'center', 
-                        vm.updateLiveUpdateResult.message, 
+                        vm.updateIncidentResult.message, 
                         'success'
                     );
                 } 
             },
-            liveUpdateLoadStatus: function() {
+            incidentLoadStatus: function() {
                 let vm = this;
-                if(vm.liveUpdateLoadStatus == 2) {
-                    vm.update.title = vm.liveUpdate.title,
-                    vm.description_editor.setData(vm.liveUpdate.description);
-                    vm.location_name = vm.liveUpdate.location.name;
-                    vm.location_type = vm.liveUpdate.location_type;
+                if(vm.incidentLoadStatus == 2) {
+                    vm.inci.title = vm.incident.title,
+                    vm.inci.incident_type_id = vm.incident.incident_type_id;
+                    vm.description_editor.setData(vm.incident.description);
+                    vm.location_name = vm.incident.location.name || vm.incident.location.code;
+                    vm.location_type = vm.incident.location_type;
                 }
             }
         },
         created() {
-            this.$store.dispatch('getLiveUpdate', {
-                id: this.$route.params.liveUpdateId
+            this.$store.dispatch('getIncident', {
+                id: this.$route.params.incidentId
             });
+
+            this.$store.dispatch('getIncidentTypes');
         },
         mounted() {
             this.initClassicEditor();
@@ -185,40 +212,47 @@
                         console.error( error );
                     } );
             },
-            editLiveUpdate(data) {
+            editIncident(data) {
                 data.description = this.description_editor.getData();
                 
-                if(this.validateLiveUpdate(data)) {
-                    this.$store.dispatch('updateLiveUpdate', data);
+                if(this.validateIncident(data)) {
+                    this.$store.dispatch('updateIncident', data);
                 }
             },
-            validateLiveUpdate(update) {
-                let validLiveUpdate = true;
+            validateIncident(inci) {
+                let validIncident = true;
                 let validations = this.validations;
 
-                if(!update.id) {
-                    validLiveUpdate = false;
+                if(!inci.id) {
+                    validIncident = false;
                     validations.id.is_valid = false;
                     validations.title.text = "id can not be empty";
                 }
 
-                if(!update.title) {
-                    validLiveUpdate = false;
+                if(!inci.title) {
+                    validIncident = false;
                     validations.title.is_valid = false;
                     validations.title.text = "title can not be empty";
                 }
 
-                if(!update.description) {
-                    validLiveUpdate = false;
+                if(!inci.description) {
+                    validIncident = false;
                     validations.description.is_valid = false;
                     validations.description.text = "description can not be empty";
                 }
 
-                return validLiveUpdate;
+                if(!inci.incident_type_id) {
+                    validIncident = false;
+                    validations.incident_type_id.is_valid = false;
+                    validations.incident_type_id.text = "incident type can not be empty";
+                }
+
+                return validIncident;
             },
-            clearLiveUpdateForm() {
-                this.update.id = '',
-                this.update.title = '',
+            clearIncidentForm() {
+                this.inci.id = '',
+                this.inci.title = '',
+                this.inci.incident_type_id = '';
                 this.description_editor.setData('');
 
                 this.validations = {
@@ -231,6 +265,10 @@
                         text: ''
                     },
                     description: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    incident_type_id: {
                         is_valid: true,
                         text: ''
                     }

@@ -90,48 +90,6 @@
                         <p>Pictures</p>
                     </router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link class="nav-link" :to="'/election/'+$route.params.id+'/charts'">
-                        <i class="material-icons">
-                            bar_chart
-                        </i>
-                        <p>Charts</p>
-                    </router-link>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#liveUpdatesCollapse">
-                        <i class="material-icons">
-                            settings
-                        </i>
-                        <p>
-                            Configuration
-                            <b class="caret"></b>
-                        </p>
-                    </a>
-
-                    <div class="collapse" id="liveUpdatesCollapse">
-                        <ul class="nav">
-                            <li class="nav-item ">
-                                <router-link class="nav-link" :to="'/election/'+$route.params.id">
-                                    <span class="sidebar-mini"> RS </span>
-                                    <span class="sidebar-normal"> RTL Support </span>
-                                </router-link>
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link" href="../../examples/pages/rtl.html">
-                                <span class="sidebar-mini"> RS </span>
-                                <span class="sidebar-normal"> RTL Support </span>
-                                </a>
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link" href="../../examples/pages/timeline.html">
-                                <span class="sidebar-mini"> T </span>
-                                <span class="sidebar-normal"> Timeline </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
             <!-- your sidebar here -->
             </ul>
             <hr>

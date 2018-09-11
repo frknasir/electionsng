@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\IncidentType;
 use Illuminate\Http\Request;
-use App\Http\Resources\IncidentResource;
+use App\Http\Resources\IncidentTypeResource;
 
 class IncidentTypeController extends Controller
 {
@@ -16,7 +16,7 @@ class IncidentTypeController extends Controller
     public function index() {
         $incidentTypes = IncidentType::all();
 
-        return IncidentResource::collection($incidentTypes);
+        return IncidentTypeResource::collection($incidentTypes);
     }
 
     /**

@@ -21,8 +21,24 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input v-model="liveUpdate.election_id" type="text" class="form-control" disabled />
+                                    <input v-model="incident.election_id" type="text" class="form-control" disabled />
                                     <small class="form-text text-muted">{{ election.title + "["+ election.id + "]" }}</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        Incident Type
+                                        <sup>
+                                            <i class="fa fa-asterisk small" style="color:red"></i>
+                                        </sup>
+                                    </label>
+                                    <select v-model="incident.incident_type_id" class="form-control">
+                                        <option v-for="type in incidentTypes" v-bind:key="type.id" :value="type.id">
+                                            {{ type.name }}
+                                        </option>
+                                    </select>
+                                    <small v-show="!validations.incident_type_id.is_valid" class="form-text text-muted text-danger">
+                                        {{ validations.incident_type_id.text }}
+                                    </small>
                                 </div>
                                 <div class="form-group">
                                     <label for="">
@@ -31,7 +47,7 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="text" class="form-control" v-model="liveUpdate.title" />
+                                    <input type="text" class="form-control" v-model="incident.title" />
                                     <small v-show="!validations.title.is_valid" class="form-text text-muted text-danger">
                                         {{ validations.title.text }}
                                     </small>
@@ -143,10 +159,10 @@
                                 <small v-show="!validations.location_type.is_valid" class="form-text text-muted text-danger">
                                     {{ validations.location_type.text }}
                                 </small>
-                                <button @click="addLiveUpdate(liveUpdate)" type="button" class="btn btn-success">Submit</button>
+                                <button @click="addIncident(incident)" type="button" class="btn btn-success">Submit</button>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
-                                {{ addLiveUpdateResult.message }}
+                                {{ addIncidentResult.message }}
                                 <a @click="addAnother()" class="alert-link">
                                     &nbsp;Add Another Update
                                 </a>
@@ -165,9 +181,10 @@
     export default {
         data() {
             return {
-                liveUpdate: {
+                incident: {
                     title: '',
                     description: '',
+                    incident_type_id: '',
                     election_id: '',
                     location_id: '',
                     location_type: ''
@@ -181,6 +198,10 @@
                         text: ''
                     },
                     description: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    incident_type_id: {
                         is_valid: true,
                         text: ''
                     },
@@ -217,11 +238,14 @@
             userLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
             },
-            addLiveUpdateLoadStatus() {
-                return this.$store.getters.getAddLiveUpdateLoadStatus;
+            incidentTypes() {
+                return this.$store.getters.getIncidentTypes;
             },
-            addLiveUpdateResult() {
-                return this.$store.getters.getAddLiveUpdateResult;
+            addIncidentLoadStatus() {
+                return this.$store.getters.getAddIncidentLoadStatus;
+            },
+            addIncidentResult() {
+                return this.$store.getters.getAddIncidentResult;
             },
             states() {
                 return this.$store.getters.getStates;
@@ -249,19 +273,19 @@
             }
         },
         watch: {
-            addLiveUpdateLoadStatus: function() {
+            addIncidentLoadStatus: function() {
                 let vm = this;
-                if(vm.addLiveUpdateLoadStatus == 3 && vm.addLiveUpdateResult.success == 0) {
+                if(vm.addIncidentLoadStatus == 3 && vm.addIncidentResult.success == 0) {
                     vm.show_form = true;
                     vm.HF.showNotification(
                         'top', 
                         'center', 
-                        vm.addLiveUpdateResult.message, 
+                        vm.addIncidentResult.message, 
                         'danger'
                     );
-                } else if(vm.addLiveUpdateLoadStatus == 2 && vm.addLiveUpdateResult.success == 1) {
+                } else if(vm.addIncidentLoadStatus == 2 && vm.addIncidentResult.success == 1) {
                     vm.show_form = false;
-                    vm.clearLiveUpdateForm();
+                    vm.clearIncidentForm();
                 } 
             },
             location_type: function() {
@@ -290,7 +314,7 @@
             }
         },
         created() {
-            
+            this.$store.dispatch('getIncidentTypes');
         },
         mounted() {
             this.initClassicEditor();
@@ -307,7 +331,7 @@
                         console.error( error );
                     } );
             },
-            addLiveUpdate(data) {
+            addIncident(data) {
                 
                 switch (this.location_type) {
                     case "state":
@@ -338,56 +362,63 @@
 
                 data.election_id = this.election.id;
                 data.description = this.description_editor.getData();
-                if(this.validateLiveUpdate(data)) {
-                    this.$store.dispatch('addLiveUpdate', data);
+                if(this.validateIncident(data)) {
+                    this.$store.dispatch('addIncident', data);
                 }
             },
             addAnother() {
-                this.addLiveUpdateResult.result = 0;
-                this.addLiveUpdateResult.message = '';
+                this.addIncidentResult.result = 0;
+                this.addIncidentResult.message = '';
                 this.show_form = true;
             },
-            validateLiveUpdate(liveUpdate) {
-                let validLiveUpdate = true;
+            validateIncident(incident) {
+                let validIncident = true;
                 let validations = this.validations;
 
-                if(!liveUpdate.title) {
-                    validLiveUpdate = false;
+                if(!incident.title) {
+                    validIncident = false;
                     validations.title.is_valid = false;
                     validations.title.text = "title can not be empty";
                 }
 
-                if(!liveUpdate.description) {
-                    validLiveUpdate = false;
+                if(!incident.description) {
+                    validIncident = false;
                     validations.description.is_valid = false;
                     validations.description.text = "description can not be empty";
                 }
 
-                if(!liveUpdate.election_id) {
-                    validLiveUpdate = false;
+                if(!incident.incident_type_id) {
+                    validIncident = false;
+                    validations.incident_type_id.is_valid = false;
+                    validations.incident_type_id.text = "incident type can not be empty";
+                }
+
+                if(!incident.election_id) {
+                    validIncident = false;
                     validations.election_id.is_valid = false;
                     validations.election_id.text = "election can not be empty";
                 }
 
-                if(!liveUpdate.location_id) {
-                    validLiveUpdate = false;
+                if(!incident.location_id) {
+                    validIncident = false;
                     validations.location_id.is_valid = false;
                     validations.location_id.text = "location id can not be empty";
                 }
 
-                if(!liveUpdate.location_type) {
-                    validLiveUpdate = false;
+                if(!incident.location_type) {
+                    validIncident = false;
                     validations.location_type.is_valid = false;
                     validations.location_type.text = "location type can not be empty";
                 }
 
-                return validLiveUpdate;
+                return validIncident;
             },
-            clearLiveUpdateForm() {
-                this.liveUpdate.title = '',
-                this.liveUpdate.election_id = '',
-                this.liveUpdate.location_id = '',
-                this.liveUpdate.location_type = ''
+            clearIncidentForm() {
+                this.incident.title = '',
+                this.incident.election_id = '',
+                this.incident.incident_type_id = '',
+                this.incident.location_id = '',
+                this.incident.location_type = ''
                 this.description_editor.setData('');
                 this.location_type = '';
 
@@ -397,6 +428,10 @@
                         text: ''
                     },
                     description: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    incident_type_id: {
                         is_valid: true,
                         text: ''
                     },

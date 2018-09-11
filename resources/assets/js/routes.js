@@ -204,11 +204,6 @@ export default new VueRouter({
                     path: 'pictures',
                     name: 'Pictures',
                     component: Vue.component('Pictures', require('./pages/Pictures.vue'))
-                },
-                {
-                    path: 'charts',
-                    name: 'Charts',
-                    component: Vue.component('Charts', require('./pages/Charts.vue'))
                 }
             ]
         }

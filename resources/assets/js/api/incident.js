@@ -158,7 +158,9 @@ export default {
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/incident', {
-            id: id
+            params: {
+                id: id
+            } 
         });
     }
 };

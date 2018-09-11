@@ -19,7 +19,7 @@ export const incidentType = {
             IncidentTypeAPI.getIncidentTypes()
                 .then(function(response) {
                     commit('setIncidentTypesLoadStatus', 2);
-                    commit('setIncidentTypes', response.data);
+                    commit('setIncidentTypes', response.data.data);
                 })
                 .catch(function() {
                     commit('setIncidentTypesLoadStatus', 3);

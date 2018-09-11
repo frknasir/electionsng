@@ -35,6 +35,7 @@
                     <h4 class="card-title"></h4>
                     <p class="category"></p> 
                     <span id="incident-type" class="badge badge-warning"></span>
+                    <br>
                     <router-link class="btn btn-sm btn-warning" 
                         :to="'/election/'+election.id+'/incidents/edit/'+incident.id">
                         <i class="material-icons">create</i>
@@ -237,6 +238,7 @@
             },
             openInfoWindow(incident) {
                 let info_window = $("#info-window");
+                this.incident.id = incident.id;
                 info_window.find(".card-title").text(incident.title);
                 info_window.find(".category").text(
                     incident.location_type + ": " +

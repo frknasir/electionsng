@@ -15,8 +15,13 @@ export const incident = {
         incident: {},
         incidentLoadStatus: 0,
         addIncidentLoadStatus: 0,
+        addIncidentResult: {
+            success: 0
+        },
         updateIncidentLoadStatus: 0,
-        deleteIncidentLoadStatus: 0
+        updateIncidentResult: {},
+        deleteIncidentLoadStatus: 0,
+        deleteIncidentResult: {}
     },
     actions: {
         getElectionIncidents({commit, state}, data) {
@@ -183,13 +188,16 @@ export const incident = {
                 data.incident_type_id,
                 data.election_id,
                 data.location_id,
-                data.location_type,
-                data.added_by,
-                data.updated_by
+                data.location_type
             ).then(function(response) {
                 commit('setAddIncidentLoadStatus', 2);
+                commit('setAddIncidentResult', response.data);
             }).catch(function() {
                 commit('setAddIncidentLoadStatus', 3);
+                commit('setAddIncidentResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
@@ -200,24 +208,33 @@ export const incident = {
                 data.id,
                 data.title,
                 data.description,
-                data.incident_type_id,
-                data.updated_by
+                data.incident_type_id
             ).then(function(response) {
                 commit('setUpdateIncidentLoadStatus', 2);
+                commit('setUpdateIncidentResult', response.data);
             }).catch(function() {
                 commit('setUpdateIncidentLoadStatus', 3);
+                commit('setUpdateIncidentResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
         deleteIncident({commit, state, dispatch}, data) {
             commit('setDeleteIncidentLoadStatus', 1);
 
-            IncidentAPI.updateIncident(
+            IncidentAPI.deleteIncident(
                 data.id
             ).then(function(response) {
                 commit('setDeleteIncidentLoadStatus', 2);
+                commit('setDeleteIncidentResult', response.data);
             }).catch(function() {
                 commit('setDeleteIncidentLoadStatus', 3);
+                commit('setDeleteIncidentResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         }
     },
@@ -258,12 +275,24 @@ export const incident = {
             state.addIncidentLoadStatus = status;
         },
 
+        setAddIncidentResult(state, result) {
+            state.addIncidentResult = result;
+        },
+
         setUpdateIncidentLoadStatus(state, status) {
             state.updateIncidentLoadStatus = status;
         },
 
+        setUpdateIncidentResult(state, result) {
+            state.updateIncidentResult = result;
+        },
+
         setDeleteIncidentLoadStatus(state, status) {
             state.deleteIncidentLoadStatus = status;
+        },
+
+        setDeleteIncidentResult(state, result) {
+            state.deleteIncidentResult = result;
         }
     },
     getters: {
@@ -291,12 +320,24 @@ export const incident = {
             return state.addIncidentLoadStatus;
         },
 
+        getAddIncidentResult(state) {
+            return state.addIncidentResult;
+        },
+
         getUpdateIncidentLoadStatus(state) {
             return state.updateIncidentLoadStatus;
         },
 
+        getUpdateIncidentResult(state) {
+            return state.updateIncidentResult;
+        },
+
         getDeleteIncidentLoadStatus(state) {
             return state.deleteIncidentLoadStatus;
+        },
+
+        getDeleteIncidentResult(state) {
+            return state.deleteIncidentResult;
         }
     }
 };

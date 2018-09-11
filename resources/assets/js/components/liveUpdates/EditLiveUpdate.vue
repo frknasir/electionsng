@@ -160,7 +160,7 @@
                 if(vm.liveUpdateLoadStatus == 2) {
                     vm.update.title = vm.liveUpdate.title,
                     vm.description_editor.setData(vm.liveUpdate.description);
-                    vm.location_name = vm.liveUpdate.location.name;
+                    vm.location_name = vm.liveUpdate.location.name || vm.liveUpdate.location.code;
                     vm.location_type = vm.liveUpdate.location_type;
                 }
             }

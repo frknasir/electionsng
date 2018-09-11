@@ -34,6 +34,9 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     /**
      * End Candidates Routes
      */
+    /**
+     * Live Updates Routes
+     */
     Route::post(
       '/liveUpdate',
       'LiveUpdateController@store'
@@ -47,11 +50,27 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
       'LiveUpdateController@destroy'
     );
     /**
-     * Live Updates Routes
-     */
-
-    /**
      * End Live Updates Routes
+     */
+    /**
+     * Incident Routes
+     */
+    Route::post(
+      '/incident',
+      'IncidentController@store'
+    );
+
+    Route::put(
+      '/incident',
+      'IncidentController@update'
+    );
+
+    Route::delete(
+      '/incident',
+      'IncidentController@destroy'
+    );
+    /**
+     * End Incident Routes
      */
 });
 
@@ -120,6 +139,11 @@ Route::group(['prefix'=> 'v1'], function() {
    * Incidents Routes
    */
   Route::get(
+    'incidentTypes',
+    'IncidentTypeController@index'
+  );
+
+  Route::get(
     '/election/{id}/incidents/limit/{limit}', 
     'IncidentController@electionIncidents'
   );
@@ -127,6 +151,11 @@ Route::group(['prefix'=> 'v1'], function() {
   Route::get(
     '/election/{electionId}/location/{locationType}/incidents/limit/{limit}', 
     'IncidentController@filterIncidentsBy'
+  );
+
+  Route::get(
+    '/incident/{id}', 
+    'IncidentController@show'
   );
   /**
    * End Incidents Routes

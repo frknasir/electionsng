@@ -13,7 +13,7 @@ class NewIncidentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false; 
+        return true; 
     }
 
     /**
@@ -29,9 +29,7 @@ class NewIncidentRequest extends FormRequest
             'incident_type_id' => 'required',
             'election_id' => 'required',
             'location_id' => 'required',
-            'location_type' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'location_type' => 'required'
         ];
     }
 
@@ -48,9 +46,7 @@ class NewIncidentRequest extends FormRequest
             'incident_type_id.required'  => 'Incident type can not be empty',
             'election_id.required' => 'Election id can not be empty',
             'location_id.required' => 'Specify the location id.',
-            'location_type.required' => 'Location type must be specified',
-            'added_by.required' => 'Who is adding this incident?',
-            'updated_by.required' => 'Who is updating this incident?'
+            'location_type.required' => 'Location type must be specified'
         ];
     }
 }

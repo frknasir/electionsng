@@ -13,6 +13,7 @@ use App\Http\Resources\IncidentResource;
 use App\Http\Requests\Incident\NewIncidentRequest;
 use App\Http\Requests\Incident\UpdateIncidentRequest;
 use App\Http\Requests\Incident\DelIncidentRequest;
+use Auth;
 
 class IncidentController extends Controller { 
     /**
@@ -85,6 +86,7 @@ class IncidentController extends Controller {
      */
     public function store(NewIncidentRequest $request) {
         $incident = new Incident();
+        $user = Auth::user()->id;
 
         $incident->title = $request->input('title');
         $incident->description = $request->input('description');
@@ -92,8 +94,7 @@ class IncidentController extends Controller {
         $incident->election_id = $request->input('election_id');
         $incident->location_id = $request->input('location_id');
         $incident->location_type = $request->input('location_type');
-        $incident->added_by = $request->input('added_by');
-        $incident->updated_by = $request->input('updated_by');
+        $incident->added_by = $incident->updated_by = $user;
 
         if($incident->save()) {
             return response()->json([
@@ -134,20 +135,17 @@ class IncidentController extends Controller {
      */
     public function update(UpdateIncidentRequest $request) {
         $incident = Incident::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
 
         $incident->title = $request->input('title');
         $incident->description = $request->input('description');
         $incident->incident_type_id = $request->input('incident_type_id');
-        $incident->election_id = $request->input('election_id');
-        $incident->location_id = $request->input('location_id');
-        $incident->location_type = $request->input('location_type');
-        $incident->added_by = $request->input('added_by');
-        $incident->updated_by = $request->input('updated_by');
+        $incident->updated_by = $user;
 
         if($incident->save()) {
             return response()->json([
                 'success'=>1,
-                'message'=>'incident added successfully'
+                'message'=>'incident updated successfully'
             ]);
         }
     }
@@ -158,7 +156,7 @@ class IncidentController extends Controller {
      * @param  \App\Incident  $incident
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Incident $incident) {
+    public function destroy(DelIncidentRequest $request) {
         $incident = Incident::findOrFail($request->input('id'));
 
         if($incident->delete()) {
