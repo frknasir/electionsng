@@ -13,10 +13,10 @@ export default {
     },
 
     /*
-    GET /api/v1/election/{election_id}/party/{party_id}/candidate
+    GET /api/v1/candidate/{id}
     */
-    getPoliticalPartyCandidate: function( electionId, partyId ) {
-        return axios.get( CONFIG.API_URL + '/election/' + electionId + '/party/' + partyId + '/candidate' );
+    getCandidate: function( id ) {
+        return axios.get( CONFIG.API_URL + '/candidate/' + id );
     },
 
     /*
@@ -27,18 +27,14 @@ export default {
         election_id, 
         aspirant, 
         deputy, 
-        bio,
-        added_by,
-        updated_by 
+        bio
     ) {
         return axios.post( CONFIG.API_URL + '/candidate', {
             political_party_id: political_party_id,
             election_id: election_id,
             aspirant: aspirant,
             deputy: deputy,
-            bio: bio,
-            added_by: added_by,
-            updated_by: updated_by
+            bio: bio
         });
     },
 
@@ -47,17 +43,17 @@ export default {
      */
     updateCandidate: function(
         id, 
+        political_party_id,
         aspirant, 
         deputy, 
-        bio,
-        updated_by
+        bio
     ) {
         return axios.put( CONFIG.API_URL + '/candidate', {
             id: id,
+            political_party_id: political_party_id,
             aspirant: aspirant,
             deputy: deputy,
-            bio: bio,
-            updated_by: updated_by
+            bio: bio
         });
     },
 
@@ -68,7 +64,9 @@ export default {
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/candidate', {
-            id: id
+            params: {
+                id: id
+            }
         });
     }
 };

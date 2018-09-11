@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Candidate;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -13,7 +13,7 @@ class NewCandidateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,8 +27,7 @@ class NewCandidateRequest extends FormRequest
             'political_party_id' => 'required',
             'election_id' => 'required',
             'aspirant' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'bio' => 'required'
         ];
     }
 
@@ -43,8 +42,7 @@ class NewCandidateRequest extends FormRequest
           'political_party_id.required'     => 'A political party is required.',
           'election_id.required'  => 'An election should be specified.',
           'aspirant.required'     => 'Aspirant name is required.',
-          'added_by.required'    => 'Who is adding this candidate?',
-          'updated_by.required'      => 'Who is updating this candidate?'
+          'bio' => 'Bio can not be empty'
         ];
     }
 }

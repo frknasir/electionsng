@@ -15,6 +15,25 @@ use Illuminate\Http\Request;
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     Route::get('/user', 'UserController@index');
+
+    /**
+     * Candidates Routes
+     */
+    Route::post(
+      '/candidate',
+      'CandidateController@store'
+    );
+    Route::put(
+      '/candidate',
+      'CandidateController@update'
+    );
+    Route::delete(
+      '/candidate',
+      'CandidateController@destroy'
+    );
+    /**
+     * End Candidates Routes
+     */
 });
 
 Route::group(['prefix'=> 'v1'], function() {
@@ -36,6 +55,11 @@ Route::group(['prefix'=> 'v1'], function() {
   Route::get(
     '/election/{id}/candidates', 
     'CandidateController@electionCandidates'
+  );
+
+  Route::get(
+    '/candidate/{id}',
+    'CandidateController@show'
   );
   /**
    * End Candidates Routes

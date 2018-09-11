@@ -139,7 +139,7 @@
                                                 rel="tooltip" class="btn btn-success">
                                                 <i class="material-icons">edit</i>
                                             </router-link>
-                                            <button type="button" rel="tooltip" class="btn btn-danger">
+                                            <button @click="deleteCandidate(candidate.id)" type="button" rel="tooltip" class="btn btn-danger">
                                                 <i class="material-icons">close</i>
                                             </button>
                                         </td>
@@ -180,7 +180,9 @@
                     </div>
                     <div class="modal-body"></div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            Close
+                        </button>
                     </div>
                 </div>
             </div>
@@ -188,10 +190,12 @@
     </div>
 </template>
 <script>
+import { HELPERS } from '../../helpers.js';
+
 export default {
     data() {
         return {
-
+            HF: HELPERS
         }
     },
     mounted() {
@@ -218,6 +222,12 @@ export default {
         },
         pagination() {
             return this.$store.getters.getPagination;
+        },
+        deleteCandidateLoadStatus() {
+            return this.$store.getters.getDeleteCandidateLoadStatus;
+        },
+        deleteCandidateResult() {
+            return this.$store.getters.getDeleteCandidateResult;
         }
     },
     watch: {
@@ -225,6 +235,30 @@ export default {
             if(this.candidatesLoadStatus == 2) {
 
             }
+        },
+        deleteCandidateLoadStatus: function() {
+            let vm = this;
+            
+            if(vm.deleteCandidateLoadStatus == 3 && vm.deleteCandidateResult.success == 0) {
+                vm.HF.showNotification(
+                    'top', 
+                    'center', 
+                    vm.deleteCandidateResult.message, 
+                    'danger'
+                );
+            } else if(vm.deleteCandidateLoadStatus == 2 && vm.deleteCandidateResult.success == 1) {
+                //reload candidates
+                this.$store.dispatch('getCandidates', {
+                    id: this.$route.params.id,
+                    url: null 
+                });
+                vm.HF.showNotification(
+                    'top', 
+                    'center', 
+                    vm.deleteCandidateResult.message, 
+                    'success'
+                );
+            } 
         }
     },
     methods: {
@@ -245,6 +279,13 @@ export default {
                 id: this.$route.params.id,
                 url: url
             });
+        },
+        deleteCandidate(data) {
+            if(confirm("are you sure?")){
+                this.$store.dispatch('deleteCandidate', {
+                    id: data
+                });
+            }
         }
     }
 }

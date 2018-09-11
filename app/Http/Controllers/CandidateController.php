@@ -8,6 +8,7 @@ use App\Http\Resources\CandidateResource;
 use App\Http\Requests\Candidate\NewCandidateRequest;
 use App\Http\Requests\Candidate\UpdateCandidateRequest;
 use App\Http\Requests\Candidate\DelCandidateRequest;
+use Auth;
 
 class CandidateController extends Controller
 {
@@ -20,7 +21,7 @@ class CandidateController extends Controller
         $candidates = Candidate::where(
             'election_id', 
             $electionId
-        )->paginate(2); 
+        )->paginate(100); 
 
         return CandidateResource::collection($candidates);
     }
@@ -55,19 +56,19 @@ class CandidateController extends Controller
     public function store(NewCandidateRequest $request)
     {
         $candidate = new Candidate();
+        $user = Auth::user()->id;
 
         $candidate->political_party_id = $request->input('political_party_id');
         $candidate->election_id = $request->input('election_id');
         $candidate->aspirant = $request->input('aspirant');
         $candidate->deputy = $request->input('deputy');
         $candidate->bio = $request->input('bio');
-        $candidate->added_by = $request->input('added_by');
-        $candidate->updated_by = $request->input('updated_by');
+        $candidate->added_by = $candidate->updated_by = $user;
 
         if($candidate->save()) {
             return response()->json([
-                'success'=>1,
-                'message'=>'candidate added successfully'
+                'success' => 1,
+                'message' => 'candidate added successfully'
             ]);
         }
     }
@@ -78,9 +79,11 @@ class CandidateController extends Controller
      * @param  \App\Candidate  $candidate
      * @return \Illuminate\Http\Response
      */
-    public function show(Candidate $candidate)
+    public function show($id)
     {
-        //
+        $candidate = Candidate::findOrFail($id);
+
+        return new CandidateResource($candidate);
     }
 
     /**
@@ -104,13 +107,13 @@ class CandidateController extends Controller
     public function update(UpdateCandidateRequest $request)
     {
         $candidate = Candidate::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
 
         $candidate->political_party_id = $request->input('political_party_id');
-        $candidate->election_id = $request->input('election_id');
         $candidate->aspirant = $request->input('aspirant');
         $candidate->deputy = $request->input('deputy');
         $candidate->bio = $request->input('bio');
-        $candidate->updated_by = $request->input('updated_by');
+        $candidate->updated_by = $user;
 
         if($candidate->save()) {
             return response()->json([

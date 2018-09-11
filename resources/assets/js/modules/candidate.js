@@ -15,8 +15,13 @@ export const candidate = {
         candidate: {},
         candidateLoadStatus: 0,
         addCandidateLoadStatus: 0,
+        addCandidateResult: {
+            success: 0
+        },
         updateCandidateLoadStatus: 0,
-        deleteCandidateLoadStatus: 0
+        updateCandidateResult: {},
+        deleteCandidateLoadStatus: 0,
+        deleteCandidateResult: {}
     },
     actions: {
         getCandidates({commit, state, dispatch}, data) {
@@ -41,12 +46,11 @@ export const candidate = {
         getCandidate({commit, state, dispatch}, data) {
             commit('setCandidateLoadStatus', 1);
 
-            CandidateAPI.getPoliticalPartyCandidate(
-                data.electionId,
-                data.partyId
+            CandidateAPI.getCandidate(
+                data.id
             ).then(function(response) {
                 commit('setCandidateLoadStatus', 2);
-                commit('setCandidate', response.data);
+                commit('setCandidate', response.data.data);
             }).catch(function() {
                 commit('setCandidateLoadStatus', 3);
                 commit('setCandidate', {});
@@ -61,13 +65,16 @@ export const candidate = {
                 data.election_id,
                 data.aspirant,
                 data.deputy,
-                data.bio,
-                data.added_by,
-                data.updated_by
+                data.bio
             ).then(function(response) {
                 commit('setAddCandidateLoadStatus', 2);
+                commit('setAddCandidateResult', response.data);
             }).catch(function() {
                 commit('setAddCandidateLoadStatus', 3);
+                commit('setAddCandidateResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
@@ -76,26 +83,35 @@ export const candidate = {
 
             CandidateAPI.updateCandidate(
                 data.id,
+                data.political_party_id,
                 data.aspirant,
                 data.deputy,
-                data.bio,
-                data.updated_by
+                data.bio
             ).then(function(response) {
                 commit('setUpdateCandidateLoadStatus', 2);
+                commit('setUpdateCandidateResult', response.data);
             }).catch(function() {
                 commit('setUpdateCandidateLoadStatus', 3);
+                commit('setUpdateCandidateResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
         deleteCandidate({commit, state, dispatch}, data) {
             commit('setDeleteCandidateLoadStatus', 1);
-
             CandidateAPI.deleteCandidate(
                 data.id
             ).then(function(response){
                 commit('setDeleteCandidateLoadStatus', 2);
+                commit('setDeleteCandidateResult', response.data);
             }).catch(function() {
                 commit('setDeleteCandidateLoadStatus', 3);
+                commit('setDeleteCandidateResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         }
     },
@@ -136,12 +152,24 @@ export const candidate = {
             state.addCandidateLoadStatus = status;
         },
 
+        setAddCandidateResult(state, result) {
+            state.addCandidateResult = result;
+        },
+
         setUpdateCandidateLoadStatus(state, status) {
             state.updateCandidateLoadStatus = status;
         },
 
+        setUpdateCandidateResult(state, result) {
+            state.updateCandidateResult = result;
+        },
+
         setDeleteCandidateLoadStatus(state, status) {
             state.deleteCandidateLoadStatus = status;
+        },
+
+        setDeleteCandidateResult(state, result) {
+            state.deleteCandidateResult = result;
         }
     }, 
     getters: {
@@ -169,12 +197,24 @@ export const candidate = {
             return state.addCandidateLoadStatus;
         },
 
+        getAddCandidateResult(state) {
+            return state.addCandidateResult;
+        },
+
         getUpdateCandidateLoadStatus(state) {
             return state.updateCandidateLoadStatus;
         },
 
+        getUpdateCandidateResult(state) {
+            return state.updateCandidateResult;
+        },
+
         getDeleteCandidateLoadStatus(state) {
             return state.deleteCandidateLoadStatus;
+        },
+
+        getDeleteCandidateResult(state) {
+            return state.deleteCandidateResult;
         }
     }
 };
