@@ -9,6 +9,8 @@ use App\Http\Requests\Picture\NewRequest;
 use App\Http\Requests\Picture\UpdateRequest;
 use App\Http\Requests\Picture\DelRequest;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Auth;
 
 class PictureController extends Controller
 {
@@ -45,18 +47,18 @@ class PictureController extends Controller
      */
     public function store(NewRequest $request)
     {
-        if($request->hasFile('qqfile')) {
+        if($request->hasFile('pic')) {
             //Get filename with the extension
-            $filenameWithExt = $request->file('qqfile')->getClientOriginalName();
+            $filenameWithExt = $request->file('pic')->getClientOriginalName();
             //get just filename
             $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
             //get just ext
-            $extension = $request->file('qqfile')->getClientOriginalExtension();
+            $extension = $request->file('pic')->getClientOriginalExtension();
             //filename to store
             $uuid = Str::uuid();
             $filenameToStore = $uuid.'.'.$extension;
             // upload image
-            $path = $request->file('qqfile')->storeAs('public/pictures', $filenameToStore);
+            $path = $request->file('pic')->storeAs('public/pictures', $filenameToStore);
         } else {
             return response()->json([
                 'success' => 0,
@@ -65,6 +67,7 @@ class PictureController extends Controller
         }
 
         $picture = new Picture();
+        $user = Auth::user()->id;
 
         $picture->title = $request->input('title');
         $picture->description = $request->input('description');
@@ -72,8 +75,7 @@ class PictureController extends Controller
         $picture->election_id = $request->input('election_id');
         $picture->location_id = $request->input('location_id');
         $picture->location_type = $request->input('location_type');
-        $picture->added_by = $request->input('added_by');
-        $picture->updated_by = $request->input('updated_by');
+        $picture->added_by = $picture->updated_by = $user;
 
         if($picture->save()) {
             return response()->json([
@@ -89,9 +91,11 @@ class PictureController extends Controller
      * @param  \App\Picture  $picture
      * @return \Illuminate\Http\Response
      */
-    public function show(Picture $picture)
+    public function show($id)
     {
-        //
+        $picture = Picture::findOrFail($id);
+
+        return new PictureResource($picture);
     }
 
     /**
@@ -115,11 +119,13 @@ class PictureController extends Controller
     public function update(UpdateRequest $request)
     {
         $picture = Picture::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
+
         $picture->title = $request->input('title');
         $picture->description = $request->input('description');
-        $picture->updated_by = $request->input('updated_by');
+        $picture->updated_by = $user;
 
-        if($liveUpdate->save()) {
+        if($picture->save()) {
             return response()->json([
                 'success' => 1,
                 'message' => 'picture updated successfully'

@@ -9,12 +9,19 @@ import PictureAPI from '../api/picture.js';
 
 export const picture = {
     state: {
-        pictures: [],
+        pictures: [], 
         picPagination: {},
         picturesLoadStatus: 0,
+        picture: {},
+        pictureLoadStatus: 0,
         addPictureLoadStatus: 0,
+        addPictureResult: {
+            success: 0
+        },
         updatePictureLoadStatus: 0,
-        deletePictureLoadStatus: 0
+        updatePictureResult: {},
+        deletePictureLoadStatus: 0,
+        deletePictureResult: {}
     },
     actions: {
         getPictures({commit, state}, data) {
@@ -40,22 +47,39 @@ export const picture = {
             });
         },
 
+        getPicture({commit, state}, data) {
+            commit('setPictureLoadStatus', 1);
+
+            PictureAPI.getPicture(
+                data.id
+            ).then(function(response) {
+                commit('setPictureLoadStatus', 2);
+                commit('setPicture', response.data.data);
+            }).catch(function() {
+                commit('setPictureLoadStatus', 3);
+                commit('setPicture', {});
+            })
+        },
+
         addPicture({commit, state, dispatch}, data) {
             commit('setAddPictureLoadStatus', 1);
 
             PictureAPI.addPicture(
                 data.title,
                 data.description,
-                data.url,
+                data.pic,
                 data.election_id,
                 data.location_id,
-                data.location_type,
-                data.added_by,
-                data.updated_by
+                data.location_type
             ).then(function(response) {
                 commit('setAddPictureLoadStatus', 2);
+                commit('setAddPictureResult', response.data);
             }).catch(function() {
                 commit('setAddPictureLoadStatus', 3);
+                commit('setAddPictureResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
@@ -65,24 +89,33 @@ export const picture = {
             PictureAPI.updatePicture(
                 data.id,
                 data.title,
-                data.description,
-                data.updated_by
+                data.description
             ).then(function(response) {
                 commit('setUpdatePictureLoadStatus', 2);
+                commit('setUpdatePictureResult', response.data);
             }).catch(function() {
                 commit('setUpdatePictureLoadStatus', 3);
+                commit('setUpdatePictureResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
-        updatePicture({commit, state, dispatch}, data) {
+        deletePicture({commit, state, dispatch}, data) {
             commit('setDeletePictureLoadStatus', 1);
 
-            PictureAPI.updatePicture(
+            PictureAPI.deletePicture(
                 data.id
             ).then(function(response) {
                 commit('setDeletePictureLoadStatus', 2);
+                commit('setDeletePictureResult', response.data);
             }).catch(function() {
                 commit('setDeletePictureLoadStatus', 3);
+                commit('setDeletePictureResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         }
     },
@@ -111,16 +144,36 @@ export const picture = {
             state.picPagination = pagination;
         },
 
+        setPicture(state, picture) {
+            state.picture = picture;
+        },
+
+        setPictureLoadStatus(state, status) {
+            state.pictureLoadStatus = status
+        },
+
         setAddPictureLoadStatus(state, status) {
             state.addPictureLoadStatus = status;
+        },
+
+        setAddPictureResult(state, result) {
+            state.addPictureResult = result;
         },
 
         setUpdatePictureLoadStatus(state, status) {
             state.updatePictureLoadStatus = status;
         },
 
+        setUpdatePictureResult(state, result) {
+            state.updatePictureResult = result;
+        },
+
         setDeletePictureLoadStatus(state, status) {
             state.deletePictureLoadStatus = status;
+        },
+
+        setDeletePictureResult(state, result) {
+            state.deletePictureResult = result;
         }
     },
     getters: {
@@ -133,14 +186,29 @@ export const picture = {
         getPicPagination(state) {
             return state.picPagination;
         },
+        getPicture(state) {
+            return state.picture;
+        },
+        getPictureLoadStatus(state) {
+            return state.pictureLoadStatus;
+        },
         getAddPictureLoadStatus(state) {
             return state.addPictureLoadStatus;
+        },
+        getAddPictureResult(state) {
+            return state.addPictureResult;
         },
         getUpdatePictureLoadStatus(state) {
             return state.updatePictureLoadStatus;
         },
+        getUpdatePictureResult(state) {
+            return state.updatePictureResult;
+        },
         getDeletePictureLoadStatus(state) {
             return state.deletePictureLoadStatus;
+        },
+        getDeletePictureResult(state) {
+            return state.deletePictureResult;
         }
     }
 };

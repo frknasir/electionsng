@@ -13,7 +13,7 @@ class NewRequest extends FormRequest
      */
     public function authorize() 
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,12 +26,10 @@ class NewRequest extends FormRequest
         return [
             'title' => 'required',
             'description' => 'required',
-            'qqfile' => 'image|nullable|max:1999',
+            'pic' => 'image|nullable|max:1999',
             'election_id' => 'required',
             'location_id' => 'required',
-            'location_type' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'location_type' => 'required'
         ];
     }
 
@@ -45,12 +43,10 @@ class NewRequest extends FormRequest
         return [
             'title.required' => 'title can not be empty',
             'description.required' => 'description can not be empty',
-            'url.required' => 'picture url can not be empty',
+            'pic.required' => 'image file can not be empty',
             'election_id.required' => 'Election id can not be empty',
             'location_id.required' => 'Specify the location id.',
-            'location_type.required' => 'Location type must be specified',
-            'added_by.required' => 'Who is adding this?',
-            'updated_by.required' => 'Who is updating this?'
+            'location_type.required' => 'Location type must be specified'
         ];
     }
 }

@@ -202,8 +202,32 @@ export default new VueRouter({
                 },
                 {
                     path: 'pictures',
-                    name: 'Pictures',
-                    component: Vue.component('Pictures', require('./pages/Pictures.vue'))
+                    component: Vue.component('Pictures', require('./pages/Pictures.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Pictures',
+                            component: Vue.component('BrowsePictures', require('./components/pictures/BrowsePictures.vue'))
+                        },
+                        {
+                            path: 'edit/:pictureId',
+                            name: 'Edit Picture',
+                            component: Vue.component('EditPicture', require('./components/pictures/EditPicture.vue')),
+                            beforeEnter: requireAuth,
+                            meta: {
+                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
+                            }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add Picture',
+                            component: Vue.component('AddPicture', require('./components/pictures/AddPicture.vue')),
+                            beforeEnter: requireAuth,
+                            meta: {
+                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
+                            }
+                        }
+                    ]
                 }
             ]
         }

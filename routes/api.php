@@ -72,6 +72,24 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     /**
      * End Incident Routes
      */
+    /**
+     * Picture Routes
+     */
+    Route::post(
+      '/picture',
+      'PictureController@store'
+    );
+    Route::put(
+      '/picture',
+      'PictureController@update'
+    );
+    Route::delete(
+      '/picture',
+      'PictureController@destroy'
+    );
+    /**
+     * End Picture Routes
+     */
 });
 
 Route::group(['prefix'=> 'v1'], function() {
@@ -232,6 +250,17 @@ Route::group(['prefix'=> 'v1'], function() {
   );
   /**
    * End Political Party Routes
+   */
+
+  /**
+   * picture routes
+   */
+  Route::get(
+    '/picture/{id}',
+    'PictureController@show'
+  );
+  /**
+   * end picture routes
    */
 });
 
