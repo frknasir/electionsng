@@ -3,21 +3,16 @@
 </style>
 <template>
     <footer class="footer">
-        <div class="container-fluid">
+        <div class="container">
             <nav class="float-left">
                 <ul>
                     <li>
-                        <a href="https://www.creative-tim.com">
-                        Creative Tim
+                        <a href="https://electionsng.com">
+                            &copy; 2018, Electionsng.com
                         </a>
                     </li>
                 </ul>
             </nav>
-            <div class="copyright float-right">
-                &copy;
-                2018, made with <i class="material-icons">favorite</i> by
-                <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a> for a better web.
-            </div>
             <!-- your footer here -->
         </div>
     </footer>

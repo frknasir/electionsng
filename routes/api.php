@@ -90,6 +90,25 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     /**
      * End Picture Routes
      */
+
+    /**
+     * Election Routes
+     */
+    Route::post(
+      '/election',
+      'ElectionController@store'
+    );
+    Route::put(
+      '/election',
+      'ElectionController@update'
+    );
+    Route::delete(
+      '/election',
+      'ElectionController@destroy'
+    );
+    /**
+     * End Election Routes
+     */
 });
 
 Route::group(['prefix'=> 'v1'], function() {
@@ -97,6 +116,10 @@ Route::group(['prefix'=> 'v1'], function() {
   /**
    * Elections Routes
    */
+  Route::get(
+    '/elections',
+    'ElectionController@index'
+  );
   Route::get(
     '/election/{id}', 
     'ElectionController@show'

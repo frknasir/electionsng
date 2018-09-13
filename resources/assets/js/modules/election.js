@@ -14,11 +14,17 @@ export const election = {
     state: {
         elections: [],
         electionsLoadStatus: 0,
+        elPagination: {},
         election: {},
         electionLoadStatus: 0,
         addElectionLoadStatus: 0,
+        addElectionResult: {
+            success: 0
+        },
         updateElectionLoadStatus: 0,
+        updateElectionResult: {},
         deleteElectionLoadStatus: 0,
+        deleteElectionResult: {}
     },
 
     /*
@@ -33,8 +39,12 @@ export const election = {
 
             ElectionAPI.getElections()
                 .then( function(response) {
-                    commit('setElections', response.data);
+                    commit('setElections', response.data.data);
                     commit('setElectionsLoadStatus', 2);
+                    commit('setElPagination', {
+                        meta: response.data.meta,
+                        links: response.data.links
+                    });
                 })
                 .catch( function() {
                     commit('setElections', []);
@@ -50,8 +60,12 @@ export const election = {
 
             ElectionAPI.getOngoing()
                 .then( function(response) {
-                    commit('setElections', response.data);
+                    commit('setElections', response.data.data);
                     commit('setElectionsLoadStatus', 2);
+                    commit('setElPagination', {
+                        meta: response.data.meta,
+                        links: response.data.links
+                    });
                 })
                 .catch( function() {
                     commit('setElections', []);
@@ -67,8 +81,12 @@ export const election = {
 
             ElectionAPI.getUpcoming()
                 .then( function(response) {
-                    commit('setElections', response.data);
+                    commit('setElections', response.data.data);
                     commit('setElectionsLoadStatus', 2);
+                    commit('setElPagination', {
+                        meta: response.data.meta,
+                        links: response.data.links
+                    });
                 })
                 .catch( function() {
                     commit('setElections', []);
@@ -84,8 +102,12 @@ export const election = {
 
             ElectionAPI.getArchived()
                 .then( function(response) {
-                    commit('setElections', response.data);
+                    commit('setElections', response.data.data);
                     commit('setElectionsLoadStatus', 2);
+                    commit('setElPagination', {
+                        meta: response.data.meta,
+                        links: response.data.links
+                    });
                 })
                 .catch( function() {
                     commit('setElections', []);
@@ -125,18 +147,18 @@ export const election = {
                 data.votes_cast,
                 data.valid_votes,
                 data.rejected_votes,
-                data.date,
-                data.added_by,
-                data.updated_by
+                data.date
             ) 
                 .then(function(response) {
                     commit('setAddElectionLoadStatus', 2);
-                    dispatch('loadOngoing');
-                    dispatch('loadUpcoming');
-                    dispatch('loadArchived');
+                    commit('setAddElectionResult', response.data);
                 })
                 .catch(function() {
                     commit('setAddElectionLoadStatus', 3);
+                    commit('setAddElectionResult', {
+                        success: 0,
+                        message: 'Something went wrong. Try again!'
+                    });
                 });
         },
 
@@ -156,15 +178,16 @@ export const election = {
                 data.votes_cast,
                 data.valid_votes,
                 data.rejected_votes,
-                data.date,
-                data.updated_by
+                data.date
             ).then(function(response) {
                 commit('setUpdateElectionLoadStatus', 2);
-                dispatch('loadOngoing');
-                dispatch('loadUpcoming');
-                dispatch('loadArchived');
+                commit('setUpdateElectionResult', response.data);
             }).catch(function() {
                 commit('setUpdateElectionLoadStatus', 3);
+                commit('setUpdateElectionResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again'
+                });
             });
         },
 
@@ -178,11 +201,13 @@ export const election = {
                 data.id
             ).then(function(response) {
                 commit('setDeleteElectionLoadStatus', 2);
-                dispatch('loadOngoing');
-                dispatch('loadUpcoming');
-                dispatch('loadArchived');
+                commit('setDeleteElectionResult', response.data);
             }).catch(function() {
                 commit('setDeleteElectionLoadStatus', 3);
+                commit('setDeleteElectionResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again'
+                });
             });
         }
     },
@@ -192,11 +217,27 @@ export const election = {
     */
     mutations: {
         setElectionsLoadStatus( state, status ) {
-            state.setElectionsLoadStatus = status;
+            state.electionsLoadStatus = status;
         },
 
         setElections(state, elections) {
             state.elections = elections;
+        },
+
+        setElPagination(state, data) {
+            let meta = data.meta;
+            let links = data.links;
+
+            let pagination = {
+                current_page: meta.current_page,
+                last_page: meta.last_page,
+                to: meta.to,
+                total: meta.total,
+                next_page_url: links.next,
+                prev_page_url: links.prev
+            };
+        
+            state.elPagination = pagination;
         },
 
         setElectionLoadStatus(state, status) {
@@ -211,12 +252,24 @@ export const election = {
             state.addElectionLoadStatus = status;
         },
 
+        setAddElectionResult(state, result) {
+            state.addElectionResult = result;
+        },
+
         setUpdateElectionLoadStatus(state, status) {
             state.updateElectionLoadStatus = status;
         },
 
+        setUpdateElectionResult(state, result) {
+            state.updateElectionResult = result;
+        },
+
         setDeleteElectionLoadStatus(state, status) {
             state.deleteElectionLoadStatus = status;
+        },
+
+        setDeleteElectionResult(state, result) {
+            state.deleteElectionResult = result;
         }
     },
 
@@ -232,6 +285,10 @@ export const election = {
             return state.elections;
         },
 
+        getElPagination(state) {
+            return state.elPagination
+        },
+
         getElectionLoadStatus(state) {
             return state.electionLoadStatus;
         },
@@ -244,12 +301,24 @@ export const election = {
             return state.addElectionLoadStatus;
         },
 
+        getAddElectionResult(state) {
+            return state.addElectionResult;
+        },
+
         getUpdateElectionLoadStatus(state) {
             return state.updateElectionLoadStatus;
         },
 
+        getUpdateElectionResult(state) {
+            return state.updateElectionResult;
+        },
+
         getDeleteElectionLoadStatus(state) {
             return state.deleteElectionLoadStatus;
+        },
+
+        getDeleteElectionResult(state) {
+            return state.deleteElectionResult;
         }
     }
 };

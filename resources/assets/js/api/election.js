@@ -58,9 +58,7 @@ export default {
         votes_cast,
         valid_votes,
         rejected_votes,
-        date,
-        added_by,
-        updated_by 
+        date
     ) {
         return axios.post( CONFIG.API_URL + '/election', {
             title: title,
@@ -71,9 +69,7 @@ export default {
             votes_cast: votes_cast,
             valid_votes: valid_votes,
             rejected_votes: rejected_votes,
-            date: date,
-            added_by: added_by,
-            updated_by: updated_by
+            date: date
         });
     },
 
@@ -90,8 +86,7 @@ export default {
         votes_cast,
         valid_votes,
         rejected_votes,
-        date,
-        updated_by 
+        date
     ) {
         return axios.put( CONFIG.API_URL + '/election', {
             id: id,
@@ -103,8 +98,7 @@ export default {
             votes_cast: votes_cast,
             valid_votes: valid_votes,
             rejected_votes: rejected_votes,
-            date: date,
-            updated_by: updated_by
+            date: date
         });
     },
 
@@ -115,7 +109,9 @@ export default {
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/election', {
-            id: id
+            params: {
+                id: id
+            }
         });
     }
 };

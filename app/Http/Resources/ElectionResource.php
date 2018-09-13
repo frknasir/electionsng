@@ -18,6 +18,7 @@ class ElectionResource extends JsonResource
      */
     public function toArray($request)
     {
+        $date = explode(" ", $this->date);
         //return parent::toArray($request);
         return [
             'id' => $this->id,
@@ -25,6 +26,7 @@ class ElectionResource extends JsonResource
             'election_type_id' => $this->election_type_id,
             'election_type_name' => ElectionType::find($this->election_type_id)->name,
             'state' => Election::find($this->id)->state,
+            'date' => $date[0],
             'registered_voters' => $this->registered_voters,
             'accredited_voters' => $this->accredited_voters,
             'votes_cast' => $this->votes_cast,

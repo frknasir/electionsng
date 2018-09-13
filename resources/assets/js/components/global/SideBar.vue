@@ -30,19 +30,25 @@
                     <div class="collapse" id="userCollapse">
                         <ul class="nav">
                             <li class="nav-item ">
-                                <router-link class="nav-link" :to="'/election/'+$route.params.id">
+                                <a class="dropdown-item" :href="config.URL+'/logout'" 
+                                    onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
                                     <span class="sidebar-mini"> L </span>
                                     <span class="sidebar-normal"> Logout </span>
-                                </router-link>
+                                </a>
+                                <form id="logout-form" :action="config.URL+'/logout'" 
+                                    method="POST" style="display: none;">
+                                    <input type="hidden" name="_token" id="csrf-token" :value="csrf_token" />
+                                </form>
                             </li>
                         </ul>
                     </div>
                 </li>
                 <li v-else class="nav-item">
-                    <router-link class="nav-link" :to="'/login'">
+                    <a class="nav-link" :href="config.URL+'/login'">
                         <i class="material-icons">person</i>
                         <p>Login</p>
-                    </router-link>
+                    </a>
                 </li>
                 <li class="nav-item active">
                     <router-link class="nav-link" :to="'/election/'+$route.params.id">
@@ -103,11 +109,15 @@
 
 <script>
     import bg from '../../../../../template/material-dashboard-html-v2.1.0/assets/img/sidebar-1.jpg';
+    import { CONFIG } from '../../config.js';
+
     export default {
         data() {
             return {
                 bg: bg,
-                active: this.$route.name
+                active: this.$route.name,
+                config: CONFIG,
+                csrf_token: $('meta[name="csrf-token"]').attr('content')
             } 
         },
         created() {

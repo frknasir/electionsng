@@ -2,9 +2,9 @@
 
 </style>
 <template>
-    <nav class="navbar navbar-expand-lg navbar-absolute fixed-top bg-success">
+    <nav class="navbar navbar-expand-lg navbar-absolute navbar-light">
         <div class="container-fluid">
-          <router-link class="btn btn-white btn-link"
+          <router-link class="btn btn-link"
               v-if="$routerHistory.hasPrevious()"
               :to="{ path: $routerHistory.previous().path }">
               <i class="material-icons">arrow_back</i>

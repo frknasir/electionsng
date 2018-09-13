@@ -2,10 +2,12 @@
  
 </style>
 <template>
-    <nav class="navbar navbar-expand-lg bg-success navbar-absolute fixed-top text-white" id="navigation-example">
+    <nav class="navbar navbar-expand-lg navbar-absolute navbar-light" id="navigation-example">
         <div class="container">
-            <div class="navbar-wrapper">        
-                <a class="navbar-brand" href="#pablo">Login Page</a>
+            <div class="navbar-wrapper">
+                <router-link class="navbar-brand" to="/">
+                    Electionsng.com
+                </router-link>
             </div>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
@@ -16,39 +18,62 @@
             </button>
 
             <div class="collapse navbar-collapse justify-content-end">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="../dashboard.html" class="nav-link">
-                            <i class="material-icons">dashboard</i>
-                            Dashboard
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav mr-auto">
+
+                </ul>
+
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Authentication Links -->
+                    <li v-if="userLoadStatus == 2 && user != {}" class="nav-item dropdown">
+                        <a id="navbarDropdown" 
+                            class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ user.name }} <span class="caret"></span>
                         </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" :href="config.URL+'/logout'" 
+                                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                            <form id="logout-form" :action="config.URL+'/logout'" 
+                                method="POST" style="display: none;">
+                                <input type="hidden" name="_token" id="csrf-token" :value="csrf_token" />
+                            </form>
+                        </div>
                     </li>
-                    <li class= "nav-item ">
-                        <a href="../pages/register.html" class="nav-link">
-                            <i class="material-icons">person_add</i>
-                            Register
-                        </a>
-                    </li>
-                    <li class= "nav-item  active ">
-                        <a href="../pages/login.html" class="nav-link">
-                            <i class="material-icons">fingerprint</i>
+                    <li v-else class="nav-item">
+                        <a class="nav-link" :href="config.URL+'/login'">
                             Login
                         </a>
                     </li>
-
-                    <li class= "nav-item ">
-                        <a href="../pages/lock.html" class="nav-link">
-                            <i class="material-icons">lock_open</i>
-                            Lock
-                        </a>
-                    </li>
-                </ul>  
+                </ul> 
             </div>
         </div>
     </nav>
 </template>
 <script>
-export default {
-    
-}
+    import { CONFIG } from '../../config.js';
+
+    export default {
+        data() {
+            return {
+                config: CONFIG,
+                csrf_token: $('meta[name="csrf-token"]').attr('content')
+            } 
+        },
+        created() {
+            this.$store.dispatch('getAuthUser');
+        },
+        computed: {
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
+            }
+        }
+    }
 </script>
