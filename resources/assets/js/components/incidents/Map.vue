@@ -36,15 +36,17 @@
                     <p class="category"></p> 
                     <span id="incident-type" class="badge badge-warning"></span>
                     <br>
-                    <router-link class="btn btn-sm btn-warning" 
-                        :to="'/election/'+election.id+'/incidents/edit/'+incident.id">
-                        <i class="material-icons">create</i>
-                        Edit
-                    </router-link>
-                    <button @click="deleteIncident(incident.id)" class="btn btn-sm btn-danger">
-                        <i class="material-icons">clear</i>
-                        Delete
-                    </button>
+                    <div v-if="userLoadStatus == 2 && user != {}">
+                        <router-link class="btn btn-sm btn-warning" 
+                            :to="'/election/'+election.id+'/incidents/edit/'+incident.id">
+                            <i class="material-icons">create</i>
+                            Edit
+                        </router-link>
+                        <button @click="deleteIncident(incident.id)" class="btn btn-sm btn-danger">
+                            <i class="material-icons">clear</i>
+                            Delete
+                        </button>
+                    </div>
                 </div>
                 <div v-html="info_desc" class="card-body"></div>
                 <div class="card-footer">
@@ -152,6 +154,12 @@
             },
             deleteIncidentResult() {
                 return this.$store.getters.getDeleteIncidentResult;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
             }
         },
         watch: {

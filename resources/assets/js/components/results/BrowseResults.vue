@@ -243,6 +243,12 @@
             },
             pollingUnitsLoadStatus() {
                 return this.$store.getters.getPollingUnitsLoadStatus;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
             }
         },
         methods: {

@@ -71,7 +71,7 @@
                             <i class="material-icons">flag</i> 
                             <span class="updated_at">Edited</span>
                         </div>
-                        <div>
+                        <div v-if="userLoadStatus == 2 && user != {}">
                             <router-link class="btn btn-sm btn-warning" 
                                 :to="'/election/'+election.id+'/incidents/edit/'+incident.id">
                                 <i class="material-icons">create</i>
@@ -137,6 +137,12 @@
             },
             deleteIncidentResult() {
                 return this.$store.getters.getDeleteIncidentResult;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
             }
         },
         watch: {

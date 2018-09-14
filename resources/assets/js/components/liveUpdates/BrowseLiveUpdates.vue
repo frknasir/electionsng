@@ -40,7 +40,7 @@
                 </button>
             </div>
         </div>
-        <div id="action-btn">
+        <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
             <router-link class="btn btn-success btn-fab btn-lg btn-round" 
                 :to="'/election/'+election.id+'/liveUpdates/add'">
                 <i class="material-icons">add</i>
@@ -69,6 +69,12 @@
         computed: {
             election() {
                 return this.$store.getters.getElection;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
             }
         },
         watch: {

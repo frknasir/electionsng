@@ -51,7 +51,9 @@
                                         </div>
                                         <div class="card-body">
                                             <h4 class="card-title">
-                                                {{ election.title }} <br />
+                                                <router-link :to="'/election/'+election.id">
+                                                    {{ election.title }}
+                                                </router-link><br />
                                                 <small class="badge badge-success">
                                                     {{ election.election_type_name }}
                                                 </small>

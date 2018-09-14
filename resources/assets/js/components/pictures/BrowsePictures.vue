@@ -25,7 +25,7 @@
                                 </small>
                             </h4>
                             <div v-html="picture.description" class="card-text"></div>
-                            <div>
+                            <div v-if="userLoadStatus == 2 && user != {}">
                                 <router-link class="btn btn-sm btn-just-icon btn-warning" 
                                     :to="'/election/'+election.id+'/pictures/edit/'+picture.id">
                                     <i class="material-icons">create</i>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            <div id="action-btn">
+            <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
                 <router-link class="btn btn-success btn-fab btn-lg btn-round" 
                     :to="'/election/'+election.id+'/pictures/add'">
                     <i class="material-icons">add</i>
@@ -79,6 +79,12 @@
             },
             picturesLoadStatus() {
                 return this.$store.getters.getPicturesLoadStatus;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
             },
             picPagination() {
                 return this.$store.getters.getPicPagination;

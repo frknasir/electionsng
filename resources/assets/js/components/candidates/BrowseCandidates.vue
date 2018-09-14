@@ -62,7 +62,7 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <div id="action-btn">
+            <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
                 <router-link class="btn btn-success btn-fab btn-lg btn-round" 
                     :to="'/election/'+election.id+'/candidates/add'">
                     <i class="material-icons">add</i>
@@ -107,7 +107,7 @@
                                         <th role="columnheader">Aspirant</th>
                                         <th role="columnheader">Deputy</th>
                                         <th role="columnheader">Bio</th>
-                                        <th role="columnheader">Action</th>
+                                        <th role="columnheader" v-if="userLoadStatus == 2 && user != {}">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody role="rowgroup">
@@ -133,7 +133,7 @@
                                                 Read
                                             </button>
                                         </td>
-                                        <td class="td-actions">
+                                        <td v-if="userLoadStatus == 2 && user != {}" class="td-actions">
                                             <router-link 
                                                 :to="'/election/'+election.id+'/candidates/edit/'+candidate.id" 
                                                 rel="tooltip" class="btn btn-success">
@@ -219,6 +219,12 @@ export default {
         },
         candidates() {
             return this.$store.getters.getCandidates;
+        },
+        user() {
+            return this.$store.getters.getUser;
+        },
+        userLoadStatus() {
+            return this.$store.getters.getUserLoadStatus;
         },
         pagination() {
             return this.$store.getters.getPagination;

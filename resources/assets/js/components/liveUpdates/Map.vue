@@ -33,15 +33,17 @@
                 <div class="card-header card-header-success">
                     <h4 class="card-title"></h4>
                     <p class="category"></p> 
-                    <router-link class="btn btn-sm btn-warning" 
-                        :to="'/election/'+election.id+'/liveUpdates/edit/'+liveUpdate.id">
-                        <i class="material-icons">create</i>
-                        Edit
-                    </router-link>
-                    <button @click="deleteLiveUpdate(liveUpdate.id)" class="btn btn-sm btn-danger">
-                        <i class="material-icons">clear</i>
-                        Delete
-                    </button>
+                    <div v-if="userLoadStatus == 2 && user != {}">
+                        <router-link class="btn btn-sm btn-warning" 
+                            :to="'/election/'+election.id+'/liveUpdates/edit/'+liveUpdate.id">
+                            <i class="material-icons">create</i>
+                            Edit
+                        </router-link>
+                        <button @click="deleteLiveUpdate(liveUpdate.id)" class="btn btn-sm btn-danger">
+                            <i class="material-icons">clear</i>
+                            Delete
+                        </button>
+                    </div>
                 </div>
                 <div v-html="info_desc" class="card-body">
 
@@ -152,6 +154,12 @@
             },
             deleteLiveUpdateResult() {
                 return this.$store.getters.getDeleteLiveUpdateResult;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
             }
         },
         watch: {
