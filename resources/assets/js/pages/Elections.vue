@@ -2,10 +2,20 @@
 
 </style>
 <template>
-    
+    <router-view></router-view>
 </template>
 <script>
-export default {
-    
-}
+    export default {
+        data() {
+            return {
+
+            };
+        },
+        components: {
+            
+        },
+        created() {
+
+        }
+    }
 </script>

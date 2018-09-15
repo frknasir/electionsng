@@ -121,6 +121,18 @@ Route::group(['prefix'=> 'v1'], function() {
     'ElectionController@index'
   );
   Route::get(
+    '/elections/ongoing',
+    'ElectionController@ongoing'
+  );
+  Route::get(
+    '/elections/upcoming',
+    'ElectionController@upcoming'
+  );
+  Route::get(
+    '/elections/archived',
+    'ElectionController@archived'
+  );
+  Route::get(
     '/election/{id}', 
     'ElectionController@show'
   );

@@ -30,7 +30,7 @@ export const election = {
     /*
         Defines the actions used to retrieve the data.
     */
-    actions: {
+    actions: { 
         /**
          * loads all elections from the API
          */

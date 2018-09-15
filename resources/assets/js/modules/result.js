@@ -19,7 +19,12 @@ export const result = {
             location_type: "For: ",
             location_name: "Final Result"
         },
-        collationStats: {},
+        collationStats: {
+            state: {},
+            registrationArea: {},
+            localGovernment: {},
+            pollingUnit: {}
+        },
         collationStatsLoadStatus: 0,
         addResultLoadStatus: 0,
         updateResultLoadStatus: 0,

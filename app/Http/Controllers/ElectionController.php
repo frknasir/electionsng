@@ -26,19 +26,19 @@ class ElectionController extends Controller
     public function ongoing() {
         $this->today = date('Y-m-d');
 
-        $elections = Election::whereDate('date', $this->today)->get();
+        $elections = Election::whereDate('date', $this->today)->paginate();
 
         return ElectionResource::collection($elections);
     }
 
-    public function upcoming() {
+    public function upcoming() { 
         $this->today = date('Y-m-d');
 
         $elections = Election::whereDate(
             'date',
             '<',
             $this->today
-        )->get();
+        )->paginate();
 
         return ElectionResource::collection($elections);
     }
@@ -50,7 +50,7 @@ class ElectionController extends Controller
             'date',
             '>',
             $this->today
-        )->get();
+        )->paginate();
 
         return ElectionResource::collection($elections);
     }

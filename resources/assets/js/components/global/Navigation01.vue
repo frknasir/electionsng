@@ -2,7 +2,7 @@
  
 </style>
 <template>
-    <nav class="navbar navbar-expand-lg navbar-absolute navbar-light" id="navigation-example">
+    <nav class="navbar navbar-expand-lg  navbar-light" id="navigation-example">
         <div class="container">
             <div class="navbar-wrapper">
                 <router-link class="navbar-brand" to="/">
@@ -20,11 +20,46 @@
             <div class="collapse navbar-collapse justify-content-end">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
-
+                    
                 </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <router-link class="nav-link" to='/elections'>
+                            Elections
+                        </router-link>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a id="electoralAreas" 
+                            class="nav-link dropdown-toggle" href="#" 
+                            data-toggle="dropdown" 
+                            aria-haspopup="true" aria-expanded="false">
+                            Electoral Areas <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="electoralAreas">
+                            <a class="dropdown-item" >
+                                States
+                            </a>
+                            <a class="dropdown-item" >
+                                Local Governments
+                            </a>
+                            <a class="dropdown-item" >
+                                Registration Areas
+                            </a>
+                            <a class="dropdown-item" >
+                                Polling Units
+                            </a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <router-link class="nav-link" to=''>
+                            Political Parties
+                        </router-link>
+                    </li>
+
                     <!-- Authentication Links -->
                     <li v-if="userLoadStatus == 2 && user != {}" class="nav-item dropdown">
                         <a id="navbarDropdown" 

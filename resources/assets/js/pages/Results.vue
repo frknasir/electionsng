@@ -115,6 +115,11 @@
     import BrowseResults from '../components/results/BrowseResults.vue';
 
     export default {
+        data() {
+            return {
+                
+            }
+        },
         components: {
             BrowseResults
         },

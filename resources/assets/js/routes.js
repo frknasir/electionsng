@@ -90,7 +90,32 @@ export default new VueRouter({
                 {
                     path: 'elections',
                     name: 'elections',
-                    component: Vue.component('Election', require('./pages/Elections.vue'))
+                    component: Vue.component('Election', require('./pages/Elections.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Elections',
+                            component: Vue.component('BrowseElections', require('./components/elections/BrowseElections.vue'))
+                        },
+                        {
+                            path: 'edit/:electionId',
+                            name: 'Edit Election',
+                            component: Vue.component('EditElection', require('./components/elections/EditElection.vue')),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add Election',
+                            component: Vue.component('AddElection', require('./components/elections/AddElection.vue')),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        }
+                    ]
                 }
             ]
         },

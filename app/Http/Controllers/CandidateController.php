@@ -13,7 +13,7 @@ use Auth;
 class CandidateController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource. 
      * based on the election id provided
      * @return \Illuminate\Http\Response
      */

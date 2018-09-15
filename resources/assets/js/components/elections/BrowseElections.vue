@@ -3,11 +3,28 @@
         height: 200px;
         z-index: 4;
     }
+
+    #action-btn {
+        position: relative;
+        right: 20px;
+        z-index: 3;
+    }
+
+    #action-btn .btn {
+        position: fixed;
+        right: 120px;
+        bottom: 10%;
+    }
 </style>
 <template>
     <div class="content">
-        <div class="container-fluid">
-
+        <div class="container">
+            <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
+                <router-link class="btn btn-success btn-fab btn-lg btn-round" 
+                    :to="'#'">
+                    <i class="material-icons">add</i>
+                </router-link>
+            </div>
             <div class="card card-nav-tabs">
                 <div class="card-header card-header-success">
                     <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
@@ -31,9 +48,9 @@
                                 <form action="">
                                     <div class="row">
                                         <div class="form-group col-md-4">
-                                            <select name="" id="" class="form-control"> 
+                                            <select v-model="election_filter" class="form-control"> 
                                                 <option value="all">All</option>
-                                                <option value="active">Active</option>
+                                                <option value="ongoing">Active</option>
                                                 <option value="upcoming">Upcoming</option>
                                                 <option value="archived">Archived</option>
                                             </select>
@@ -43,7 +60,7 @@
                             </div>
 
 
-                            <div class="row">
+                            <div class="row"> 
                                 <div v-for="election in elections" v-bind:key="election.id" class="col-md-4">
                                     <div class="card">
                                         <div class="card-header card-chart card-header-success p-0">
@@ -65,6 +82,17 @@
                                             </p>
                                         </div>
                                         <div class="card-footer">
+                                            <div v-if="userLoadStatus == 2 && user != {}">
+                                                <router-link 
+                                                    :to="'/elections/edit/'+election.id" 
+                                                    rel="tooltip" class="btn btn-sm btn-success">
+                                                    <i class="material-icons">edit</i>
+                                                </router-link>
+                                                <button @click="deleteElection(election.id)" type="button" 
+                                                rel="tooltip" class="btn btn-sm btn-danger">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </div>
                                             <div v-if="moment(election.updated_at, 'YYYY-MM-DD').isValid()" class="stats">
                                                 <i class="material-icons">access_time</i> 
                                                 updated {{ moment(election.updated_at, 'YYYY-MM-DD').fromNow() }}
@@ -84,7 +112,8 @@
     export default {
         data() {
             return {
-                moment: window.moment
+                moment: window.moment,
+                election_filter: 'all'
             }
         },
         computed: {
@@ -93,6 +122,17 @@
             },
             electionsLoadStatus() {
                 return this.$store.getters.getElectionsLoadStatus;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
+            }
+        },
+        watch: {
+            election_filter: function(val) {
+                alert(val);
             }
         },
         created() {
