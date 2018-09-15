@@ -13,7 +13,7 @@ class UpdateElectionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,11 +26,7 @@ class UpdateElectionRequest extends FormRequest
         return [
             'id' => 'required',
             'title' => 'required',
-            'election_type_id' => 'required',
-            'state_id' => 'required',
-            'date' => 'required|date_format:Y-m-d|after:today',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'date' => 'required|date_format:Y-m-d|after:today'
         ];
     }
 
@@ -44,13 +40,9 @@ class UpdateElectionRequest extends FormRequest
         return [
             'id.required' => 'Election ID is required',
             'title.required' => 'Election title can not be empty.',
-            'election_type_id.required'  => 'Election type can not be empty.',
-            'state_id.required' => 'Specify the state please.',
             'date.required' => 'Election date is missing',
             'date.date_format' => 'Wrong date format',
-            'date.after' => 'Date must be after today',
-            'added_by.required' => 'Who is adding this election?',
-            'updated_by.required' => 'Who is updating this election?'
+            'date.after' => 'Date must be after today'
         ];
     }
 }

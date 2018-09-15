@@ -7,32 +7,36 @@ export default {
     /**
      * GET /api/v1/elections
      */
-    getElections: function() {
+    getElections: function(url = null) {
+        url = url || CONFIG.API_URL +
+        '/elections';
         return axios.get(
-            CONFIG.API_URL +
-            '/elections'
+            url
         );
     },
     
     /*
         GET /api/v1/elections/ongoing
     */
-    getOngoing: function() {
-        return axios.get( CONFIG.API_URL + '/elections/ongoing' );
+    getOngoing: function(url = null) {
+        url = url || CONFIG.API_URL + '/elections/ongoing';
+        return axios.get( url );
     },
 
     /*
     GET /api/v1/elections/upcoming
     */
-    getUpcoming: function() {
-        return axios.get( CONFIG.API_URL + '/elections/upcoming' );
+    getUpcoming: function(url = null) {
+        url = url || CONFIG.API_URL + '/elections/upcoming'
+        return axios.get( url );
     },
 
     /**
      * GET /api/v1/elections/archived 
     */
-    getArchived: function() {
-        return axios.get( CONFIG.API_URL + '/elections/archived');
+    getArchived: function(url = null) {
+        url = url || CONFIG.API_URL + '/elections/archived';
+        return axios.get( url );
     },
 
     /**
@@ -79,8 +83,6 @@ export default {
     updateElection: function ( 
         id,
         title, 
-        election_type_id, 
-        state_id, 
         registered_voters, 
         accredited_voters,
         votes_cast,
@@ -91,8 +93,6 @@ export default {
         return axios.put( CONFIG.API_URL + '/election', {
             id: id,
             title: title,
-            election_type_id: election_type_id,
-            state_id: state_id,
             registered_voters: registered_voters,
             accredited_voters: accredited_voters,
             votes_cast: votes_cast,

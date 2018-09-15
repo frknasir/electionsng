@@ -136,6 +136,10 @@ Route::group(['prefix'=> 'v1'], function() {
     '/election/{id}', 
     'ElectionController@show'
   );
+  Route::get(
+    '/electionTypes',
+    'ElectionTypeController@index'
+  );
   /**
    * End Elections Routes
    */

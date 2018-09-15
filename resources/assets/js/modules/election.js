@@ -34,10 +34,12 @@ export const election = {
         /**
          * loads all elections from the API
          */
-        getElections({commit}) {
+        getElections({commit}, data) {
             commit('setElectionsLoadStatus', 1);
 
-            ElectionAPI.getElections()
+            ElectionAPI.getElections(
+                data.url
+            )
                 .then( function(response) {
                     commit('setElections', response.data.data);
                     commit('setElectionsLoadStatus', 2);
@@ -55,10 +57,12 @@ export const election = {
         /**
          * Loads the ongoing elections from the API
          */
-        getOngoing({commit}) {
+        getOngoing({commit}, data) {
             commit('setElectionsLoadStatus', 1);
 
-            ElectionAPI.getOngoing()
+            ElectionAPI.getOngoing(
+                data.url
+            )
                 .then( function(response) {
                     commit('setElections', response.data.data);
                     commit('setElectionsLoadStatus', 2);
@@ -76,10 +80,12 @@ export const election = {
         /**
          * Loads upcoming elections from the API
          */
-        getUpcoming({commit}) {
+        getUpcoming({commit},data) {
             commit('setElectionsLoadStatus', 1);
 
-            ElectionAPI.getUpcoming()
+            ElectionAPI.getUpcoming(
+                data.url
+            )
                 .then( function(response) {
                     commit('setElections', response.data.data);
                     commit('setElectionsLoadStatus', 2);
@@ -97,22 +103,24 @@ export const election = {
         /**
          * Loads archived elections from the API
          */
-        getArchived({commit}) {
+        getArchived({commit}, data) {
             commit('setElectionsLoadStatus', 1);
 
-            ElectionAPI.getArchived()
-                .then( function(response) {
-                    commit('setElections', response.data.data);
-                    commit('setElectionsLoadStatus', 2);
-                    commit('setElPagination', {
-                        meta: response.data.meta,
-                        links: response.data.links
-                    });
-                })
-                .catch( function() {
-                    commit('setElections', []);
-                    commit('setElectionsLoadStatus', 3);
+            ElectionAPI.getArchived(
+                data.url
+            )
+            .then( function(response) {
+                commit('setElections', response.data.data);
+                commit('setElectionsLoadStatus', 2);
+                commit('setElPagination', {
+                    meta: response.data.meta,
+                    links: response.data.links
                 });
+            })
+            .catch( function() {
+                commit('setElections', []);
+                commit('setElectionsLoadStatus', 3);
+            });
         },
 
         /**
@@ -171,8 +179,6 @@ export const election = {
             ElectionAPI.updateElection(
                 data.id,
                 data.title,
-                data.election_type_id,
-                data.state_id,
                 data.registered_voters,
                 data.accredited_voters,
                 data.votes_cast,
@@ -286,7 +292,7 @@ export const election = {
         },
 
         getElPagination(state) {
-            return state.elPagination
+            return state.elPagination;
         },
 
         getElectionLoadStatus(state) {

@@ -19,7 +19,7 @@ export const electionType = {
             ElectionTypeAPI.getElectionTypes()
                 .then(function(response) {
                     commit('setElectionTypesLoadStatus', 2);
-                    commit('setElectionTypes', response.data);
+                    commit('setElectionTypes', response.data.data);
                 })
                 .catch(function() {
                     commit('setElectionTypesLoadStatus', 3);

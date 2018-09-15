@@ -89,7 +89,6 @@ export default new VueRouter({
                 },
                 {
                     path: 'elections',
-                    name: 'elections',
                     component: Vue.component('Election', require('./pages/Elections.vue')),
                     children: [
                         {

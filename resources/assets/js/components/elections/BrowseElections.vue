@@ -1,13 +1,13 @@
 <style scoped>
     .maps {
         height: 200px;
-        z-index: 4;
+        z-index: 2;
     }
 
     #action-btn {
         position: relative;
         right: 20px;
-        z-index: 3;
+        z-index: 6;
     }
 
     #action-btn .btn {
@@ -21,7 +21,7 @@
         <div class="container">
             <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
                 <router-link class="btn btn-success btn-fab btn-lg btn-round" 
-                    :to="'#'">
+                    to="elections/add">
                     <i class="material-icons">add</i>
                 </router-link>
             </div>
@@ -50,7 +50,7 @@
                                         <div class="form-group col-md-4">
                                             <select v-model="election_filter" class="form-control"> 
                                                 <option value="all">All</option>
-                                                <option value="ongoing">Active</option>
+                                                <option value="ongoing">Ongoing</option>
                                                 <option value="upcoming">Upcoming</option>
                                                 <option value="archived">Archived</option>
                                             </select>
@@ -101,6 +101,20 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div id="pagination-btn">
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination justify-content-center text-black">
+                                        <li class="page-item" v-bind:class="[{disabled: !elPagination.prev_page_url}]">
+                                            <a @click="getElections(elPagination.prev_page_url)" class="page-link" tabindex="-1">Previous</a>
+                                        </li>
+                                        <li class="page-item" v-bind:class="[{disabled: !elPagination.next_page_url}]">
+                                            <a @click="getElections(elPagination.next_page_url)" class="page-link">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -123,20 +137,26 @@
             electionsLoadStatus() {
                 return this.$store.getters.getElectionsLoadStatus;
             },
+            elPagination() {
+                return this.$store.getters.getElPagination;
+            },
             user() {
                 return this.$store.getters.getUser;
             },
             userLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
-            }
-        },
-        watch: {
-            election_filter: function(val) {
-                alert(val);
+            },
+            deleteElectionLoadStatus() {
+                return this.$store.getters.getDeleteElectionLoadStatus;
+            },
+            deleteElectionResult() {
+                return this.$store.getters.getDeleteElectionResult;
             }
         },
         created() {
-            this.$store.dispatch('getElections');
+            this.$store.dispatch('getElections', {
+                url: null
+            });
         },
         mounted() {
             
@@ -150,6 +170,59 @@
                         this.createMaps();
                     });
                 }
+            },
+            election_filter: function(val) {
+                switch (val) {
+                    case 'all':
+                        this.$store.dispatch('getElections',{
+                            url: null
+                        });
+                        break;
+
+                    case 'ongoing':
+                        this.$store.dispatch('getOngoing', {
+                            url: null
+                        });
+                        break;
+
+                    case 'upcoming':
+                        this.$store.dispatch('getUpcoming', {
+                            url: null
+                        });
+                        break;
+
+                    case 'archived':
+                        this.$store.dispatch('getArchived', {
+                            url: null
+                        });
+                        break;
+
+                    default:
+                        break;
+                }
+            },
+            deleteElectionLoadStatus: function() {
+                let vm = this;
+                
+                if(vm.deleteElectionLoadStatus == 3 && vm.deleteElectionResult.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteElectionResult.message, 
+                        'danger'
+                    );
+                } else if(vm.deleteElectionLoadStatus == 2 && vm.deleteElectionResult.success == 1) {
+                    //reload elections
+                    this.$store.dispatch('getElections', {
+                        url: null
+                    });
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteElectionResult.message, 
+                        'success'
+                    );
+                } 
             }
         },
         methods: {
@@ -189,6 +262,18 @@
                     ).addTo(map).bindPopup(element.state.name)
                         .openPopup();
                 });
+            },
+            getElections(url) {
+                this.$store.dispatch('getElections', {
+                    url: url
+                });
+            },
+            deleteElection(data) {
+                if(confirm("are you sure?")){
+                    this.$store.dispatch('deleteElection', {
+                        id: data
+                    });
+                }
             }
         }
     }

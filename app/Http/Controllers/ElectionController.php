@@ -8,6 +8,8 @@ use App\Http\Requests\Election\NewElectionRequest;
 use App\Http\Requests\Election\UpdateElectionRequest;
 use App\Http\Requests\Election\DelElectionRequest;
 use App\Http\Resources\ElectionResource;
+use Auth;
+use Illuminate\Support\Str;
 
 class ElectionController extends Controller
 {
@@ -74,7 +76,9 @@ class ElectionController extends Controller
     public function store(NewElectionRequest $request)
     {
         $election = new Election();
+        $user = Auth::user()->id;
 
+        $election->id = Str::uuid();
         $election->title = $request->input('title');
         $election->election_type_id = $request->input('election_type_id');
         $election->state_id = $request->input('state_id');
@@ -84,8 +88,7 @@ class ElectionController extends Controller
         $election->valid_votes = $request->input('valid_votes');
         $election->rejected_votes = $request->input('rejected_votes');
         $election->date = $request->input('date');
-        $election->added_by = $request->input('added_by');
-        $election->updated_by = $request->input('updated_by');
+        $election->added_by = $election->updated_by = $user;
 
         if($election->save()) {
             return response()->json([
@@ -129,18 +132,16 @@ class ElectionController extends Controller
     public function update(UpdateElectionRequest $request)
     {
         $election = Election::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
 
         $election->title = $request->input('title');
-        $election->election_type_id = $request->input('election_type_id');
-        $election->state_id = $request->input('state_id');
         $election->registered_voters = $request->input('registered_voters');
         $election->accredited_voters = $request->input('accredited_voters');
         $election->votes_cast = $request->input('votes_cast');
         $election->valid_votes = $request->input('valid_votes');
         $election->rejected_votes = $request->input('rejected_votes');
         $election->date = $request->input('date');
-        $election->added_by = $request->input('added_by');
-        $election->updated_by = $request->input('updated_by');
+        $election->updated_by = $user;
 
         if($election->save()) {
             return response()->json([
