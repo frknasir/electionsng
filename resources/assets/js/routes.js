@@ -115,6 +115,17 @@ export default new VueRouter({
                             }
                         }
                     ]
+                },
+                {
+                    path: 'states',
+                    component: Vue.component('BrowseStates', require('./pages/States.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'States',
+                            component: Vue.component('BrowseStates', require('./components/states/BrowseStates.vue'))
+                        }
+                    ]
                 }
             ]
         },

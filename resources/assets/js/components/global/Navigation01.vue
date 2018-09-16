@@ -39,18 +39,18 @@
                             Electoral Areas <span class="caret"></span>
                         </a>
                         <div class="dropdown-menu" aria-labelledby="electoralAreas">
-                            <a class="dropdown-item" >
+                            <router-link class="dropdown-item" to="/states">
                                 States
-                            </a>
-                            <a class="dropdown-item" >
+                            </router-link>
+                            <router-link class="dropdown-item" to="/localGovernments">
                                 Local Governments
-                            </a>
-                            <a class="dropdown-item" >
+                            </router-link>
+                            <router-link class="dropdown-item" to="/registrationAreas">
                                 Registration Areas
-                            </a>
-                            <a class="dropdown-item" >
+                            </router-link>
+                            <router-link class="dropdown-item" to="/pollingUnits">
                                 Polling Units
-                            </a>
+                            </router-link>
                         </div>
                     </li>
 
