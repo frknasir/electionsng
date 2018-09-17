@@ -68,8 +68,10 @@ class LocalGovernmentController extends Controller {
      * @param  \App\LocalGovernment  $localGovernment
      * @return \Illuminate\Http\Response
      */
-    public function show(LocalGovernment $localGovernment) {
-        //
+    public function show($id) {
+        $localGovernment = LocalGovernment::findOrFail($id);
+
+        return new LocalGovernmentResource($localGovernment);
     }
 
     /**

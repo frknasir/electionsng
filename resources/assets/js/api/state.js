@@ -15,9 +15,19 @@ export default {
     },
 
     /**
+     * GET /api/v1/state/{id}
+     */
+    getState: function(id) {
+        return axios.get(
+            CONFIG.API_URL + 
+            '/state/' + id
+        );
+    },
+
+    /**
      * PUT /api/v1/state
      */
-    UpdateState: function ( 
+    updateState: function ( 
         id,
         latitude, 
         longitude

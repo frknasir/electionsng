@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\User;
 use App\LocalGovernment;
+use App\RegistrationArea;
 
 class RegistrationAreaResource extends JsonResource
 {
@@ -17,6 +18,9 @@ class RegistrationAreaResource extends JsonResource
     public function toArray($request)
     {
         //return parent::toArray($request);
+        $registrationArea = RegistrationArea::findOrFail($this->id);
+        $puCount = $registrationArea->pollingUnits()->count();
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -24,6 +28,7 @@ class RegistrationAreaResource extends JsonResource
             'local_government_name' => LocalGovernment::find($this->local_government_id)->name,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
+            'pu_count' => $puCount,
             'added_by' => $this->added_by,
             'added_by_name' => User::find($this->added_by)->name,
             'updated_by' => $this->updated_by,

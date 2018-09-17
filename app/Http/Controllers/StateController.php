@@ -44,8 +44,9 @@ class StateController extends Controller {
      * @param  \App\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function show(State $state) {
-        //
+    public function show($id) {
+        $state = State::findOrFail($id);
+        return new StateResource($state);
     }
 
     /**
@@ -66,7 +67,7 @@ class StateController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request) {
-        $state = State::findOrFail($request->input('name'));
+        $state = State::findOrFail($request->input('id'));
 
         $state->latitude = $request->input('latitude');
         $state->longitude = $request->input('longitude');

@@ -118,12 +118,75 @@ export default new VueRouter({
                 },
                 {
                     path: 'states',
-                    component: Vue.component('BrowseStates', require('./pages/States.vue')),
+                    component: Vue.component('States', require('./pages/States.vue')),
                     children: [
                         {
                             path: '',
                             name: 'States',
                             component: Vue.component('BrowseStates', require('./components/states/BrowseStates.vue'))
+                        },
+                        {
+                            path: 'edit/:stateId',
+                            name: 'Edit State',
+                            component: Vue.component('EditState', require('./components/states/EditState.vue')),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        }
+                    ]
+                },
+                {
+                    path: 'localGovernments/:stateId',
+                    component: Vue.component('LocalGovernments', require('./pages/LocalGovernments.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Local Governments',
+                            component: Vue.component(
+                                'BrowseLocalGovernments', 
+                                require('./components/localGovernments/BrowseLocalGovernments.vue')
+                            )
+                        },
+                        {
+                            path: 'edit/:localGovernmentId',
+                            name: 'Edit LG',
+                            component: Vue.component(
+                                'EditLocalGovernment', 
+                                require('./components/localGovernments/EditLocalGovernment.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        }
+                    ]
+                },
+                {
+                    path: 'registrationAreas/:localGovernmentId',
+                    component: Vue.component('RegistrationAreas', require('./pages/RegistrationAreas.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Registration Areas',
+                            component: Vue.component(
+                                'BrowseRegistrationAreas', 
+                                require('./components/registrationAreas/BrowseRegistrationAreas.vue')
+                            )
+                        }
+                    ]
+                },
+                {
+                    path: 'pollingUnits/:registrationId',
+                    component: Vue.component('PollingUnits', require('./pages/PollingUnits.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Polling Units',
+                            component: Vue.component(
+                                'BrowsePollingUnits',
+                                require('./components/pollingUnits/BrowsePollingUnits.vue')
+                            )
                         }
                     ]
                 }

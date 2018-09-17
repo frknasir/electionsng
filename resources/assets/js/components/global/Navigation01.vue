@@ -42,7 +42,7 @@
                             <router-link class="dropdown-item" to="/states">
                                 States
                             </router-link>
-                            <router-link class="dropdown-item" to="/localGovernments">
+                            <!--<router-link class="dropdown-item" to="/localGovernments">
                                 Local Governments
                             </router-link>
                             <router-link class="dropdown-item" to="/registrationAreas">
@@ -50,7 +50,7 @@
                             </router-link>
                             <router-link class="dropdown-item" to="/pollingUnits">
                                 Polling Units
-                            </router-link>
+                            </router-link>-->
                         </div>
                     </li>
 

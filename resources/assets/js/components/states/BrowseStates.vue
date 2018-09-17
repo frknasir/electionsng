@@ -24,7 +24,11 @@
                                 <div class="card-body">
                                     <table class="table table-borderless">
                                         <tr>
-                                            <td>Local Governments </td>
+                                            <td>
+                                                <router-link :to="'/localGovernments/'+state.id">
+                                                    Local Governments
+                                                </router-link>
+                                            </td>
                                             <td>{{ state.lg_count }}</td>
                                         </tr>
                                         <tr>
@@ -37,9 +41,18 @@
                                         </tr>
                                     </table>
                                 </div>
+                                <div class="card-footer">
+                                    <div v-if="userLoadStatus == 2 && user != {}">
+                                        <router-link class="btn btn-block btn-warning" 
+                                            :to="'/states/edit/'+state.id">
+                                            <i class="material-icons">create</i>
+                                            Edit
+                                        </router-link>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
@@ -58,6 +71,12 @@
             },
             statesLoadStatus() {
                 return this.$store.getters.getStatesLoadStatus;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
             }
         },
         created() {

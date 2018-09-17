@@ -14,12 +14,23 @@ export default {
             stateId + 
             '/localGovernments' 
         );
+    }, 
+
+    /**
+     * GET /api/v1/localGovernment/{id}
+     */
+    getLocalGovernment: function(id) {
+        return axios.get(
+            CONFIG.API_URL +
+            '/localGovernment/' +
+            id
+        );
     },
 
     /**
      * PUT /api/v1/localGovernment
      */
-    UpdateLocalGovernment: function ( 
+    updateLocalGovernment: function ( 
         id,
         latitude, 
         longitude

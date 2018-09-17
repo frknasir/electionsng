@@ -10,23 +10,41 @@ import StateAPI from '../api/state.js';
 export const state = { 
     state: {
         states: [],
+        statesLoadStatus: 0,
+        st: {},
         stateLoadStatus: 0,
         updateStateLoadStatus: 0,
+        updateStateResult: {}
     },
     actions: {
         getStates({commit}) {
-            commit('setStateLoadStatus', 1);
+            commit('setStatesLoadStatus', 1);
 
             StateAPI.getStates()
                 .then(function(response) {
-                    commit('setStateLoadStatus', 2);
+                    commit('setStatesLoadStatus', 2);
                     commit('setStates', response.data.data);
                 })
                 .catch(function() {
-                    commit('setStateLoadStatus', 3);
+                    commit('setStatesLoadStatus', 3);
                     commit('setStates', []);
                 });
         },
+
+        getState({commit}, data) {
+            commit('setStateLoadStatus', 1);
+
+            StateAPI.getState(
+                data.id
+            ).then(function(response) {
+                commit('setStateLoadStatus', 2);
+                commit('setState', response.data.data);
+            }).catch(function() {
+                commit('setStateLoadStatus', 3);
+                commit('setState', {});
+            });
+        },
+
         updateState({commit, state, dispatch}, data) {
             commit('setUpdateStateLoadStatus', 1);
 
@@ -36,15 +54,19 @@ export const state = {
                 data.longitude
             ).then(function(response) {
                 commit('setUpdateStateLoadStatus', 2);
-                dispatch('getStates');
+                commit('setUpdateStateResult', response.data);
             })
             .catch(function() {
                 commit('setUpdateStateLoadStatus', 3);
+                commit('setUpdateStateResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         }
     },
     mutations: {
-        setStateLoadStatus(state, status) {
+        setStatesLoadStatus(state, status) {
             state.stateLoadStatus = status;
         },
 
@@ -52,12 +74,24 @@ export const state = {
             state.states = states;
         },
 
+        setStateLoadStatus(state, status) {
+            state.stateLoadStatus = status;
+        },
+
+        setState(state, st) {
+            state.st = st;
+        },
+
         setUpdateStateLoadStatus(state, status) {
             state.updateStateLoadStatus = status;
+        },
+
+        setUpdateStateResult(state, result) {
+            state.updateStateResult = result;
         }
     },
     getters: {
-        getStateLoadStatus(state) {
+        getStatesLoadStatus(state) {
             return state.stateLoadStatus;
         },
 
@@ -65,8 +99,20 @@ export const state = {
             return state.states;
         },
 
+        getStateLoadStatus(state) {
+            return state.stateLoadStatus;
+        },
+
+        getState(state) {
+            return state.st;
+        },
+
         getUpdateStateLoadStatus(state) {
             return state.updateStateLoadStatus;
+        },
+
+        getUpdateStateResult(state) {
+            return state.updateStateResult;
         }
     }
 }

@@ -109,6 +109,50 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     /**
      * End Election Routes
      */
+
+
+    /**
+     * Location Routes
+     */
+    Route::put(
+      '/state',
+      'StateController@update'
+    );
+
+    Route::put(
+      '/localGovernment',
+      'LocalGovernmentController@update'
+    );
+
+    Route::post(
+      '/registrationArea',
+      'RegistrationAreaController@store'
+    );
+
+    Route::put(
+      '/registrationArea',
+      'RegistrationAreaController@update'
+    );
+
+    Route::delete(
+      '/registrationArea',
+      'RegistrationAreaController@delete'
+    );
+
+    Route::post(
+      '/pollingUnit',
+      'PollingUnitController@store'
+    );
+
+    Route::put(
+      '/pollingUnit',
+      'PollingUnitController@update'
+    );
+
+    Route::delete(
+      '/pollingUnit',
+      'PollingUnitController@delete'
+    );
 });
 
 Route::group(['prefix'=> 'v1'], function() {
@@ -227,8 +271,18 @@ Route::group(['prefix'=> 'v1'], function() {
   );
 
   Route::get(
+    '/state/{id}',
+    'StateController@show'
+  );
+
+  Route::get(
     '/state/{stateId}/localGovernments',
     'LocalGovernmentController@index'
+  );
+
+  Route::get(
+    '/localGovernment/{id}',
+    'LocalGovernmentController@show'
   );
 
   Route::get(
@@ -237,8 +291,18 @@ Route::group(['prefix'=> 'v1'], function() {
   );
 
   Route::get(
+    '/registrationArea/{id}',
+    'RegistrationAreaController@show'
+  );
+
+  Route::get(
     '/registrationArea/{raId}/pollingUnits',
     'PollingUnitController@index'
+  );
+
+  Route::get(
+    '/pollingUnit/{id}',
+    'PollingUnitController@show'
   );
   /**
    * End Location Routes

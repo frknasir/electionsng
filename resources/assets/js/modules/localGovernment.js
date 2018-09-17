@@ -11,7 +11,10 @@ export const localGovernment = {
     state: {
         localGovernments: [],
         localGovernmentsLoadStatus: 0,
-        updateLocalGovernmentLoadStatus: 0
+        localGovernment: {},
+        localGovernmentLoadStatus: 0,
+        updateLocalGovernmentLoadStatus: 0,
+        updateLocalGovernmentResult: {}
     },
     actions: {
         getLocalGovernments({commit}, data) {
@@ -26,18 +29,34 @@ export const localGovernment = {
                 commit('setLocalGovernmentsLoadStatus', 3);
             });
         },
+        getLocalGovernment({commit}, data) {
+            commit('setLocalGovernmentLoadStatus', 1);
+
+            LocalGovernmentAPI.getLocalGovernment(
+                data.id
+            ).then(function(response) {
+                commit('setLocalGovernmentLoadStatus', 2);
+                commit('setLocalGovernment', response.data.data);
+            }).catch(function() {
+                commit('setLocalGovernmentLoadStatus', 3);
+            });
+        },
         updateLocalGovernment({commit, state, dispatch}, data) {
             commit('setUpdateLocalGovernmentLoadStatus', 1);
         
-            LocalGovernmentAPI.UpdateLocalGovernment(
+            LocalGovernmentAPI.updateLocalGovernment(
                 data.id,
                 data.latitude,
                 data.longitude
             ).then(function(response) {
                 commit('setUpdateLocalGovernmentLoadStatus', 2);
-                dispatch('getLocalGovernments', data);
+                commit('setUpdateLocalGovernmentResult', response.data);
             }).then(function(){
                 commit('setUpdateLocalGovernmentLoadStatus', 3);
+                commit('setUpdateLocalGovernmentResult', {
+                    success: 0,
+                    message: 'Something is wrong. Try again!'
+                });
             });
         }
     },
@@ -48,8 +67,17 @@ export const localGovernment = {
         setLocalGovernments(state, localGovernments) {
             state.localGovernments = localGovernments;
         },
+        setLocalGovernmentLoadStatus(state, status) {
+            state.localGovernmentLoadStatus = status;
+        },
+        setLocalGovernment(state, localGovernment) {
+            state.localGovernment = localGovernment;
+        },
         setUpdateLocalGovernmentLoadStatus(state, status) {
             state.updateLocalGovernmentLoadStatus = status;
+        },
+        setUpdateLocalGovernmentResult(state, result) {
+            state.updateLocalGovernmentResult = result;
         }
     },
     getters: {
@@ -59,8 +87,17 @@ export const localGovernment = {
         getLocalGovernments(state) {
             return state.localGovernments;
         },
+        getLocalGovernmentLoadStatus(state) {
+            return state.localGovernmentLoadStatus;
+        },
+        getLocalGovernment(state) {
+            return state.localGovernment;
+        },
         getUpdateLocalGovernmentLoadStatus(state) {
             return state.updateLocalGovernmentLoadStatus;
+        },
+        getUpdateLocalGovernmentResult(state) {
+            return state.updateLocalGovernmentResult;
         }
     }
 };
