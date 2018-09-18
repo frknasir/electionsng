@@ -4,7 +4,7 @@ namespace App\Http\Requests\RegistrationArea;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class NewRequest extends FormRequest {
+class DelRequest extends FormRequest {
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -12,7 +12,7 @@ class NewRequest extends FormRequest {
      */
     public function authorize()
     {
-        return true; 
+        return true;
     }
 
     /**
@@ -22,10 +22,7 @@ class NewRequest extends FormRequest {
      */
     public function rules() {
         return [
-            'name' => 'required',
-            'local_government_id' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required'
+            'id' => 'required'
         ];
     }
 
@@ -36,10 +33,7 @@ class NewRequest extends FormRequest {
      */
     public function messages() {
         return [
-            'name.required' => 'registration area name can not be empty',
-            'local_government_id.required' => 'local government id can not be empty',
-            'latitude.required' => 'latitude can not be empty',
-            'longitude.required' => 'longitude can not be empty'
+            'id.required' => 'registration area id can not be empty'
         ];
     }
 }

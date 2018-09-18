@@ -26,7 +26,7 @@
                 <div class="card-header card-header-text card-header-success">
                     <div class="card-text">
                         <h4 class="card-title">
-                            {{ lg.name }} <br />
+                            {{ localGovernment.name }} <br />
                             <small>
                                 Registration Areas
                             </small>
@@ -76,13 +76,12 @@
     </div>
 </template> 
 <script>
+    import { HELPERS } from '../../helpers.js';
+
     export default {
         data() {
             return {
-                lg: {
-                    id: '',
-                    name: ''
-                }
+                HF: HELPERS
             }
         },
         computed: {
@@ -98,6 +97,12 @@
             userLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
             },
+            localGovernment() {
+                return this.$store.getters.getLocalGovernment;
+            },
+            localGovernmentLoadStatus() {
+                return this.$store.getters.getLocalGovernmentLoadStatus;
+            },
             deleteRegistrationAreaLoadStatus() {
                 return this.$store.getters.getDeleteRegistrationAreaLoadStatus;
             },
@@ -110,6 +115,10 @@
                     id: this.$route.params.localGovernmentId
                 }
             );
+
+            this.$store.dispatch('getLocalGovernment', {
+                id: this.$route.params.localGovernmentId
+            });
         },
         mounted() {
 
@@ -117,8 +126,7 @@
         watch: {
             registrationAreasLoadStatus: function(val) {
                 if(val == 2) {
-                    this.lg.id = this.registrationAreas[0].local_government_id;
-                    this.lg.name = this.registrationAreas[0].local_government_name;
+                    
                 }
             },
             deleteRegistrationAreaLoadStatus: function() {

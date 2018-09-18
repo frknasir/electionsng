@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\RegistrationAreaResource;
 use App\Http\Requests\RegistrationArea\NewRequest;
 use App\Http\Requests\RegistrationArea\UpdateRequest;
+use App\Http\Requests\RegistrationArea\DelRequest;
 use Auth;
 
 class RegistrationAreaController extends Controller
@@ -116,9 +117,9 @@ class RegistrationAreaController extends Controller
      * @param  \App\RegistrationArea  $registrationArea
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DelRequest $request) 
     {
-        $registrationArea = RegistrationArea::findOrFail($id);
+        $registrationArea = RegistrationArea::findOrFail($request->input('id'));
 
         if($registrationArea->delete()) {
             return response()->json([

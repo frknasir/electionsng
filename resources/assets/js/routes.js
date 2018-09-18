@@ -185,6 +185,18 @@ export default new VueRouter({
 							meta: {
 								permitted: ['Super-admin', 'Admin']
                             }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add RA',
+                            component: Vue.component(
+                                'AddRegistrationArea', 
+                                require('./components/registrationAreas/AddRegistrationArea.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
                         }
                     ]
                 },

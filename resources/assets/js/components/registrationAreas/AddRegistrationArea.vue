@@ -9,7 +9,8 @@
                     <div class="card">
                         <div class="card-header card-header-text card-header-success">
                             <div class="card-text">
-                                {{ registrationArea.name }}
+                                {{ localGovernment.name }} <br>
+                                New Registration Area
                             </div>
                         </div>
                         <div class="card-body">
@@ -21,7 +22,7 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="text" class="form-control" v-model="ra.name" />
+                                    <input type="text" class="form-control" v-model="registrationArea.name" />
                                     <small v-show="!validations.name.is_valid" class="form-text text-muted text-danger">
                                         {{ validations.name.text }}
                                     </small>
@@ -33,7 +34,7 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="text" class="form-control" v-model="ra.latitude" />
+                                    <input type="text" class="form-control" v-model="registrationArea.latitude" />
                                     <small v-show="!validations.latitude.is_valid" class="form-text text-muted text-danger">
                                         {{ validations.latitude.text }}
                                     </small>
@@ -45,17 +46,23 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="text" class="form-control" v-model="ra.longitude" />
+                                    <input type="text" class="form-control" v-model="registrationArea.longitude" />
                                     <small v-show="!validations.longitude.is_valid" 
                                         class="form-text text-muted text-danger">
                                         {{ validations.longitude.text }}
                                     </small>
                                 </div>
-                                <button @click="editRegistrationArea(ra)" type="button" 
+                                <button @click="addRegistrationArea(registrationArea)" type="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
                             </form>
+                            <div v-show="!show_form" class="alert alert-success" role="alert">
+                                {{ addRegistrationAreaResult.message }}
+                                <a @click="addAnother()" class="alert-link">
+                                    &nbsp;Add Another registration Area
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -69,20 +76,20 @@
     export default {
         data() {
             return {
-                ra: {
-                    id: this.$route.params.registrationAreaId,
+                registrationArea: {
                     name: '',
+                    local_government_id: '',
                     latitude: '',
                     longitude: ''
                 },
                 HF: HELPERS,
                 show_form: true,
                 validations: {
-                    id: {
+                    name: {
                         is_valid: true,
                         text: ''
                     },
-                    name: {
+                    local_government_id: {
                         is_valid: true,
                         text: ''
                     },
@@ -104,46 +111,39 @@
             userLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
             },
-            registrationArea() {
-                return this.$store.getters.getRegistrationArea;
+            addRegistrationAreaLoadStatus() {
+                return this.$store.getters.getAddRegistrationAreaLoadStatus;
             },
-            registrationAreaLoadStatus() {
-                return this.$store.getters.getRegistrationAreaLoadStatus;
+            addRegistrationAreaResult() {
+                return this.$store.getters.getAddRegistrationAreaResult;
             },
-            updateRegistrationAreaLoadStatus() {
-                return this.$store.getters.getUpdateRegistrationAreaLoadStatus;
+            localGovernment() {
+                return this.$store.getters.getLocalGovernment;
             },
-            updateRegistrationAreaResult() {
-                return this.$store.getters.getUpdateRegistrationAreaResult;
+            localGovernmentLoadStatus() {
+                return this.$store.getters.getLocalGovernmentLoadStatus;
             }
         },
         watch: {
-            updateRegistrationAreaLoadStatus: function() {
+            addRegistrationAreaLoadStatus: function() {
                 let vm = this;
-                if(vm.updateRegistrationAreaLoadStatus == 3 && vm.updateRegistrationAreaResult.success == 0) {
+                if(vm.addRegistrationAreaLoadStatus == 3 && vm.addRegistrationAreaResult.success == 0) {
                     vm.show_form = true;
                     vm.HF.showNotification(
                         'top', 
                         'center', 
-                        vm.updateRegistrationAreaResult.message, 
+                        vm.addRegistrationAreaResult.message, 
                         'danger'
                     );
-                } else if(vm.updateRegistrationAreaLoadStatus == 2 && vm.updateRegistrationAreaResult.success == 1) {
-                    vm.show_form = true;
-                    vm.HF.showNotification(
-                        'top', 
-                        'center', 
-                        vm.updateRegistrationAreaResult.message, 
-                        'success'
-                    );
+                } else if(vm.addRegistrationAreaLoadStatus == 2 && vm.addRegistrationAreaResult.success == 1) {
+                    vm.show_form = false;
+                    vm.clearRegistrationAreaForm();
                 } 
             },
-            registrationAreaLoadStatus: function(val) {
+            localGovernmentLoadStatus: function(val) {
                 let vm = this;
                 if(val == 2) {
-                    vm.ra.name = vm.registrationArea.name;
-                    vm.ra.latitude = vm.registrationArea.latitude;
-                    vm.ra.longitude = vm.registrationArea.longitude;
+                    vm.registrationArea.local_government_id = vm.localGovernment.id;
                 }
             }
         },
@@ -151,24 +151,29 @@
 
         },
         created() {
-            this.$store.dispatch('getRegistrationArea', {
-                id: this.$route.params.registrationAreaId
+            this.$store.dispatch('getLocalGovernment', {
+                id: this.$route.params.localGovernmentId
             });
         },
         methods: {
-            editRegistrationArea(data) {
+            addRegistrationArea(data) {
                 if(this.validateRegistrationArea(data)) {
-                    this.$store.dispatch('updateRegistrationArea', data);
+                    this.$store.dispatch('addRegistrationArea', data);
                 }
+            },
+            addAnother() {
+                this.$store.commit('setAddRegistrationAreaResult', {});
+                this.$store.commit('setAddRegistrationAreaLoadStatus', 0);
+                this.show_form = true;
             },
             validateRegistrationArea(ra) {
                 let validRegistrationArea = true;
                 let validations = this.validations;
 
-                if(!ra.id) {
+                if(!ra.local_government_id) {
                     validRegistrationArea = false;
-                    validations.id.is_valid = false;
-                    validations.id.text = "id can not be empty";
+                    validations.local_government_id.is_valid = false;
+                    validations.local_government_id.text = "lg id can not be empty";
                 }
 
                 if(!ra.name) {
@@ -190,6 +195,30 @@
                 }
 
                 return validRegistrationArea;
+            },
+            clearRegistrationAreaForm() {
+                this.registrationArea.name = '';
+                this.registrationArea.latitude = '';
+                this.registrationArea.longitude = '';
+
+                this.validations = {
+                    name: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    local_government_id: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    latitude: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    longitude: {
+                        is_valid: true,
+                        text: ''
+                    }
+                }
             }
         }
     }

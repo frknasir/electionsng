@@ -136,7 +136,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
 
     Route::delete(
       '/registrationArea',
-      'RegistrationAreaController@delete'
+      'RegistrationAreaController@destroy'
     );
 
     Route::post(
