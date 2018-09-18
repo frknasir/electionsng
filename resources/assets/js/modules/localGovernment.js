@@ -51,7 +51,7 @@ export const localGovernment = {
             ).then(function(response) {
                 commit('setUpdateLocalGovernmentLoadStatus', 2);
                 commit('setUpdateLocalGovernmentResult', response.data);
-            }).then(function(){
+            }).catch(function(){
                 commit('setUpdateLocalGovernmentLoadStatus', 3);
                 commit('setUpdateLocalGovernmentResult', {
                     success: 0,

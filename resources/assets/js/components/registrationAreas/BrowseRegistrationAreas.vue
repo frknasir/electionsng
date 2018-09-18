@@ -1,14 +1,32 @@
 <style scoped>
+    #action-btn {
+        position: relative;
+        right: 20px;
+        z-index: 4;
+    }
 
+    #action-btn .btn {
+        position: fixed;
+        right: 120px;
+        bottom: 10%;
+    }
 </style>
 <template>
     <div class="content">
         <div class="container">
+
+            <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
+                <router-link class="btn btn-success btn-fab btn-lg btn-round" 
+                    :to="'/registrationAreas/'+$route.params.localGovernmentId+'/add'">
+                    <i class="material-icons">add</i>
+                </router-link>
+            </div>
+
             <div class="card">
                 <div class="card-header card-header-text card-header-success">
                     <div class="card-text">
                         <h4 class="card-title">
-                            {{ lg }} <br />
+                            {{ lg.name }} <br />
                             <small>
                                 Registration Areas
                             </small>
@@ -36,8 +54,21 @@
                                         <td>{{ registrationArea.pu_count }}</td>
                                     </table>
                                 </div>
+                                <div class="card-footer">
+                                    <div v-if="userLoadStatus == 2 && user != {}">
+                                        <router-link class="btn btn-warning" 
+                                            :to="'/registrationAreas/'+registrationArea.local_government_id+'/edit/'+registrationArea.id">
+                                            <i class="material-icons">create</i>
+                                            Edit
+                                        </router-link>
+                                        <button @click="deleteRegistrationArea(registrationArea.id)" class="btn btn-danger">
+                                            <i class="material-icons">cancel</i>
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -48,7 +79,10 @@
     export default {
         data() {
             return {
-                lg: ''
+                lg: {
+                    id: '',
+                    name: ''
+                }
             }
         },
         computed: {
@@ -57,12 +91,22 @@
             },
             registrationAreasLoadStatus() {
                 return this.$store.getters.getRegistrationAreasLoadStatus;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
+            },
+            deleteRegistrationAreaLoadStatus() {
+                return this.$store.getters.getDeleteRegistrationAreaLoadStatus;
+            },
+            deleteRegistrationAreaResult() {
+                return this.$store.getters.getDeleteRegistrationAreaResult;
             }
         },
         created() {
-            this.$store.dispatch(
-                'getRegistrationAreas',
-                {
+            this.$store.dispatch('getRegistrationAreas',{
                     id: this.$route.params.localGovernmentId
                 }
             );
@@ -73,7 +117,41 @@
         watch: {
             registrationAreasLoadStatus: function(val) {
                 if(val == 2) {
-                    this.lg = this.registrationAreas[0].local_government_name;
+                    this.lg.id = this.registrationAreas[0].local_government_id;
+                    this.lg.name = this.registrationAreas[0].local_government_name;
+                }
+            },
+            deleteRegistrationAreaLoadStatus: function() {
+                let vm = this;
+                
+                if(vm.deleteRegistrationAreaLoadStatus == 3 && vm.deleteRegistrationAreaResult.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteRegistrationAreaResult.message, 
+                        'danger'
+                    );
+                } else if(vm.deleteRegistrationAreaLoadStatus == 2 && vm.deleteRegistrationAreaResult.success == 1) {
+                    //reload registration areas
+                    this.$store.dispatch('getRegistrationAreas', {
+                            id: this.$route.params.localGovernmentId
+                        }
+                    );
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteRegistrationAreaResult.message, 
+                        'success'
+                    );
+                } 
+            }
+        },
+        methods: {
+            deleteRegistrationArea(id) {
+                if(confirm('Are you sure?')) {
+                    this.$store.dispatch('deleteRegistrationArea', {
+                        id: id
+                    });
                 }
             }
         }

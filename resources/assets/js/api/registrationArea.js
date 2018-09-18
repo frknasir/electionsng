@@ -5,7 +5,7 @@ import { CONFIG } from '../config.js';
 
 export default {
     /*
-        GET /api/v1/localGovernment/{local_government_id}/registrationAreas
+    **GET /api/v1/localGovernment/{local_government_id}/registrationAreas
     */
     getRegistrationAreasFor: function(localGovernmentId) {
         return axios.get( 
@@ -16,6 +16,17 @@ export default {
         );
     },
 
+    /**
+     * GET /api/v1/registrationArea/{id}
+     */
+    getRegistrationArea: function(id) {
+        return axios.get(
+            CONFIG.API_URL +
+            '/registrationArea/' +
+            id
+        );
+    },
+
     /** 
      * POST  /api/v1/registrationArea
     */
@@ -23,17 +34,13 @@ export default {
         name, 
         local_government_id,
         latitude,
-        longitude,
-        added_by,
-        updated_by 
+        longitude
     ) {
         return axios.post( CONFIG.API_URL + '/registrationArea', {
             name: name,
             local_government_id: local_government_id,
             latitude: latitude,
-            longitude: longitude,
-            added_by: added_by,
-            updated_by: updated_by
+            longitude: longitude
         });
     },
 
@@ -44,15 +51,13 @@ export default {
         id,
         name, 
         latitude,
-        longitude,
-        updated_by 
+        longitude
     ) {
         return axios.put( CONFIG.API_URL + '/registrationArea', {
             id: id,
             name: name, 
             latitude: latitude,
-            longitude: longitude,
-            updated_by: updated_by
+            longitude: longitude
         });
     },
 
@@ -63,7 +68,9 @@ export default {
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/registrationArea', {
-            id: id
+            params: {
+                id: id
+            }
         });
     }
 };

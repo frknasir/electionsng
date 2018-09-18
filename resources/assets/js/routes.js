@@ -173,6 +173,18 @@ export default new VueRouter({
                                 'BrowseRegistrationAreas', 
                                 require('./components/registrationAreas/BrowseRegistrationAreas.vue')
                             )
+                        },
+                        {
+                            path: 'edit/:registrationAreaId',
+                            name: 'Edit RA',
+                            component: Vue.component(
+                                'EditRegistrationArea', 
+                                require('./components/registrationAreas/EditRegistrationArea.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
                         }
                     ]
                 },

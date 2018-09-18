@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\RegistrationAreaResource;
 use App\Http\Requests\RegistrationArea\NewRequest;
 use App\Http\Requests\RegistrationArea\UpdateRequest;
+use Auth;
 
 class RegistrationAreaController extends Controller
 {
@@ -44,13 +45,13 @@ class RegistrationAreaController extends Controller
     public function store(NewRequest $request)
     {
         $registrationArea = new RegistrationArea();
+        $user = Auth::user()->id;
 
         $registrationArea->name = $request->input('name');
         $registrationArea->local_government_id = $request->input('local_government_id');
         $registrationArea->latitude = $request->input('latitude');
         $registrationArea->longitude = $request->input('longitude');
-        $registrationArea->added_by = $request->input('added_by');
-        $registrationArea->updated_by = $request->input('updated_by');
+        $registrationArea->added_by = $registrationArea->updated_by = $user;
 
         if($registrationArea->save()) {
             return response()->json([
@@ -66,9 +67,11 @@ class RegistrationAreaController extends Controller
      * @param  \App\RegistrationArea  $registrationArea
      * @return \Illuminate\Http\Response
      */
-    public function show(RegistrationArea $registrationArea)
+    public function show($id)
     {
-        //
+        $registrationArea = RegistrationArea::findOrFail($id);
+
+        return new RegistrationAreaResource($registrationArea);
     }
 
     /**
@@ -92,11 +95,12 @@ class RegistrationAreaController extends Controller
     public function update(UpdateRequest $request)
     {
         $registrationArea = RegistrationArea::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
 
         $registrationArea->name = $request->input('name');
         $registrationArea->latitude = $request->input('latitude');
         $registrationArea->longitude = $request->input('longitude');
-        $registrationArea->updated_by = $request->input('updated_by');
+        $registrationArea->updated_by = $user;
 
         if($registrationArea->save()) {
             return response()->json([
@@ -112,8 +116,15 @@ class RegistrationAreaController extends Controller
      * @param  \App\RegistrationArea  $registrationArea
      * @return \Illuminate\Http\Response
      */
-    public function destroy(RegistrationArea $registrationArea)
+    public function destroy($id)
     {
-        //
+        $registrationArea = RegistrationArea::findOrFail($id);
+
+        if($registrationArea->delete()) {
+            return response()->json([
+                'success' => 1,
+                'message' => 'Registration area deleted successfully'
+            ]);
+        }
     }
 }

@@ -12,7 +12,7 @@ class UpdateRequest extends FormRequest {
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,8 +25,7 @@ class UpdateRequest extends FormRequest {
             'id' => 'required',
             'name' => 'required',
             'latitude' => 'required',
-            'longitude' => 'required',
-            'updated_by' => 'required'
+            'longitude' => 'required'
         ];
     }
 
@@ -40,8 +39,7 @@ class UpdateRequest extends FormRequest {
             'id.required' => 'registration area id can not be empty',
             'name.required' => 'registration area name can not be empty',
             'latitude.required' => 'latitude can not be empty',
-            'longitude.required' => 'longitude can not be empty',
-            'updated_by.required' => 'Who is updating this registration area?'
+            'longitude.required' => 'longitude can not be empty'
         ];
     }
 }

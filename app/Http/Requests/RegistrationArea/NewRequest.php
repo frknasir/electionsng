@@ -12,7 +12,7 @@ class NewRequest extends FormRequest {
      */
     public function authorize()
     {
-        return false; 
+        return true; 
     }
 
     /**
@@ -26,8 +26,7 @@ class NewRequest extends FormRequest {
             'local_government_id' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'added_by' => 'required'
         ];
     }
 
@@ -42,8 +41,7 @@ class NewRequest extends FormRequest {
             'local_government_id.required' => 'local government id can not be empty',
             'latitude.required' => 'latitude can not be empty',
             'longitude.required' => 'longitude can not be empty',
-            'added_by.required' => 'Who is adding this registration area?',
-            'updated_by.required' => 'Who is updating this registration area?'
+            'added_by.required' => 'Who is adding this registration area?'
         ];
     }
 }
