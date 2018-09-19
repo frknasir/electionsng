@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 use App\Http\Resources\PollingUnitResource;
 use App\Http\Requests\PollingUnit\NewRequest;
 use App\Http\Requests\PollingUnit\UpdateRequest;
+use App\Http\Requests\PollingUnit\DelRequest;
+use Auth;
 
-class PollingUnitController extends Controller
-{
+class PollingUnitController extends Controller {
     /**
      * Display a listing of the resource.
      *
@@ -42,14 +43,14 @@ class PollingUnitController extends Controller
      */
     public function store(NewRequest $request) {
         $pollingUnit = new PollingUnit();
+        $user = Auth::user()->id;
 
         $pollingUnit->code = $request->input('code');
         $pollingUnit->description = $request->input('description');
         $pollingUnit->registration_area_id = $request->input('registration_area_id');
         $pollingUnit->latitude = $request->input('latitude');
         $pollingUnit->longitude = $request->input('longitude');
-        $pollingUnit->added_by = $request->input('added_by');
-        $pollingUnit->updated_by = $request->input('updated_by');
+        $pollingUnit->added_by = $pollingUnit->updated_by = $user;
 
         if($pollingUnit->save()) {
             return response()->json([
@@ -65,8 +66,10 @@ class PollingUnitController extends Controller
      * @param  \App\PollingUnit  $pollingUnit
      * @return \Illuminate\Http\Response
      */
-    public function show(PollingUnit $pollingUnit) {
-        //
+    public function show($id) {
+        $pollingUnit = PollingUnit::findOrFail($id);
+
+        return new PollingUnitResource($pollingUnit);
     }
 
     /**
@@ -88,12 +91,13 @@ class PollingUnitController extends Controller
      */
     public function update(UpdateRequest $request) {
         $pollingUnit = PollingUnit::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
 
         $pollingUnit->code = $request->input('code');
         $pollingUnit->description = $request->input('description');
         $pollingUnit->latitude = $request->input('latitude');
         $pollingUnit->longitude = $request->input('longitude');
-        $pollingUnit->updated_by = $request->input('updated_by');
+        $pollingUnit->updated_by = $user;
 
         if($pollingUnit->save()) {
             return response()->json([
@@ -109,7 +113,14 @@ class PollingUnitController extends Controller
      * @param  \App\PollingUnit  $pollingUnit
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PollingUnit $pollingUnit) {
-        //
+    public function destroy(DelRequest $request) {
+        $pollingUnit = PollingUnit::findOrFail($request->input('id'));
+
+        if($pollingUnit->delete()) {
+            return response()->json([
+                'success' => 1,
+                'message' => 'polling unit deleted successfully'
+            ]);
+        }
     }
 }

@@ -6,15 +6,19 @@
 */
 
 import PoliticalPartyAPI from '../api/politicalParty.js';
-import { CONFIG } from '../config.js';
 
-export const politicalParty = {
+export const politicalParty = { 
     state: {
         politicalParties: [],
         politicalPartiesLoadStatus: 0,
+        politicalParty: {},
+        politicalPartyLoadStatus: 0,
         addPoliticalPartyLoadStatus: 0,
+        addPoliticalPartyResult: {},
         updatePoliticalPartyLoadStatus: 0,
-        deletePoliticalPartyLoadStatus: 0
+        updatePoliticalPartyResult: {},
+        deletePoliticalPartyLoadStatus: 0,
+        deletePoliticalPartyResult: {}
     },
     actions: {
         getPoliticalParties({commit}) {
@@ -30,19 +34,35 @@ export const politicalParty = {
                 });
         },
 
+        getPoliticalParty({commit}, data) {
+            commit('setPoliticalPartyLoadStatus', 1);
+
+            PoliticalPartyAPI.getPoliticalParty(
+                data.id
+            ).then(function(response) {
+                commit('setPoliticalPartyLoadStatus', 2);
+                commit('setPoliticalParty', response.data.data);
+            }).catch(function() {
+                commit('setPoliticalPartyLoadStatus', 3);
+                commit('setPoliticalParty', {});
+            });
+        },
+
         addPoliticalParty({commit, state, dispatch}, data) {
             commit('setAddPoliticalPartyLoadStatus', 1);
 
-            PoliticalPartyAPI.AddPoliticalParty(
+            PoliticalPartyAPI.addPoliticalParty(
                 data.initials,
-                data.name,
-                data.added_by,
-                data.updated_by
+                data.name
             ).then(function(response) {
                 commit('setAddPoliticalPartyLoadStatus', 2);
-                dispatch('getPoliticalParties');
+                commit('setAddPoliticalPartyResult', response.data);
             }).catch(function() {
                 commit('setAddPoliticalPartyLoadStatus', 3);
+                commit('setAddPoliticalPartyResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
@@ -52,13 +72,16 @@ export const politicalParty = {
             PoliticalPartyAPI.updatePoliticalParty(
                 data.id,
                 data.initials,
-                data.name,
-                data.updated_by
+                data.name
             ).then(function(response) {
                 commit('setUpdatePoliticalPartyLoadStatus', 2);
-                dispatch('getPoliticalParties');
+                commit('setUpdatePoliticalPartyResult', response.data);
             }).catch(function() {
                 commit('setUpdatePoliticalPartyLoadStatus', 3);
+                commit('setUpdatePoliticalPartyResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         },
 
@@ -69,9 +92,13 @@ export const politicalParty = {
                 data.id
             ).then(function(response) {
                 commit('setDeletePoliticalPartyLoadStatus', 2);
-                dispatch('getPoliticalParties');
+                commit('setDeletePoliticalPartyResult', response.data);
             }).catch(function() {
                 commit('setDeletePoliticalPartyLoadStatus', 3);
+                commit('setDeletePoliticalPartyResult', {
+                    success: 0,
+                    message: 'Something went wrong. Try again!'
+                });
             });
         }
     },
@@ -84,16 +111,36 @@ export const politicalParty = {
             state.politicalParties = politicalParties;
         },
 
+        setPoliticalParty(state, politicalParty) {
+            state.politicalParty = politicalParty;
+        },
+
+        setPoliticalPartyLoadStatus(state, status) {
+            state.politicalPartyLoadStatus = status;
+        },
+
         setAddPoliticalPartyLoadStatus(state, status) {
             state.addPoliticalPartyLoadStatus = status;
+        },
+
+        setAddPoliticalPartyResult(state, result) {
+            state.addPoliticalPartyResult = result;
         },
 
         setUpdatePoliticalPartyLoadStatus(state, status) {
             state.updatePoliticalPartyLoadStatus = status;
         },
 
+        setUpdatePoliticalPartyResult(state, result) {
+            state.updatePoliticalPartyResult = result;
+        },
+
         setDeletePoliticalPartyLoadStatus(state, status) {
             state.deletePoliticalPartyLoadStatus = status;
+        },
+
+        setDeletePoliticalPartyResult(state, result) {
+            state.deletePoliticalPartyResult = result;
         }
     },
     getters: {
@@ -105,16 +152,36 @@ export const politicalParty = {
             return state.politicalParties;
         },
 
+        getPoliticalParty(state) {
+            return state.politicalParty;
+        },
+
+        getPoliticalPartyLoadStatus(state) {
+            return state.politicalPartyLoadStatus;
+        },
+
         getAddPoliticalPartyLoadStatus(state) {
             return state.addPoliticalPartyLoadStatus;
+        },
+
+        getAddPoliticalPartyResult(state) {
+            return state.addPoliticalPartyResult;
         },
 
         getUpdatePoliticalPartyLoadStatus(state) {
             return state.updatePoliticalPartyLoadStatus;
         },
 
+        getUpdatePoliticalPartyResult(state) {
+            return state.updatePoliticalPartyResult;
+        },
+
         getDeletePoliticalPartyLoadStatus(state) {
             return state.deletePoliticalPartyLoadStatus;
+        },
+
+        getDeletePoliticalPartyResult(state) {
+            return state.deletePoliticalPartyResult;
         }
     }
 };

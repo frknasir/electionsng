@@ -55,7 +55,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <router-link class="nav-link" to=''>
+                        <router-link class="nav-link" to='/politicalParties'>
                             Political Parties
                         </router-link>
                     </li>

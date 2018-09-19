@@ -1,7 +1,7 @@
 /*
     Imports the Roast API URL from the config.
 */
-import { CONFIG } from '../config.js';
+import { CONFIG } from '../config.js'; 
 
 export default {
     /*
@@ -13,48 +13,55 @@ export default {
             '/politicalParties' );
     },
 
+    /**
+     * GET /api/v1/politicalParty/{id}
+     */
+    getPoliticalParty: function(id) {
+        return axios.get(
+            CONFIG.API_URL +
+            '/politicalParty/' +
+            id
+        );
+    },
+
     /** 
      * POST  /api/v1/politicalParty
     */
-    AddPoliticalParty: function ( 
+    addPoliticalParty: function ( 
         initials, 
-        name, 
-        added_by,
-        updated_by 
+        name
     ) {
         return axios.post( CONFIG.API_URL + '/politicalParty', {
             initials: initials,
-            name: name,
-            added_by: added_by,
-            updated_by: updated_by
+            name: name
         });
     },
 
     /**
      * PUT /api/v1/politicalParty
      */
-    UpdatePoliticalParty: function ( 
+    updatePoliticalParty: function ( 
         id,
         initials, 
-        name,
-        updated_by 
+        name
     ) {
         return axios.put( CONFIG.API_URL + '/politicalParty', {
             id: id,
             initials: initials,
-            name: name,
-            updated_by: updated_by
+            name: name
         });
     },
 
     /**
      * DELETE /api/v1/election
      */
-    DeletePoliticalParty: function (
+    deletePoliticalParty: function (
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/politicalParty', {
-            id: id
+            params: {
+                id: id
+            }
         });
     }
 };

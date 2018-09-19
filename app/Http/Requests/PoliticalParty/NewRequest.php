@@ -13,7 +13,7 @@ class NewRequest extends FormRequest
      */
     public function authorize()
     {
-        return false; 
+        return true; 
     }
 
     /**
@@ -24,9 +24,7 @@ class NewRequest extends FormRequest
     public function rules() {
         return [
             'initials' => 'required',
-            'name' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'name' => 'required'
         ];
     }
 
@@ -38,9 +36,7 @@ class NewRequest extends FormRequest
     public function messages() {
         return [
             'initials.required' => 'political party initials can not be empty',
-            'name.required' => 'political party name can not be empty',
-            'added_by.required' => 'Who is adding this political party?',
-            'updated_by.required' => 'Who is updating this political party?'
+            'name.required' => 'political party name can not be empty'
         ];
     }
 }

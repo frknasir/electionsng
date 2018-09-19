@@ -12,7 +12,7 @@ class UpdateRequest extends FormRequest {
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +24,7 @@ class UpdateRequest extends FormRequest {
         return [
             'id' => 'required',
             'initials' => 'required',
-            'name' => 'required',
-            'updated_by' => 'required'
+            'name' => 'required'
         ];
     }
 
@@ -38,8 +37,7 @@ class UpdateRequest extends FormRequest {
         return [
             'id.required' => 'political party id can not be empty',
             'initials.required' => 'political party initials can not be empty',
-            'name.required' => 'political party name can not be empty',
-            'updated_by.required' => 'Who is updating this political party?'
+            'name.required' => 'political party name can not be empty'
         ];
     }
 }

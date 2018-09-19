@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Resources\PoliticalPartyResource;
 use App\Http\Requests\PoliticalParty\NewRequest;
 use App\Http\Requests\PoliticalParty\UpdateRequest;
+use App\Http\Requests\PoliticalParty\DelRequest;
+use Auth;
 
 class PoliticalPartyController extends Controller {
     /**
@@ -37,11 +39,11 @@ class PoliticalPartyController extends Controller {
      */
     public function store(NewRequest $request) {
         $politicalParty = new PoliticalParty();
+        $user = Auth::user()->id;
 
         $politicalParty->initials = $request->input('initials');
         $politicalParty->name = $request->input('name');
-        $politicalParty->added_by = $request->input('added_by');
-        $politicalParty->updated_by = $request->input('updated_by');
+        $politicalParty->added_by = $politicalParty->updated_by = $user;
 
         if($politicalParty->save()) {
             return response()->json([
@@ -57,8 +59,10 @@ class PoliticalPartyController extends Controller {
      * @param  \App\PoliticalParty  $politicalParty
      * @return \Illuminate\Http\Response
      */
-    public function show(PoliticalParty $politicalParty) {
-        //
+    public function show($id) {
+        $politicalParty = PoliticalParty::findOrFail($id);
+
+        return new PoliticalPartyResource($politicalParty);
     }
 
     /**
@@ -80,10 +84,11 @@ class PoliticalPartyController extends Controller {
      */
     public function update(UpdateRequest $request) {
         $politicalParty = PoliticalParty::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
 
         $politicalParty->initials = $request->input('initials');
         $politicalParty->name = $request->input('name');
-        $politicalParty->updated_by = $request->input('updated_by');
+        $politicalParty->updated_by = $user;
 
         if($politicalParty->save()) {
             return response()->json([
@@ -99,7 +104,14 @@ class PoliticalPartyController extends Controller {
      * @param  \App\PoliticalParty  $politicalParty
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PoliticalParty $politicalParty) {
-        //
+    public function destroy(DelRequest $request) {
+        $politicalParty = PoliticalParty::findOrFail($request->input('id'));
+
+        if($politicalParty->delete()) {
+            return response()->json([
+                'success' => 1, 
+                'message' => 'political party deleted successfully'
+            ]);
+        }
     }
 }

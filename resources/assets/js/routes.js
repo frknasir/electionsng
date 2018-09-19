@@ -211,6 +211,68 @@ export default new VueRouter({
                                 'BrowsePollingUnits',
                                 require('./components/pollingUnits/BrowsePollingUnits.vue')
                             )
+                        },
+                        {
+                            path: 'edit/:pollingUnitId',
+                            name: 'Edit PU',
+                            component: Vue.component(
+                                'EditPollingUnit', 
+                                require('./components/pollingUnits/EditPollingUnit.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add PU',
+                            component: Vue.component(
+                                'AddPollingUnit', 
+                                require('./components/pollingUnits/AddPollingUnit.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        }
+                    ]
+                },
+                {
+                    path: 'politicalParties',
+                    component: Vue.component('PoliticalParties', require('./pages/PoliticalParties.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Parties',
+                            component: Vue.component(
+                                'BrowsePoliticalParties',
+                                require('./components/politicalParties/BrowsePoliticalParties.vue')
+                            )
+                        },
+                        {
+                            path: 'edit/:politicalPartyId',
+                            name: 'Edit Party',
+                            component: Vue.component(
+                                'EditPoliticalParty', 
+                                require('./components/politicalParties/EditPoliticalParty.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add Party',
+                            component: Vue.component(
+                                'AddPoliticalPart', 
+                                require('./components/politicalParties/AddPoliticalParty.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
                         }
                     ]
                 }

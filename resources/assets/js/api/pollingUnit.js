@@ -13,6 +13,17 @@ export default {
             '/registrationArea/' +
             registrationAreaId +
             '/pollingUnits' 
+        ); 
+    },
+
+    /**
+     * GET /api/v1/pollingUnit/{id}
+     */
+    getPollingUnit: function(id) {
+        return axios.get(
+            CONFIG.API_URL +
+            '/pollingUnit/' +
+            id
         );
     },
 
@@ -24,18 +35,14 @@ export default {
         description, 
         registration_area_id,
         latitude,
-        longitude,
-        added_by,
-        updated_by 
+        longitude
     ) {
         return axios.post( CONFIG.API_URL + '/pollingUnit', {
             code: code,
             description: description,
             registration_area_id: registration_area_id,
             latitude: latitude,
-            longitude: longitude,
-            added_by: added_by,
-            updated_by: updated_by
+            longitude: longitude
         });
     },
 
@@ -47,16 +54,14 @@ export default {
         code, 
         description, 
         latitude,
-        longitude,
-        updated_by 
+        longitude
     ) {
         return axios.put( CONFIG.API_URL + '/pollingUnit', {
             id: id,
             code: code,
             description: description,
             latitude: latitude,
-            longitude: longitude,
-            updated_by: updated_by
+            longitude: longitude
         });
     },
 
@@ -67,7 +72,9 @@ export default {
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/pollingUnit', {
-            id: id
+            params: {
+                id: id
+            }
         });
     }
 };

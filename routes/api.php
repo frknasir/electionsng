@@ -151,8 +151,27 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
 
     Route::delete(
       '/pollingUnit',
-      'PollingUnitController@delete'
+      'PollingUnitController@destroy'
     );
+    /**
+     * End Location Routes
+     */
+
+    Route::post(
+      '/politicalParty',
+      'PoliticalPartyController@store'
+    );
+
+    Route::put(
+      '/politicalParty',
+      'PoliticalPartyController@update'
+    );
+
+    Route::delete(
+      '/politicalParty', 
+      'PoliticalPartyController@destroy'
+    );
+
 });
 
 Route::group(['prefix'=> 'v1'], function() {
@@ -350,6 +369,11 @@ Route::group(['prefix'=> 'v1'], function() {
   Route::get(
     '/politicalParties',
     'PoliticalPartyController@index'
+  );
+
+  Route::get(
+    '/politicalParty/{id}', 
+    'PoliticalPartyController@show'
   );
   /**
    * End Political Party Routes

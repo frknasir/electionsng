@@ -13,7 +13,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,8 +27,7 @@ class UpdateRequest extends FormRequest
             'code' => 'required',
             'description' => 'required',
             'latitude' => 'required',
-            'longitude' => 'required',
-            'updated_by' => 'required'
+            'longitude' => 'required'
         ];
     }
 
@@ -43,8 +42,7 @@ class UpdateRequest extends FormRequest
             'code.required' => 'polling unit code can not be empty',
             'description.required' => 'polling unit description can not be empty',
             'latitude.required' => 'latitude can not be empty',
-            'longitude.required' => 'longitude can not be empty',
-            'updated_by.required' => 'Who is updating this polling unit?'
+            'longitude.required' => 'longitude can not be empty'
         ];
     }
 }

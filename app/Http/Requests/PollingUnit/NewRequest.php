@@ -13,7 +13,7 @@ class NewRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -27,9 +27,7 @@ class NewRequest extends FormRequest
             'description' => 'required',
             'registration_area_id' => 'required',
             'latitude' => 'required',
-            'longitude' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'longitude' => 'required'
         ];
     }
 
@@ -44,9 +42,7 @@ class NewRequest extends FormRequest
             'description.required' => 'polling unit description can not be empty',
             'registration_area_id.required' => 'registration area id can not be empty',
             'latitude.required' => 'latitude can not be empty',
-            'longitude.required' => 'longitude can not be empty',
-            'added_by.required' => 'Who is adding this polling unit?',
-            'updated_by.required' => 'Who is updating this polling unit?'
+            'longitude.required' => 'longitude can not be empty'
         ];
     }
 }
