@@ -14,7 +14,7 @@ class AddStatusColumnToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('active')->after('remember_token');
+            $table->boolean('active')->after('remember_token')->default(1);
         });
     }
 

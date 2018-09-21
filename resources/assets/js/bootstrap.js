@@ -1,5 +1,5 @@
 window.Popper = require('popper.js').default;
-window._ = require('lodash');
+//window._ = require('lodash');
 window.L = require('leaflet');
 require('leaflet.markercluster');
 window.Chartist = require('chartist');
@@ -15,6 +15,7 @@ window.ClassicEditor = require('@ckeditor/ckeditor5-build-classic');
 try {
     window.$ = window.jQuery = require('jquery');
     
+    //require('../../../template/material-dashboard-html-v2.1.0/assets/js/core/popper.min');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/core/bootstrap-material-design.min.js');
     require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/perfect-scrollbar.jquery.min.js');
     window.moment = require('moment');

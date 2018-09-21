@@ -4,8 +4,7 @@ namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class NewRequest extends FormRequest
-{
+class NewRequest extends FormRequest {
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -13,7 +12,7 @@ class NewRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +20,24 @@ class NewRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            //
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required'
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages() {
+        return [
+            'name.required' => 'name can not be empty',
+            'email.required' => 'email can not be empty',
+            'password.required' => 'password can not be empty'
         ];
     }
 }

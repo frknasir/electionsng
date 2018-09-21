@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\IncidentType;
 use Illuminate\Http\Request;
 use App\Http\Resources\IncidentTypeResource;
+use App\Http\Requests\IncidentType\NewRequest;
+use App\Http\Requests\IncidentType\UpdateRequest;
+use App\Http\Requests\IncidentType\DelRequest;
+use Auth;
 
-class IncidentTypeController extends Controller
-{
+class IncidentTypeController extends Controller {
     /**
      * Display a listing of the resource.
      *
@@ -35,9 +38,18 @@ class IncidentTypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewRequest $request)
     {
-        //
+        $incidentType = IncidentType();
+
+        $incidentType->name = $request->input('name');
+
+        if($incidentType->save()) {
+            return response()->json([
+                'success' => 1,
+                'message' => 'incident type added successfully'
+            ]);
+        }
     }
 
     /**
@@ -46,9 +58,11 @@ class IncidentTypeController extends Controller
      * @param  \App\IncidentType  $incidentType
      * @return \Illuminate\Http\Response
      */
-    public function show(IncidentType $incidentType)
+    public function show($id)
     {
-        //
+        $incidentType = IncidentType::findOrFail($id);
+
+        return new IncidentTypeResource($incidentType);
     }
 
     /**
@@ -69,9 +83,18 @@ class IncidentTypeController extends Controller
      * @param  \App\IncidentType  $incidentType
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, IncidentType $incidentType)
+    public function update(UpdateRequest $request)
     {
-        //
+        $incidentType = IncidentType::findOrFail($request->input('id'));
+
+        $incidentType->name = $request->input('name');
+
+        if($incidentType->save()) {
+            return response()->json([
+                'success' => 1,
+                'message' => 'incident type updated successfully'
+            ]);
+        }
     }
 
     /**
@@ -80,8 +103,15 @@ class IncidentTypeController extends Controller
      * @param  \App\IncidentType  $incidentType
      * @return \Illuminate\Http\Response
      */
-    public function destroy(IncidentType $incidentType)
+    public function destroy(DelRequest $request)
     {
-        //
+        $incidentType = IncidentType::findOrFail($request->input('id'));
+
+        if($incidentType->delete()) {
+            return response()->json([
+                'success' => 1,
+                'message' => 'incident type deleted successfully'
+            ]);
+        }
     }
 }

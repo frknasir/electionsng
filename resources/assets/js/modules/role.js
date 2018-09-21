@@ -19,7 +19,7 @@ export const role = {
             RoleAPI.getRoles()
                 .then(function(response) {
                     commit('setRolesLoadStatus', 2);
-                    commit('setRoles', response.data);
+                    commit('setRoles', response.data.data);
                 })
                 .catch(function() {
                     commit('setRolesLoadStatus', 3);

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests\User\NewRequest;
-use App\Http\Requests\User\updateRequest;
+use App\Http\Requests\User\UpdateRequest;
+use App\Http\Requests\User\DelRequest;
+use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Resources\UserResource;
 use Auth;
 
@@ -18,6 +21,12 @@ class UserController extends Controller
      */
     public function index()
     {
+        $users = User::paginate();
+
+        return UserResource::collection($users);
+    }
+
+    public function authenticatedUser() {
         $user = User::findOrFail(Auth::user()->id);
         
         return new UserResource($user);
@@ -39,9 +48,22 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewRequest $request)
     {
-        //
+        $user = new User();
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = bcrypt($request->input('password'));
+
+        if($user->save()) {
+            $user->roles()->attach(Role::where('id', $request->input('role_id'))->get());
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'user added successfully'
+            ]);
+        }
     }
 
     /**
@@ -50,9 +72,11 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        return new UserResource($user);
     }
 
     /**
@@ -73,9 +97,35 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateRequest $request)
     {
-        //
+        $user = User::findOrFail($request->input('id'));
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->active = $request->input('active');
+
+        if($user->save()) {
+            $user->roles()->sync($request->input('role_id'));
+
+            return response()->json([
+                'success' => 1,
+                'message' => 'user updated successfully'
+            ]);
+        }
+    }
+
+    public function changeUserPassword(ChangePasswordRequest $request) {
+        $user = User::findOrFail($request->input('id'));
+
+        $user->password = bcrypt($request->input('password'));
+
+        if($user->save()) {
+            return response()->json([
+                'success' => 1,
+                'message' => 'user password changed successfully'
+            ]);
+        }
     }
 
     /**
@@ -84,8 +134,14 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
-    {
-        //
+    public function destroy(DelRequest $request) {
+        $user = User::findOrFail($request->input('id'));
+
+        if($user->delete()) {
+            return response()->json([
+                'success' => 1,
+                'message' => 'user deleted successfully'
+            ]);
+        }
     }
 }

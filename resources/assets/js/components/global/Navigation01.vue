@@ -2,22 +2,29 @@
  
 </style>
 <template>
-    <nav class="navbar navbar-expand-lg  navbar-light" id="navigation-example">
+    <nav class="navbar navbar-expand-lg navbar-light" >
         <div class="container">
+            <router-link class="btn btn-link"
+                v-if="$routerHistory.hasPrevious()"
+                :to="{ path: $routerHistory.previous().path }">
+                <i class="material-icons">arrow_back</i>
+            </router-link>
             <div class="navbar-wrapper">
                 <router-link class="navbar-brand" to="/">
                     Electionsng.com
                 </router-link>
             </div>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
+            <button class="navbar-toggler" type="button" 
+                data-toggle="collapse" data-target="#navbarnav" aria-controls="navbarnav" 
+                aria-expanded="false" aria-label="Toggle navigation">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon icon-bar"></span>
                 <span class="navbar-toggler-icon icon-bar"></span>
                 <span class="navbar-toggler-icon icon-bar"></span>
             </button>
 
-            <div class="collapse navbar-collapse justify-content-end">
+            <div id="navbarnav" class="collapse navbar-collapse justify-content-end">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav mr-auto">
                     

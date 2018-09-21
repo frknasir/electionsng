@@ -14,7 +14,26 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
-    Route::get('/user', 'UserController@index');
+    /**
+     * User Routes
+     */
+    Route::get('/user', 'UserController@authenticatedUser');
+
+    Route::get('/users', 'UserController@index');
+
+    Route::get('/user/{id}', 'UserController@show');
+
+    Route::post('/user', 'UserController@store');
+
+    Route::put('/user', 'UserController@updated');
+
+    Route::put('/user/{id}/changePassword', 'UserController@changeUserPassword');
+
+    Route::delete('/user', 'UserController@destroy');
+
+    /**
+     * End User Routes
+     */
 
     /**
      * Candidates Routes
@@ -175,6 +194,17 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
 });
 
 Route::group(['prefix'=> 'v1'], function() {
+
+  /**
+   * User and Roles routes
+   */
+  Route::get(
+    '/roles',
+    'RoleController@index'
+  );
+  /**
+   * end User x Roles routes
+   */
 
   /**
    * Elections Routes

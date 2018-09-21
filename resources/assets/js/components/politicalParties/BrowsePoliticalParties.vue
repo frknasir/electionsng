@@ -38,9 +38,7 @@
                                     <h4 class="card-title">{{ politicalParty.initials }}</h4>
                                 </div>
                                 <div class="card-body text-center">
-                                    <p>
-                                        <h4>{{ politicalParty.name }}</h4>
-                                    </p>
+                                    <h4>{{ politicalParty.name }}</h4>
                                 </div>
                                 <div class="card-footer">
                                     <div v-if="userLoadStatus == 2 && user != {}">

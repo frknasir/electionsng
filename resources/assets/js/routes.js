@@ -275,6 +275,86 @@ export default new VueRouter({
                             }
                         }
                     ]
+                },
+                {
+                    path: 'incidentTypes',
+                    component: Vue.component('IncidentTypes', require('./pages/IncidentTypes.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Incident Types',
+                            component: Vue.component(
+                                'BrowseIncidentTypes',
+                                require('./components/incidentTypes/BrowseIncidentTypes.vue')
+                            )
+                        },
+                        {
+                            path: 'edit/:incidentTypeId',
+                            name: 'Edit Incident Type',
+                            component: Vue.component(
+                                'EditIncidentType', 
+                                require('./components/incidentTypes/EditIncidentType.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add Incident Type',
+                            component: Vue.component(
+                                'AddIncidentType', 
+                                require('./components/incidentTypes/AddIncidentType.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin', 'Admin']
+                            }
+                        }
+                    ]
+                },
+                {
+                    path: 'users',
+                    component: Vue.component('Users', require('./pages/Users.vue')),
+                    children: [
+                        {
+                            path: '',
+                            name: 'Users',
+                            component: Vue.component(
+                                'BrowseUsers',
+                                require('./components/users/BrowseUsers.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin']
+                            }
+                        },
+                        {
+                            path: 'edit/:userId',
+                            name: 'Edit User',
+                            component: Vue.component(
+                                'EditUser', 
+                                require('./components/users/EditUser.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin']
+                            }
+                        },
+                        {
+                            path: 'add',
+                            name: 'Add User',
+                            component: Vue.component(
+                                'AddUser', 
+                                require('./components/users/AddUser.vue')
+                            ),
+                            beforeEnter: requireAuth,
+							meta: {
+								permitted: ['Super-admin']
+                            }
+                        }
+                    ]
                 }
             ]
         },
