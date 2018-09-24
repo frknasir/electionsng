@@ -314,7 +314,7 @@ export default new VueRouter({
                         }
                     ]
                 },
-                {
+                { 
                     path: 'users',
                     component: Vue.component('Users', require('./pages/Users.vue')),
                     children: [

@@ -70,8 +70,13 @@
                                         </sup>
                                     </label>
                                     <select class="form-control" v-model="user.role_id">
-                                        <option value=""></option>
+                                        <option v-for="role in roles" v-bind:key="role.id" :value="role.id">
+                                            {{ role.name }}
+                                        </option>
                                     </select>
+                                    <small v-show="!validations.role_id.is_valid" class="form-text text-muted text-danger">
+                                        {{ validations.role_id.text }}
+                                    </small>
                                 </div>
                                 <button @click="addUser(user)" user="button" 
                                     class="btn btn-success">
@@ -131,10 +136,10 @@
             }
         },
         computed: {
-            user() {
+            authUser() {
                 return this.$store.getters.getUser;
             },
-            userLoadStatus() {
+            authUserLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
             },
             roles() {
@@ -171,14 +176,13 @@
 
         },
         created() {
-
+            this.$store.dispatch('getRoles');
         },
         methods: {
             addUser(data) {
-                /**if(this.validateUser(data)) {
+                if(this.validateUser(data)) {
                     this.$store.dispatch('addUser', data);
-                }**/
-                console.log(data);
+                }
             },
             addAnother() {
                 this.$store.commit('setAddUserResult', {});
@@ -225,6 +229,7 @@
                 this.user.name = '';
                 this.user.email = '';
                 this.user.password = '';
+                this.cpassword = '';
                 this.user.role_id = '';
 
                 this.validations = {

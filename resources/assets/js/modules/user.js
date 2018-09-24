@@ -182,7 +182,7 @@ export const user = {
             state.addUserLoadStatus = status;
         },
         setAddUserResult(state, result) {
-            state.setAddUserResult = result;
+            state.addUserResult = result;
         },
         setUpdateUserLoadStatus(state, status) {
             state.updateUserLoadStatus = status;
@@ -229,7 +229,7 @@ export const user = {
             return state.addUserLoadStatus;
         },
         getAddUserResult(state) {
-            return state.setAddUserResult;
+            return state.addUserResult;
         },
         getUpdateUserLoadStatus(state) {
             return state.updateUserLoadStatus;

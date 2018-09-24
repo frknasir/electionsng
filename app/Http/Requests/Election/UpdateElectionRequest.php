@@ -26,7 +26,7 @@ class UpdateElectionRequest extends FormRequest
         return [
             'id' => 'required',
             'title' => 'required',
-            'date' => 'required|date_format:Y-m-d|after:today'
+            'date' => 'required|date_format:Y-m-d'
         ];
     }
 
@@ -41,8 +41,7 @@ class UpdateElectionRequest extends FormRequest
             'id.required' => 'Election ID is required',
             'title.required' => 'Election title can not be empty.',
             'date.required' => 'Election date is missing',
-            'date.date_format' => 'Wrong date format',
-            'date.after' => 'Date must be after today'
+            'date.date_format' => 'Wrong date format'
         ];
     }
 }

@@ -107,23 +107,18 @@
                                 <th role="columnheader">Roles</th>
                                 <th role="columnheader" v-if="userLoadStatus == 2 && user != {}">Action</th>
                             </tr>
-                        </thead>
+                        </thead> 
                         <tbody role="rowgroup">
                             <tr role="row" v-for="(user, index) in users" v-bind:key="user.id">
                                 <td role="cell">
-                                    {{ index }}
+                                    {{ index + 1 }}
                                 </td>
                                 <td role="cell">
                                     {{ user.name }}
                                 </td>
                                 <td role="cell">{{ user.email }}</td>
                                 <td role="cell">
-                                    <ul class="list-group">
-                                        <li v-for="role in user.roles" v-bind:key="role.id"
-                                            class="list-group-item">
-                                            {{ role.name }}
-                                        </li>
-                                    </ul>
+                                    {{ user.roles[0] }}
                                 </td>
                                 <td v-if="userLoadStatus == 2 && user != {}" class="td-actions">
                                     <router-link 
@@ -207,8 +202,10 @@
                         'danger'
                     );
                 } else if(vm.deleteUserLoadStatus == 2 && vm.deleteUserResult.success == 1) {
-                    //reload Incident Types
-                    this.$store.dispatch('getUsers');
+                    //reload Users
+                    this.$store.dispatch('getUsers', {
+                        url: null
+                    });
                     vm.HF.showNotification(
                         'top', 
                         'center', 

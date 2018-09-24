@@ -37,34 +37,28 @@
                             Elections
                         </router-link>
                     </li>
-
-                    <li class="nav-item dropdown">
-                        <a id="electoralAreas" 
-                            class="nav-link dropdown-toggle" href="#" 
-                            data-toggle="dropdown" 
-                            aria-haspopup="true" aria-expanded="false">
-                            Electoral Areas <span class="caret"></span>
+                    
+                    <!-- Administration -->
+                    <li v-if="userLoadStatus == 2 && user != {}" class="nav-item dropdown">
+                        <a id="administrationDropdown" 
+                            class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Administation <span class="caret"></span>
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="electoralAreas">
-                            <router-link class="dropdown-item" to="/states">
-                                States
-                            </router-link>
-                            <!--<router-link class="dropdown-item" to="/localGovernments">
-                                Local Governments
-                            </router-link>
-                            <router-link class="dropdown-item" to="/registrationAreas">
-                                Registration Areas
-                            </router-link>
-                            <router-link class="dropdown-item" to="/pollingUnits">
-                                Polling Units
-                            </router-link>-->
-                        </div>
-                    </li>
 
-                    <li class="nav-item">
-                        <router-link class="nav-link" to='/politicalParties'>
-                            Political Parties
-                        </router-link>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="administrationDropdown">
+                            <router-link class="dropdown-item" to="/states">
+                                Electoral Areas
+                            </router-link>
+                            <router-link class="dropdown-item" to='/politicalParties'>
+                                Political Parties
+                            </router-link>
+                            <router-link class="dropdown-item" to='/incidentTypes'>
+                                Incident Types
+                            </router-link>
+                            <router-link class="dropdown-item" to='/users'>
+                                Manage Users
+                            </router-link>
+                        </div>
                     </li>
 
                     <!-- Authentication Links -->

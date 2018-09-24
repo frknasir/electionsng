@@ -87,7 +87,7 @@
                         <tbody role="rowgroup">
                             <tr role="row" v-for="(type, index) in incidentTypes" v-bind:key="type.id">
                                 <td role="cell">
-                                    {{ index }}
+                                    {{ index + 1 }}
                                 </td>
                                 <td role="cell">
                                     {{ type.name }}

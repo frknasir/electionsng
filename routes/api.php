@@ -91,6 +91,30 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
     /**
      * End Incident Routes
      */
+
+    /**
+     * Incident Type Routes
+     */
+    Route::post(
+      '/incidentType',
+      'IncidentTypeController@store'
+    );
+
+    Route::put(
+      '/incidentType',
+      'IncidentTypeController@update'
+    );
+
+    Route::delete(
+      '/incidentType',
+      'IncidentTypeController@destroy'
+    );
+    
+    /**
+     * End Incident Type Routes
+     */
+
+
     /**
      * Picture Routes
      */
@@ -291,6 +315,11 @@ Route::group(['prefix'=> 'v1'], function() {
   Route::get(
     'incidentTypes',
     'IncidentTypeController@index'
+  );
+
+  Route::get(
+    'incidentType/{id}',
+    'IncidentTypeController@show'
   );
 
   Route::get(

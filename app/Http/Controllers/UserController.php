@@ -57,7 +57,7 @@ class UserController extends Controller
         $user->password = bcrypt($request->input('password'));
 
         if($user->save()) {
-            $user->roles()->attach(Role::where('id', $request->input('role_id'))->get());
+            $user->roles()->attach($request->input('role_id'));
 
             return response()->json([
                 'success' => 1,
@@ -106,7 +106,9 @@ class UserController extends Controller
         $user->active = $request->input('active');
 
         if($user->save()) {
-            $user->roles()->sync($request->input('role_id'));
+            //Detach all roles from the user...
+            $user->roles()->detach();
+            $user->roles()->attach($request->input('role_id'));
 
             return response()->json([
                 'success' => 1,
@@ -136,6 +138,8 @@ class UserController extends Controller
      */
     public function destroy(DelRequest $request) {
         $user = User::findOrFail($request->input('id'));
+        
+        $user->roles()->detach();
 
         if($user->delete()) {
             return response()->json([

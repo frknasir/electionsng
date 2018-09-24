@@ -40,7 +40,7 @@ class IncidentTypeController extends Controller {
      */
     public function store(NewRequest $request)
     {
-        $incidentType = IncidentType();
+        $incidentType = new IncidentType();
 
         $incidentType->name = $request->input('name');
 

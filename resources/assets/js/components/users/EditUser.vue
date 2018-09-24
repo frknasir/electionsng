@@ -21,12 +21,64 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="text" class="form-control" v-model="type.name" />
+                                    <input type="text" class="form-control" v-model="user.name" />
                                     <small v-show="!validations.name.is_valid" class="form-text text-muted text-danger">
                                         {{ validations.name.text }}
                                     </small>
                                 </div>
-                                <button @click="editIncidentType(type)" type="button" 
+                                <div class="form-group">
+                                    <label for="">
+                                        email
+                                        <sup>
+                                            <i class="fa fa-asterisk small" style="color:red"></i>
+                                        </sup>
+                                    </label>
+                                    <input type="email" class="form-control" v-model="user.email" />
+                                    <small v-show="!validations.email.is_valid" class="form-text text-muted text-danger">
+                                        {{ validations.email.text }}
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        password
+                                        <sup>
+                                            <i class="fa fa-asterisk small" style="color:red"></i>
+                                        </sup>
+                                    </label>
+                                    <input type="text" class="form-control" v-model="user.password" />
+                                    <small v-show="!validations.password.is_valid" class="form-text text-muted text-danger">
+                                        {{ validations.password.text }}
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        password
+                                        <sup>
+                                            <i class="fa fa-asterisk small" style="color:red"></i>
+                                        </sup>
+                                    </label>
+                                    <input type="text" class="form-control" v-model="cpassword" />
+                                    <small v-show="!validations.cpassword.is_valid" class="form-text text-muted text-danger">
+                                        {{ validations.cpassword.text }}
+                                    </small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        role
+                                        <sup>
+                                            <i class="fa fa-asterisk small" style="color:red"></i>
+                                        </sup>
+                                    </label>
+                                    <select class="form-control" v-model="user.role_id">
+                                        <option v-for="role in roles" v-bind:key="role.id" :value="role.id">
+                                            {{ role.name }}
+                                        </option>
+                                    </select>
+                                    <small v-show="!validations.role_id.is_valid" class="form-text text-muted text-danger">
+                                        {{ validations.role_id.text }}
+                                    </small>
+                                </div>
+                                <button @click="addUser(user)" user="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
@@ -44,9 +96,12 @@
     export default {
         data() {
             return {
-                type: {
-                    id: this.$route.params.incidentTypeId,
-                    name: ''
+                usr: {
+                    id: this.$route.params.userId,
+                    name: '',
+                    email: '',
+                    role_id: '',
+                    active: ''
                 },
                 HF: HELPERS,
                 show_form: true,
@@ -58,55 +113,70 @@
                     name: {
                         is_valid: true,
                         text: ''
+                    },
+                    email: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    role_id: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    active: {
+                        is_valid: true,
+                        text: ''
                     }
                 }
             }
         },
         computed: {
-            user() {
+            authUser() {
                 return this.$store.getters.getUser;
             },
-            userLoadStatus() {
+            authUserLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
             },
-            incidentType() {
-                return this.$store.getters.getIncidentType;
+            user() {
+                return this.$store.getAUser;
             },
-            incidentTypeLoadStatus() {
-                return this.$store.getters.getIncidentTypeLoadStatus;
+            userLoadStatus() {
+                return this.$store.getAUserLoadStatus;
             },
-            updateIncidentTypeLoadStatus() {
-                return this.$store.getters.getUpdateIncidentTypeLoadStatus;
+            updateUserLoadStatus() {
+                return this.$store.getters.getUpdateUserLoadStatus;
             },
-            updateIncidentTypeResult() {
-                return this.$store.getters.getUpdateIncidentTypeResult;
+            updateUserResult() {
+                return this.$store.getters.getUpdateUserResult;
             }
         },
         watch: {
-            updateIncidentTypeLoadStatus: function() {
+            updateUserLoadStatus: function() {
                 let vm = this;
-                if(vm.updateIncidentTypeLoadStatus == 3 && vm.updateIncidentTypeResult.success == 0) {
+                if(vm.updateUserLoadStatus == 3 && vm.updateUserResult.success == 0) {
                     vm.show_form = true;
                     vm.HF.showNotification(
                         'top', 
                         'center', 
-                        vm.updateIncidentTypeResult.message, 
+                        vm.updateUserResult.message, 
                         'danger'
                     );
-                } else if(vm.updateIncidentTypeLoadStatus == 2 && vm.updateIncidentTypeResult.success == 1) {
+                } else if(vm.updateUserLoadStatus == 2 && vm.updateUserResult.success == 1) {
                     vm.show_form = true;
                     vm.HF.showNotification(
                         'top', 
                         'center', 
-                        vm.updateIncidentTypeResult.message, 
+                        vm.updateUserResult.message, 
                         'success'
                     );
                 } 
             },
-            incidentTypeLoadStatus: function(val) {
+            updateUserLoadStatus: function(val) {
                 let vm = this;
                 if(val == 2) {
-                    vm.type.name = vm.incidentType.name;
+                    vm.type.name = vm.user.name;
+                    vm.usr.email = vm.user.email;
+                    vm.usr.role_id = vm.user.role_id;
+                    vm.usr.active = vm.user.active;
                 }
             }
         },
@@ -114,33 +184,33 @@
 
         },
         created() {
-            this.$store.dispatch('getIncidentType', {
-                id: this.$route.params.incidentTypeId
+            this.$store.dispatch('getAUser', {
+                id: this.$route.params.userId
             });
         },
         methods: {
-            editIncidentType(data) {
-                if(this.validateIncidentType(data)) {
-                    this.$store.dispatch('updateIncidentType', data);
+            edituser(data) {
+                if(this.validateuser(data)) {
+                    this.$store.dispatch('updateuser', data);
                 }
             },
-            validateIncidentType(type) {
-                let validIncidentType = true;
+            validateuser(type) {
+                let validuser = true;
                 let validations = this.validations;
 
                 if(!type.id) {
-                    validIncidentType = false;
+                    validuser = false;
                     validations.id.is_valid = false;
                     validations.id.text = "id can not be empty";
                 }
 
                 if(!type.name) {
-                    validIncidentType = false;
+                    validuser = false;
                     validations.name.is_valid = false;
                     validations.name.text = "name can not be empty";
                 }
 
-                return validIncidentType;
+                return validuser;
             }
         }
     }
