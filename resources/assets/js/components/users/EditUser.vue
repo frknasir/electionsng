@@ -113,7 +113,7 @@
                                         {{ validations.cpassword.text }}
                                     </small>
                                 </div>
-                                <button @click="changePassword(usr)" user="button" 
+                                <button @click="changeUserPassword(changePassword)" user="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
@@ -204,6 +204,12 @@
             },
             updateUserResult() {
                 return this.$store.getters.getUpdateUserResult;
+            },
+            changeUserPasswordLoadStatus() {
+                return this.$store.getters.getChangeUserPasswordLoadStatus;
+            },
+            changeUserPasswordResult() {
+                return this.$store.getters.getChangeUserPasswordResult;
             }
         },
         watch: {
@@ -226,6 +232,29 @@
                         'success'
                     );
                 } 
+            },
+            changeUserPasswordLoadStatus: function() {
+                let vm = this;
+                if(vm.changeUserPasswordResult === 3 && vm.changeUserPasswordResult.success == 0) {
+                    vm.show_form = true;
+                    vm.HF.showNotification(
+                        'top',
+                        'center',
+                        vm.changeUserPasswordResult.message,
+                        'danger'
+                    );
+                } else if(vm.changeUserPasswordLoadStatus == 2 && vm.changeUserPasswordResult.success == 1) {
+                    vm.changePassword.password = '';
+                    vm.cpassword = '';
+                    
+                    vm.show_form = true;
+                    vm.HF.showNotification(
+                        'top',
+                        'center',
+                        vm.changeUserPasswordResult.message,
+                        'success'
+                    );
+                }
             },
             userLoadStatus: function(val) {
                 let vm = this;
@@ -258,6 +287,11 @@
                     this.$store.dispatch('updateUser', data);
                 }
             },
+            changeUserPassword(data) {
+                if(this.validatePasswordChange(data)) {
+                    this.$store.dispatch('changeUserPassword', data);
+                }
+            },
             validateUser(user) {
                 let validUser = true;
                 let validations = this.validations;
@@ -287,6 +321,36 @@
                 }
                 
                 return validUser;
+            },
+            validatePasswordChange(data) {
+                let valid = true;
+                let validations = this.validations;
+
+                if(!data.id) {
+                    valid = false;
+                    validations.id.is_valid = false;
+                    validations.id.text = "id can not be empty";
+                }
+
+                if(!data.password) {
+                    valid = false;
+                    validations.password.is_valid = false;
+                    validations.password.text = "password can not be empty";
+                }
+
+                if(!this.cpassword) {
+                    valid = false;
+                    validations.cpassword.is_valid = false;
+                    validations.cpassword.text = "password confirmation can not be empty";
+                }
+
+                if(data.password !== this.cpassword) {
+                    valid = false;
+                    validations.cpassword.is_valid = false;
+                    validations.cpassword.text = "passwords do not match";
+                }
+
+                return valid;
             }
         }
     }

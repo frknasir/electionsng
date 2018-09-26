@@ -240,7 +240,7 @@ export const user = {
         getChangeUserPasswordLoadStatus(state) {
             return state.changeUserPasswordLoadStatus;
         },
-        setChangeUserPasswordResult(state) {
+        getChangeUserPasswordResult(state) {
             return state.changeUserPasswordResult;
         },
         getDeleteUserLoadStatus(state) {
