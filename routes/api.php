@@ -25,7 +25,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
 
     Route::post('/user', 'UserController@store');
 
-    Route::put('/user', 'UserController@updated');
+    Route::put('/user', 'UserController@update');
 
     Route::put('/user/{id}/changePassword', 'UserController@changeUserPassword');
 

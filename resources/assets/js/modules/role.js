@@ -38,7 +38,7 @@ export const role = {
     },
     getters: {
         getRolesLoadStatus(state) {
-            return state.roles;
+            return state.rolesLoadStatus;
         },
 
         getRoles(state) {

@@ -5,11 +5,13 @@
     <div class="content">
         <div class="container">
             <div class="row">
+
+
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header card-header-text card-header-success">
                             <div class="card-text">
-                                Edit type
+                                Edit User
                             </div>
                         </div>
                         <div class="card-body">
@@ -21,7 +23,7 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="text" class="form-control" v-model="user.name" />
+                                    <input type="text" class="form-control" v-model="usr.name" />
                                     <small v-show="!validations.name.is_valid" class="form-text text-muted text-danger">
                                         {{ validations.name.text }}
                                     </small>
@@ -33,11 +35,60 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="email" class="form-control" v-model="user.email" />
+                                    <input type="email" class="form-control" v-model="usr.email" />
                                     <small v-show="!validations.email.is_valid" class="form-text text-muted text-danger">
                                         {{ validations.email.text }}
                                     </small>
                                 </div>
+                                <div class="form-group">
+                                    <label for="">
+                                        role
+                                        <sup>
+                                            <i class="fa fa-asterisk small" style="color:red"></i>
+                                        </sup>
+                                    </label>
+                                    <select class="form-control" v-model="usr.role_id">
+                                        <option v-for="role in roles" v-bind:key="role.id" :value="role.id">
+                                            {{ role.name }}
+                                        </option>
+                                    </select>
+                                    <small v-show="!validations.role_id.is_valid" class="form-text text-muted text-danger">
+                                        {{ validations.role_id.text }}
+                                    </small>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" v-model="usr.active" value="1"> Is User Active?
+                                        <span class="form-check-sign">
+                                            <span class="check"></span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <small v-show="!validations.active.is_valid" class="form-text text-muted text-danger">
+                                    {{ validations.active.text }}
+                                </small>
+                                <button @click="editUser(usr)" user="button" 
+                                    class="btn btn-success">
+                                    Submit
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-text card-header-success">
+                            <div class="card-text">
+                                {{ user.name }} <br >
+                                <small>
+                                    Password Change
+                                </small>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form v-show="show_form">
                                 <div class="form-group">
                                     <label for="">
                                         password
@@ -45,7 +96,7 @@
                                             <i class="fa fa-asterisk small" style="color:red"></i>
                                         </sup>
                                     </label>
-                                    <input type="text" class="form-control" v-model="user.password" />
+                                    <input type="text" class="form-control" v-model="changePassword.password" />
                                     <small v-show="!validations.password.is_valid" class="form-text text-muted text-danger">
                                         {{ validations.password.text }}
                                     </small>
@@ -62,23 +113,7 @@
                                         {{ validations.cpassword.text }}
                                     </small>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">
-                                        role
-                                        <sup>
-                                            <i class="fa fa-asterisk small" style="color:red"></i>
-                                        </sup>
-                                    </label>
-                                    <select class="form-control" v-model="user.role_id">
-                                        <option v-for="role in roles" v-bind:key="role.id" :value="role.id">
-                                            {{ role.name }}
-                                        </option>
-                                    </select>
-                                    <small v-show="!validations.role_id.is_valid" class="form-text text-muted text-danger">
-                                        {{ validations.role_id.text }}
-                                    </small>
-                                </div>
-                                <button @click="addUser(user)" user="button" 
+                                <button @click="changePassword(usr)" user="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
@@ -86,6 +121,9 @@
                         </div>
                     </div>
                 </div>
+
+
+
             </div>
         </div>
     </div>
@@ -103,6 +141,11 @@
                     role_id: '',
                     active: ''
                 },
+                changePassword: {
+                    id: this.$route.params.userId,
+                    password: ''
+                },
+                cpassword: '',
                 HF: HELPERS,
                 show_form: true,
                 validations: {
@@ -125,6 +168,14 @@
                     active: {
                         is_valid: true,
                         text: ''
+                    },
+                    password: {
+                        is_valid: true, 
+                        text: ''
+                    },
+                    cpassword: {
+                        is_valid: true,
+                        text: ''
                     }
                 }
             }
@@ -137,10 +188,16 @@
                 return this.$store.getters.getUserLoadStatus;
             },
             user() {
-                return this.$store.getAUser;
+                return this.$store.getters.getAUser;
             },
             userLoadStatus() {
-                return this.$store.getAUserLoadStatus;
+                return this.$store.getters.getAUserLoadStatus;
+            },
+            roles() {
+                return this.$store.getters.getRoles;
+            },
+            rolesLoadStatus() {
+                return this.$store.getters.rolesLoadStatus;
             },
             updateUserLoadStatus() {
                 return this.$store.getters.getUpdateUserLoadStatus;
@@ -170,10 +227,10 @@
                     );
                 } 
             },
-            updateUserLoadStatus: function(val) {
+            userLoadStatus: function(val) {
                 let vm = this;
                 if(val == 2) {
-                    vm.type.name = vm.user.name;
+                    vm.usr.name = vm.user.name;
                     vm.usr.email = vm.user.email;
                     vm.usr.role_id = vm.user.role_id;
                     vm.usr.active = vm.user.active;
@@ -184,33 +241,52 @@
 
         },
         created() {
+            this.$store.dispatch('getRoles');
+
             this.$store.dispatch('getAUser', {
                 id: this.$route.params.userId
             });
         },
         methods: {
-            edituser(data) {
-                if(this.validateuser(data)) {
-                    this.$store.dispatch('updateuser', data);
+            editUser(data) {
+
+                if(!this.usr.active) {
+                    data.active = 0;
+                }
+
+                if(this.validateUser(data)) {
+                    this.$store.dispatch('updateUser', data);
                 }
             },
-            validateuser(type) {
-                let validuser = true;
+            validateUser(user) {
+                let validUser = true;
                 let validations = this.validations;
 
-                if(!type.id) {
-                    validuser = false;
+                if(!user.id) {
+                    validUser = false;
                     validations.id.is_valid = false;
                     validations.id.text = "id can not be empty";
                 }
 
-                if(!type.name) {
-                    validuser = false;
+                if(!user.name) {
+                    validUser = false;
                     validations.name.is_valid = false;
                     validations.name.text = "name can not be empty";
                 }
 
-                return validuser;
+                if(!user.email) {
+                    validUser = false;
+                    validations.email.is_valid = false;
+                    validations.email.text = "email can not be empty";
+                }
+
+                if(!user.role_id) {
+                    validUser = false;
+                    validations.role_id.is_valid = false;
+                    validations.role_id.text = "role can not be empty";
+                }
+                
+                return validUser;
             }
         }
     }

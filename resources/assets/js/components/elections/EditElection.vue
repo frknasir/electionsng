@@ -193,11 +193,11 @@
                 if(val == 2) {
                     this.uElection.id = this.election.id;
                     this.uElection.title = this.election.title;
-                    this.uElection.registered_voters = this.election.registered_voters;
-                    this.uElection.accredited_voters = this.election.accredited_voters;
-                    this.uElection.votes_cast = this.election.votes_cast;
-                    this.uElection.valid_votes = this.election.valid_votes;
-                    this.uElection.rejected_votes = this.election.rejected_votes;
+                    this.uElection.registered_voters = (this.election.registered_voters !== "Not Available") ? this.election.registered_voters : '';
+                    this.uElection.accredited_voters = (this.election.accredited_voters !== "Not Available") ? this.election.accredited_voters : '';
+                    this.uElection.votes_cast = (this.election.votes_cast !== "Not Available") ? this.election.votes_cast : '';
+                    this.uElection.valid_votes = (this.election.valid_votes !== "Not Available") ? this.election.valid_votes : '';
+                    this.uElection.rejected_votes = (this.election.rejected_votes !== "Not Available") ? this.election.rejected_votes : '';
                     this.uElection.date = this.election.date;
                     this.state = this.election.state.name;
                     this.type = this.election.election_type_name;

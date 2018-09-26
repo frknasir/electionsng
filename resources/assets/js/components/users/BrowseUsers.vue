@@ -43,6 +43,7 @@
 		td:nth-of-type(2):before { content: "Name: "; }
 		td:nth-of-type(3):before { content: "Email: "; }
 		td:nth-of-type(4):before { content: "Roles: "; }
+        td:nth-of-type(5):before { content: "Status: "; }
         td:nth-of-type(6):before { content: "Actions: "; }
 	}
 
@@ -105,13 +106,14 @@
                                 <th role="columnheader">Name</th>
                                 <th role="columnheader">Email</th>
                                 <th role="columnheader">Roles</th>
+                                <th role="columnheader">Status</th>
                                 <th role="columnheader" v-if="userLoadStatus == 2 && user != {}">Action</th>
                             </tr>
                         </thead> 
                         <tbody role="rowgroup">
-                            <tr role="row" v-for="(user, index) in users" v-bind:key="user.id">
+                            <tr role="row" v-for="user in users" v-bind:key="user.id">
                                 <td role="cell">
-                                    {{ index + 1 }}
+                                    {{ "#" }}
                                 </td>
                                 <td role="cell">
                                     {{ user.name }}
@@ -119,6 +121,9 @@
                                 <td role="cell">{{ user.email }}</td>
                                 <td role="cell">
                                     {{ user.roles[0] }}
+                                </td>
+                                <td>
+                                    {{ user.active_label }}
                                 </td>
                                 <td v-if="userLoadStatus == 2 && user != {}" class="td-actions">
                                     <router-link 
@@ -135,7 +140,7 @@
                     </table>
                     <div id="userPagination-btn">
                         <nav aria-label="Page navigation">
-                            <ul class="userPagination justify-content-end text-black">
+                            <ul class="pagination justify-content-end text-black">
                                 <li class="page-item" v-bind:class="[{disabled: !userPagination.prev_page_url}]">
                                     <a @click="getUsers(userPagination.prev_page_url)" class="page-link" tabindex="-1">Previous</a>
                                 </li>

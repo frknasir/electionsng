@@ -9,8 +9,8 @@
               <i class="material-icons">arrow_back</i>
           </router-link>
           <div class="navbar-wrapper">
-            <a class="navbar-brand text-capitalize" href="#pablo">
-              {{ title + ": " + $route.name }}
+            <a class="navbar-text">
+              {{ title }}
             </a>
           </div>
           <button class="navbar-toggler" type="button" 

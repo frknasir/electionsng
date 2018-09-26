@@ -26,7 +26,8 @@ class UpdateRequest extends FormRequest
             'id' => 'required',
             'name' => 'required',
             'email' => 'required',
-            'password' => 'required'
+            'active' => 'required',
+            'role_id' => 'required'
         ];
     }
 
@@ -40,7 +41,8 @@ class UpdateRequest extends FormRequest
             'id.required' => 'id can not be empty',
             'name.required' => 'name can not be empty',
             'email.required' => 'email can not be empty',
-            'password.required' => 'password can not be empty'
+            'active.required' => 'user status can not be empty',
+            'role_id.required' => 'user role can not be empty'
         ];
     }
 }
