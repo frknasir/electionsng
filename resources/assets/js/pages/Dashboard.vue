@@ -5,105 +5,44 @@
     <div class="content">
         <div class="container-fluid">
             <!-- Election metrics Card -->
-            <div class="card card-stats col-md-6 offset-3">
-                <div class="card-header card-header-warning card-header-icon">
-                    <div class="card-icon">
-                    <i class="material-icons">group</i>
-                    </div>
-                    <p class="card-category">Registered Voters</p>
-                    <h3 class="card-title">{{ election.registered_voters }}</h3>
-                </div>
-                <div class="card-footer">
-                    <div class="stats">
-                        <a>From INEC</a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                    <div class="card-header card-header-warning card-header-icon">
-                        <div class="card-icon">
-                        <i class="material-icons">group</i>
-                        </div>
-                        <p class="card-category">Accredited</p>
-                        <h3 class="card-title">{{ election.accredited_voters }}</h3>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <a>From INEC</a>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                    <div class="card-header card-header-rose card-header-icon">
-                        <div class="card-icon">
-                        <i class="material-icons">group</i>
-                        </div>
-                        <p class="card-category">Votes Cast</p>
-                        <h3 class="card-title">{{ election.votes_cast }}</h3>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <a>From INEC</a>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                    <div class="card-header card-header-success card-header-icon">
-                        <div class="card-icon">
-                        <i class="material-icons">ballot</i>
-                        </div>
-                        <p class="card-category">Valid Votes</p>
-                        <h3 class="card-title">{{ election.valid_votes }}</h3>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <a>From INEC</a>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats">
-                    <div class="card-header card-header-info card-header-icon">
-                        <div class="card-icon">
-                        <i class="material-icons">ballot</i>
-                        </div>
-                        <p class="card-category">Rejected Votes</p>
-                        <h3 class="card-title">{{ election.rejected_votes }}</h3>
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <a>From INEC</a>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
+            <election-metrics></election-metrics>
             <!-- End Election metrics Card -->
 
-            <div class="card">
-                <div class="container">
-                    
-                </div>
-            </div>
+            <!-- Update Metrics -->
+            <update-metrics></update-metrics>
+            <!-- /Update Metrics -->
+
+            <!-- Incident Metrics -->
+            <incident-metrics></incident-metrics>
+            <!-- /Incident Metrics -->
+
+            <!-- Result Metrics -->
+            <result-metrics></result-metrics>
+            <!-- /Result Metrics -->
+            
         </div>
     </div>
 </template>
 <script>
-export default {
-    computed: {
-        election() {
-            return this.$store.getters.getElection;
+    import ElectionMetrics from '../components/dashboard/ElectionMetrics.vue';
+    import UpdateMetrics from '../components/dashboard/UpdateMetrics.vue';
+    import IncidentMetrics from '../components/dashboard/IncidentMetrics.vue';
+    import ResultMetrics from '../components/dashboard/ResultMetrics.vue';
+
+    export default {
+        components: {
+            ElectionMetrics,
+            UpdateMetrics,
+            IncidentMetrics,
+            ResultMetrics
         },
-        electionLoadStatus() {
-            return this.$store.getters.getElectionLoadStatus;
+        computed: {
+            election() {
+                return this.$store.getters.getElection;
+            },
+            electionLoadStatus() {
+                return this.$store.getters.getElectionLoadStatus;
+            }
         }
     }
-}
 </script>
