@@ -55,7 +55,7 @@
 
     #action-btn .btn {
         position: fixed;
-        right: 120px;
+        right: 30px;
         bottom: 10%;
     }
 </style>

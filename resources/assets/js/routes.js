@@ -80,11 +80,11 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
-            component: Vue.component( 'Layout', require('./pages/layouts/Layout01.vue')),
+            component: Vue.component( 'Layout', require('./pages/layouts/Layout.vue')),
             children: [
                 {
                     path: '',
-                    name: 'landing',
+                    name: 'Home',
                     component: Vue.component('Home', require('./pages/Home.vue'))
                 },
                 {
@@ -355,141 +355,200 @@ export default new VueRouter({
                             }
                         }
                     ]
-                }
-            ]
-        },
-        {
-            path: '/election/:id',
-            component: Vue.component( 'Layout', require( './pages/layouts/Layout02.vue' ) ),
-            children: [
-                {
-                    path: '',
-                    name: 'Dashboard',
-                    component: Vue.component( 'Dashboard', require( './pages/Dashboard.vue' ) )
                 },
                 {
-                    path: 'candidates',
-                    component: Vue.component('Candidates', require('./pages/Candidates.vue')),
+                    path: '/election/:id',
+                    component: Vue.component( 'Layout', require( './pages/Election.vue' ) ),
                     children: [
                         {
                             path: '',
-                            name: 'Browse Candidates',
-                            component: Vue.component('BrowseCandidates', require('./components/candidates/BrowseCandidates.vue'))
-                        },
-                        {
-                            path: 'view/:candidateId',
-                            name: 'View Candidate',
-                            component: Vue.component('ViewCandidate', require('./components/candidates/ViewCandidate.vue'))
-                        },
-                        {
-                            path: 'edit/:candidateId',
-                            name: 'Edit Candidate',
-                            component: Vue.component('EditCandidate', require('./components/candidates/EditCandidate.vue')),
-                            beforeEnter: requireAuth,
-							meta: {
-								permitted: ['Super-admin', 'Admin']
-                            }
-                        },
-                        {
-                            path: 'add',
-                            name: 'Add Candidate',
-                            component: Vue.component('AddCandidate', require('./components/candidates/AddCandidate.vue')),
-                            beforeEnter: requireAuth,
-							meta: {
-								permitted: ['Super-admin', 'Admin']
-                            }
-                        }
-                    ]
-                },
-                {
-                    path: 'liveUpdates',
-                    component: Vue.component('LiveUpdates', require('./pages/LiveUpdates.vue')),
-                    children: [
-                        {
-                            path: '',
-                            name: 'Browse Updates',
-                            component: Vue.component('BrowseLiveUpdates', require('./components/liveUpdates/BrowseLiveUpdates.vue'))
-                        },
-                        {
-                            path: 'edit/:liveUpdateId',
-                            name: 'Edit Update',
-                            component: Vue.component('EditLiveUpdate', require('./components/liveUpdates/EditLiveUpdate.vue')),
-                            beforeEnter: requireAuth,
+                            name: 'Election Dashboard',
+                            component: Vue.component( 'Dashboard', require( './pages/Dashboard.vue' ) ),
+                            beforeEnter: function(to, from, next) {
+                                if(to.params.id !== "undefined") {
+                                    next();
+                                }
+                            },
                             meta: {
-                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
+                                isElectionPage: true
                             }
                         },
                         {
-                            path: 'add',
-                            name: 'Add Update',
-                            component: Vue.component('AddLiveUpdate', require('./components/liveUpdates/AddLiveUpdate.vue')),
-                            beforeEnter: requireAuth,
-                            meta: {
-                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
-                            }
-                        }
-                    ]
-                },
-                {
-                    path: 'incidents',
-                    component: Vue.component('Incidents', require('./pages/Incidents.vue')),
-                    children: [
-                        {
-                            path: '',
-                            name: 'Browse Incidents',
-                            component: Vue.component('BrowseIncidents', require('./components/incidents/BrowseIncidents.vue'))
+                            path: 'candidates',
+                            component: Vue.component('Candidates', require('./pages/Candidates.vue')),
+                            beforeEnter: function(to, from, next) {
+                                if(to.params.id !== "undefined") {
+                                    next();
+                                }
+                            },
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'Browse Candidates',
+                                    component: Vue.component('BrowseCandidates', require('./components/candidates/BrowseCandidates.vue')),
+                                    meta: {
+                                        isElectionPage: true
+                                    },
+                                },
+                                {
+                                    path: 'view/:candidateId',
+                                    name: 'View Candidate',
+                                    component: Vue.component('ViewCandidate', require('./components/candidates/ViewCandidate.vue')),
+                                    meta: {
+                                        isElectionPage: true
+                                    },
+                                },
+                                {
+                                    path: 'edit/:candidateId',
+                                    name: 'Edit Candidate',
+                                    component: Vue.component('EditCandidate', require('./components/candidates/EditCandidate.vue')),
+                                    beforeEnter: requireAuth,
+                                    meta: {
+                                        permitted: ['Super-admin', 'Admin'],
+                                        isElectionPage: true
+                                    }
+                                },
+                                {
+                                    path: 'add',
+                                    name: 'Add Candidate',
+                                    component: Vue.component('AddCandidate', require('./components/candidates/AddCandidate.vue')),
+                                    beforeEnter: requireAuth,
+                                    meta: {
+                                        permitted: ['Super-admin', 'Admin'],
+                                        isElectionPage: true
+                                    }
+                                }
+                            ]
                         },
                         {
-                            path: 'edit/:incidentId',
-                            name: 'Edit Incident',
-                            component: Vue.component('EditIncident', require('./components/incidents/EditIncident.vue')),
-                            beforeEnter: requireAuth,
+                            path: 'liveUpdates',
+                            component: Vue.component('LiveUpdates', require('./pages/LiveUpdates.vue')),
+                            beforeEnter: function(to, from, next) {
+                                if(to.params.id !== "undefined") {
+                                    next();
+                                }
+                            },
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'Browse Updates',
+                                    component: Vue.component('BrowseLiveUpdates', require('./components/liveUpdates/BrowseLiveUpdates.vue')),
+                                    meta: {
+                                        isElectionPage: true
+                                    }
+                                },
+                                {
+                                    path: 'edit/:liveUpdateId',
+                                    name: 'Edit Update',
+                                    component: Vue.component('EditLiveUpdate', require('./components/liveUpdates/EditLiveUpdate.vue')),
+                                    beforeEnter: requireAuth,
+                                    meta: {
+                                        permitted: ['Super-admin', 'Admin', 'Tracking Officer'],
+                                        isElectionPage: true
+                                    }
+                                },
+                                {
+                                    path: 'add',
+                                    name: 'Add Update',
+                                    component: Vue.component('AddLiveUpdate', require('./components/liveUpdates/AddLiveUpdate.vue')),
+                                    beforeEnter: requireAuth,
+                                    meta: {
+                                        permitted: ['Super-admin', 'Admin', 'Tracking Officer'],
+                                        isElectionPage: true
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            path: 'incidents',
+                            component: Vue.component('Incidents', require('./pages/Incidents.vue')),
+                            beforeEnter: function(to, from, next) {
+                                if(to.params.id !== "undefined") {
+                                    next();
+                                }
+                            },
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'Browse Incidents',
+                                    component: Vue.component('BrowseIncidents', require('./components/incidents/BrowseIncidents.vue')),
+                                    meta: {
+                                        isElectionPage: true
+                                    }
+                                },
+                                {
+                                    path: 'edit/:incidentId',
+                                    name: 'Edit Incident',
+                                    component: Vue.component('EditIncident', require('./components/incidents/EditIncident.vue')),
+                                    beforeEnter: requireAuth,
+                                    meta: {
+                                        permitted: ['Super-admin', 'Admin', 'Tracking Officer'],
+                                        isElectionPage: true
+                                    }
+                                },
+                                {
+                                    path: 'add',
+                                    name: 'Add Incident',
+                                    component: Vue.component('AddIncident', require('./components/incidents/AddIncident.vue')),
+                                    beforeEnter: requireAuth,
+                                    meta: {
+                                        permitted: ['Super-admin', 'Admin', 'Tracking Officer'],
+                                        isElectionPage: true
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            path: 'results',
+                            name: 'Results',
+                            component: Vue.component('Results', require('./pages/Results.vue')),
+                            beforeEnter: function(to, from, next) {
+                                if(to.params.id !== "undefined") {
+                                    next();
+                                }
+                            },
                             meta: {
-                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
+                                isElectionPage: true
                             }
                         },
                         {
-                            path: 'add',
-                            name: 'Add Incident',
-                            component: Vue.component('AddIncident', require('./components/incidents/AddIncident.vue')),
-                            beforeEnter: requireAuth,
-                            meta: {
-                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
-                            }
-                        }
-                    ]
-                },
-                {
-                    path: 'results',
-                    name: 'Results',
-                    component: Vue.component('Results', require('./pages/Results.vue'))
-                },
-                {
-                    path: 'pictures',
-                    component: Vue.component('Pictures', require('./pages/Pictures.vue')),
-                    children: [
-                        {
-                            path: '',
-                            name: 'Pictures',
-                            component: Vue.component('BrowsePictures', require('./components/pictures/BrowsePictures.vue'))
-                        },
-                        {
-                            path: 'edit/:pictureId',
-                            name: 'Edit Picture',
-                            component: Vue.component('EditPicture', require('./components/pictures/EditPicture.vue')),
-                            beforeEnter: requireAuth,
-                            meta: {
-                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
-                            }
-                        },
-                        {
-                            path: 'add',
-                            name: 'Add Picture',
-                            component: Vue.component('AddPicture', require('./components/pictures/AddPicture.vue')),
-                            beforeEnter: requireAuth,
-                            meta: {
-                                permitted: ['Super-admin', 'Admin', 'Tracking Officer']
-                            }
+                            path: 'pictures',
+                            component: Vue.component('Pictures', require('./pages/Pictures.vue')),
+                            beforeEnter: function(to, from, next) {
+                                if(to.params.id !== "undefined") {
+                                    next();
+                                }
+                            },
+                            children: [
+                                {
+                                    path: '',
+                                    name: 'Pictures',
+                                    component: Vue.component('BrowsePictures', require('./components/pictures/BrowsePictures.vue')),
+                                    meta: {
+                                        isElectionPage: true
+                                    }
+                                },
+                                {
+                                    path: 'edit/:pictureId',
+                                    name: 'Edit Picture',
+                                    component: Vue.component('EditPicture', require('./components/pictures/EditPicture.vue')),
+                                    beforeEnter: requireAuth,
+                                    meta: {
+                                        permitted: ['Super-admin', 'Admin', 'Tracking Officer'],
+                                        isElectionPage: true
+                                    }
+                                },
+                                {
+                                    path: 'add',
+                                    name: 'Add Picture',
+                                    component: Vue.component('AddPicture', require('./components/pictures/AddPicture.vue')),
+                                    beforeEnter: requireAuth,
+                                    meta: {
+                                        permitted: ['Super-admin', 'Admin', 'Tracking Officer'],
+                                        isElectionPage: true
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
