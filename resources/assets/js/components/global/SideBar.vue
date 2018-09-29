@@ -52,12 +52,12 @@
                     </a>
                 </li>
 
-                <li @click="updateActivePage('home')" class="nav-item" :class="{ 'active': active_pages.home.is_active }">
+                <!--<li @click="updateActivePage('home')" class="nav-item" :class="{ 'active': active_pages.home.is_active }">
                     <router-link class="nav-link" to='/'>
                         <i class="material-icons">home</i>
                         <p>Home</p>
                     </router-link>
-                </li>
+                </li>-->
 
                 <!-- the chunk below will be visible only when an election is not being monitored -->
                 <div v-if="$route.meta.isElectionPage">
@@ -110,6 +110,7 @@
                 </div>
                 <!-- then end of the chunk only related to elections' pages -->
 
+                <div v-if="!$route.meta.isElectionPage">
                 <li @click="updateActivePage('elections')" class="nav-item" :class="{ 'active': active_pages.elections.is_active }">
                     <router-link class="nav-link" to='/elections'>
                         <i class="material-icons">
@@ -160,6 +161,7 @@
                         </ul>
                     </div>
                 </li>
+                </div>
                 <!-- /End Administrative Chunk -->
             <!-- your sidebar here -->
             </ul>

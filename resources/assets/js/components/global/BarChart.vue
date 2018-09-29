@@ -15,7 +15,7 @@
             <div id="barChart" class="ct-chart"></div>
         </div>
     </div>
-</template>
+</template> 
 <script>
     export default {
         props: {
