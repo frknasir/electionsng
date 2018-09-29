@@ -60,7 +60,7 @@
             Timeline,
         },
         data() {
-            return {
+            return { 
                 active_component: 'map',
                 map_active: true,
                 timeline_active: false,
@@ -81,7 +81,9 @@
             }
         },
         created() {
-
+            this.$store.dispatch("getElection", {
+                id: this.$route.params.id
+            });
         },
         methods: {
             toggleComponent(component) {

@@ -36,6 +36,17 @@
             IncidentMetrics,
             ResultMetrics
         },
+        data() {
+            return {
+
+            }
+        },
+        created() {
+
+        },
+        mounted() {
+
+        },
         computed: {
             election() {
                 return this.$store.getters.getElection;
@@ -43,6 +54,9 @@
             electionLoadStatus() {
                 return this.$store.getters.getElectionLoadStatus;
             }
+        },
+        methods: {
+            
         }
     }
 </script>

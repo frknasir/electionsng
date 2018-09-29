@@ -3,7 +3,7 @@
 </style>
 <template>
     <div>
-        <div class="card card-stats col-md-6 offset-3">
+        <div class="card card-stats mx-auto">
             <div class="card-header card-header-warning card-header-icon">
                 <div class="card-icon">
                 <i class="material-icons">group</i>

@@ -84,7 +84,9 @@
 
         },
         created() {
- 
+            this.$store.dispatch("getElection", {
+                id: this.$route.params.id
+            });
         },
         methods: {
             toggleComponent(component) {
