@@ -8,11 +8,12 @@
                 <i class="material-icons">insert_chart</i>
             </div>
             <h4 class="card-title">Locations With Most Updates
-                <small>- Bar Chart</small>
+                <small></small>
             </h4>
         </div>
         <div class="card-body">
-            <line-chart :data="chartData" :download="true"></line-chart>
+            <line-chart :messages="{empty: 'No data'}" :data="'/api/v1/election/'+election.id+'/viz/location/mostUpdates'" 
+            height="460px" :refresh="60"></line-chart>
         </div>
     </div>
 </template>
@@ -20,7 +21,7 @@
     export default {
         data() {
             return {
-                chartData: [["Jan", 4], ["Feb", 2], ["Mar", 10], ["Apr", 5], ["May", 3]]
+                
             }
         },
         created() {
@@ -30,7 +31,9 @@
 
         },
         computed: {
-
+            election() {
+                return this.$store.getters.getElection;
+            }
         },
         methods: {
 

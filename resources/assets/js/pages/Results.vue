@@ -99,10 +99,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body ">
+                <div class="card-body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="browse-results">
-                            <browse-results :election_id="''"></browse-results>
+                            <browse-results></browse-results>
                         </div>
                     </div>
                 </div>

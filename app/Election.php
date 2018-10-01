@@ -23,7 +23,7 @@ class Election extends Model
     public $incrementing = false;
 
     /**
-     * Eloquent Relationships
+     * Eloquent Relationships 
      */
     public function user() {
         return $this->belongsTo(User::class, 'added_by');
@@ -38,7 +38,7 @@ class Election extends Model
     }
 
     public function candidates() {
-        return $this->hasMany(Candidate::class);
+        return $this->hasMany(Candidate::class); 
     }
 
     public function liveUpdates() {

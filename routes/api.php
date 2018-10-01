@@ -448,6 +448,34 @@ Route::group(['prefix'=> 'v1'], function() {
   /**
    * end picture routes
    */
+
+
+   /**
+    * Viz Routes
+    */
+    #get data for the heatmap in dashboard page
+    Route::get(
+      '/election/{electionId}/viz/heatMap/{type}',
+      'VizController@getHeatMapData'
+    );
+
+    #get data for locations with most incidents
+    Route::get(
+      '/election/{electionId}/viz/location/mostIncidents',
+      'VizController@getLocMostIncidentsData'
+    );
+
+    #get data for locations with most updates
+    Route::get(
+      '/election/{electionId}/viz/location/mostUpdates',
+      'VizController@getLocMostUpdatesData'
+    );
+
+    #get data for final results
+    Route::get(
+      '/election/{electionId}/viz/finalResults',
+      'VizController@getFinalResultsData'
+    );
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

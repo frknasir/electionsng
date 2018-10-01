@@ -13,8 +13,14 @@
                     <div class="card-icon">
                         <i class="material-icons">layerst</i>
                     </div>
-                    <h4 class="card-title"> Live Results
-                        <small>- Heat Map</small>
+                    <h4 class="card-title"> HeatMap
+                        <small>
+                            <select class="form-control" name="" id="">
+                                <option value="">Incidents</option>
+                                <option value="">Updates</option>
+                                <option value="">Results</option>
+                            </select>
+                        </small>
                     </h4>
                 </div>
                 <div class="card-body">

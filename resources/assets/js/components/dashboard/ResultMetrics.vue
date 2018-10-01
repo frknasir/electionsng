@@ -12,7 +12,8 @@
             </h4>
         </div>
         <div class="card-body">
-            <bar-chart :messages="{empty: 'No data'}" :data="chartData"></bar-chart>
+            <bar-chart :messages="{empty: 'No data'}" :data="'/api/v1/election/'+election.id+'/viz/finalResults'"
+            height="460px" :refresh="60"></bar-chart>
         </div>
     </div>
 </template>
@@ -20,7 +21,7 @@
     export default {
         data() {
             return {
-                chartData: [["APC", 4], ["PDP", 2], ["APGA", 10], ["SDP", 5], ["SSD", 3]]
+                
             }
         },
         created() {
@@ -30,7 +31,9 @@
 
         },
         computed: {
-
+            election() {
+                return this.$store.getters.getElection;
+            }
         },
         methods: {
 
