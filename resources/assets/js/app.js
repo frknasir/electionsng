@@ -10,6 +10,15 @@ require('./bootstrap');
 window.Vue = require('vue');
 import router from './routes.js';
 import store from './store.js';
+
+//https://www.npmjs.com/package/vue-chartkick
+//https://chartkick.com/vue
+import VueChartkick from 'vue-chartkick';
+
+//https://www.npmjs.com/package/highcharts
+import Highcharts from 'highcharts';
+
+//https://www.npmjs.com/package/vue-router-back-button
 import { writeHistory } from 'vue-router-back-button';
 //export const EventBus = new Vue();
 
@@ -26,6 +35,9 @@ const app = new Vue({
 });*/
 
 router.afterEach(writeHistory);
+
+//https://www.npmjs.com/package/vue-chartkick
+Vue.use(VueChartkick, {adapter: Highcharts});
 
 new Vue({
     router,

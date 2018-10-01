@@ -34,10 +34,9 @@
             <incident-metrics></incident-metrics>
             <!-- /Incident Metrics -->
 
-            <!-- Result Metrics -->
+            <!-- Final Result Metrics -->
             <result-metrics></result-metrics>
-            <!-- /Result Metrics -->
-            
+            <!-- /Final Result Metrics -->
         </div>
     </div>
 </template>
@@ -56,7 +55,7 @@
         },
         data() {
             return {
-
+                
             }
         },
         created() {

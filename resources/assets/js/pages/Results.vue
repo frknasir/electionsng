@@ -4,30 +4,6 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            
-            <div class="card card-nav-tabs">
-                <div class="card-header card-header-success">
-                    <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
-                    <div class="nav-tabs-navigation">
-                        <div class="nav-tabs-wrapper">
-                            <ul class="nav nav-tabs" data-tabs="tabs">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#browse-results" data-toggle="tab">
-                                        Browse Results
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body ">
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="browse-results">
-                            <browse-results :election_id="''"></browse-results>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row">
                 <div v-if="election.election_type_id == 1" class="col-lg-3 col-md-6 col-sm-6">
@@ -107,7 +83,30 @@
                     </div>
                 </div>
             </div>
-
+            
+            <div class="card card-nav-tabs">
+                <div class="card-header card-header-success">
+                    <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <ul class="nav nav-tabs" data-tabs="tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#browse-results" data-toggle="tab">
+                                        Browse Results
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body ">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="browse-results">
+                            <browse-results :election_id="''"></browse-results>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -125,7 +124,7 @@
         },
         created() {
             this.$store.dispatch('getCollationStats', {
-                election_id: this.election.id
+                election_id: this.$route.params.id
             });
         },
         computed: {

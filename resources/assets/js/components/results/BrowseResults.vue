@@ -158,6 +158,8 @@
                 </tr>
             </tbody>
         </table>
+
+        <bar-chart height="460px" :title="forr.location_name" xtitle="Candidates" ytitle="Votes" :messages="{empty: 'No data'}" :data="chartData"></bar-chart>
     </div>
 </template>
 <script>
@@ -165,6 +167,10 @@
         mounted() {
         },
         created() {
+            this.$store.dispatch("getElection", {
+                id: this.$route.params.id
+            });
+
             this.$store.dispatch('getFinalResults', {
                 id: this.$route.params.id
             });
@@ -175,7 +181,8 @@
                 state_slct: null,
                 lg_slct: null,
                 ra_slct: null,
-                pu_slct: null
+                pu_slct: null,
+                chartData: [["APC", 4], ["PDP", 2], ["APGA", 10], ["SDP", 5], ["SSD", 3]]
             }
         },
         watch: {
@@ -210,6 +217,9 @@
         computed: {
             election() {
                 return this.$store.getters.getElection;
+            },
+            electionLoadStatus() {
+                return this.$store.getters.getElectionLoadStatus;
             },
             results() {
                 return this.$store.getters.getResults;

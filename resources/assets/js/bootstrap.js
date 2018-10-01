@@ -3,7 +3,6 @@ window.Popper = require('popper.js').default;
 window.L = require('leaflet');
 require('leaflet.markercluster');
 require('leaflet.heat');
-window.Chartist = require('chartist');
 
 //https://ckeditor.com/ckeditor-5/#classic
 window.ClassicEditor = require('@ckeditor/ckeditor5-build-classic');
