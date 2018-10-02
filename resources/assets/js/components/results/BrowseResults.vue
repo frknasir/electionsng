@@ -42,7 +42,8 @@
 		td:nth-of-type(1):before { content: "Id: "; }
 		td:nth-of-type(2):before { content: "Party: "; }
 		td:nth-of-type(3):before { content: "Candidate: "; }
-		td:nth-of-type(4):before { content: "Votes: "; }
+		td:nth-of-type(4):before { content: "Votes: "; } 
+        td:nth-of-type(5):before { content: "Actions: "; }
 	}
 </style>
 <template>
@@ -143,10 +144,11 @@
         <table id="final-results-dt" class="table table-success table-striped table-bordered">
             <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Party</th>
-                    <th>Candidate</th>
-                    <th>Votes</th>
+                    <th role="columnheader">Id</th>
+                    <th role="columnheader">Party</th>
+                    <th role="columnheader">Candidate</th>
+                    <th role="columnheader">Votes</th>
+                    <th role="columnheader" v-if="userLoadStatus == 2 && user != {}">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -155,16 +157,122 @@
                     <td>{{ result.party }}</td>
                     <td>{{ result.candidate_name }}</td>
                     <td>{{ result.votes }}</td>
+                    <td v-if="userLoadStatus == 2 && user != {}" class="td-actions">
+                        <button v-if="result.votes !== 'Not Available'" rel="tooltip" class="btn btn-success" 
+                            data-toggle="modal" data-target="#updateResultModal" 
+                            :data-id="result.id" :data-votes="result.votes" 
+                            :data-party="result.party">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button v-else rel="tooltip" class="btn btn-success" 
+                            data-toggle="modal" data-target="#addResultModal"
+                            :data-locationid="result.location_id" :data-locationtype="result.location_type" 
+                            :data-partyid="result.party_id" :data-party="result.party">
+                            <i class="material-icons">add</i>
+                        </button>
+                        <button @click="deleteResult(result.id)" type="button" rel="tooltip" class="btn btn-danger">
+                            <i class="material-icons">close</i>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
 
-        <bar-chart height="460px" :title="forr.location_name" xtitle="Candidates" ytitle="Votes" :messages="{empty: 'No data'}" :data="chartData"></bar-chart>
+        <bar-chart height="460px" :title="forr.location_name" xtitle="Candidates" 
+        ytitle="Votes" :messages="{empty: 'No data'}" :data="chartData"></bar-chart>
+    
+        <!-- Add Result Modal -->
+        <!-- Modal -->
+        <div class="modal fade" id="addResultModal" tabindex="-1" role="dialog" 
+            aria-labelledby="addResultModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateResultModalLabel">
+                            Add Result <br>
+                            <small>
+                                {{ forr.location_type + forr.location_name }}
+                            </small>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label>Political Party</label>
+                                <input type="text" class="form-control" 
+                                    id="add-result-party" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Votes</label>
+                                <input v-model="new_result.votes" type="number" class="form-control" 
+                                    id="add-result-votes" placeholder="votes">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button @click="addResult(new_result)" type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /End Add Result Modal -->
+
+        <!-- Update Result Modal -->
+        <div class="modal fade" id="updateResultModal" tabindex="-1" role="dialog" 
+            aria-labelledby="updateResultModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateResultModalLabel">
+                            Update Result <br>
+                            <small>
+                                {{ forr.location_type + forr.location_name }}
+                            </small>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label>Political Party</label>
+                                <input type="text" class="form-control" 
+                                    id="update-result-party" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Votes</label>
+                                <input v-model="edit_result.votes" type="number" class="form-control" 
+                                    id="update-result-votes" placeholder="votes">
+                            </div>
+                            <input v-model="edit_result.id" type="hidden" id="update-result-id">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button @click="updateResult(edit_result)" type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /End Result Modal -->
+    
+    
+    
     </div>
 </template>
 <script>
     export default {
         mounted() {
+            let vm = this;
+            vm.$nextTick(function() {
+                vm.initUpdateResultModal();
+                vm.initAddResultModal();
+            })
         },
         created() {
             this.$store.dispatch("getElection", {
@@ -177,6 +285,18 @@
         },
         data() {
             return {
+                new_result: {
+                    political_party_id: '',
+                    election_id: this.$route.params.id,
+                    location_id: '',
+                    location_type: '',
+                    votes: ''
+                },
+                edit_result: {
+                    id: '',
+                    votes: ''
+                },
+                result_type: 'normal',
                 location_type: null,
                 state_slct: null,
                 lg_slct: null,
@@ -298,6 +418,54 @@
                         });
                         break;
                 }
+            },
+            initAddResultModal() {
+                let vm = this;
+                $('#addResultModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget) // Button that triggered the modal
+                    var location_id = button.data('locationid') // Extract info from data-* attributes
+                    var location_type = button.data('locationtype')
+                    var party_id = button.data('partyid')
+                    var party = button.data('party')
+                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                    var modal = $(this)
+
+                    modal.find('#add-result-party').val(party)
+                    vm.new_result.political_party_id = party_id;
+
+                    if(!location_id && !location_type) {
+                        vm.result_type = 'final';
+                    } else {
+                        vm.new_result.location_id = location_id;
+                        vm.new_result.location_type = location_type;
+                    }
+                })
+            },
+            initUpdateResultModal() {
+                let vm = this;
+                $('#updateResultModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget) // Button that triggered the modal
+                    var id = button.data('id') // Extract info from data-* attributes
+                    var votes = button.data('votes')
+                    votes = votes.replace(',', '')
+                    var party = button.data('party')
+                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                    var modal = $(this)
+
+                    modal.find('#update-result-party').val(party)
+                    vm.edit_result.id = id;
+                    vm.edit_result.votes = parseInt(votes);
+                })
+            },
+            addResult(result) {
+                console.log(JSON.stringify(result));
+                console.log(this.result_type);
+            },
+            updateResult(result) {
+                console.log(JSON.stringify(result));
+                console.log(this.result_type);
             }
         }
     }

@@ -28,7 +28,7 @@ class VizController extends Controller
                         $d = array();
                         array_push($d, $value['location']['latitude']);
                         array_push($d, $value['location']['longitude']);
-                        array_push($d, $value['votes']);
+                        array_push($d, 10);
                         array_push($data, $d); 
                     }
                 }

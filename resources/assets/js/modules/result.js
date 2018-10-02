@@ -8,7 +8,7 @@
 import ResultAPI from '../api/result.js';
 import FinalResultAPI from '../api/finalResult.js';
 
-export const result = {
+export const result = { 
     
     state: {
         results: [],
@@ -27,11 +27,17 @@ export const result = {
         },
         collationStatsLoadStatus: 0,
         addResultLoadStatus: 0,
+        addResultResponse: {},
         updateResultLoadStatus: 0,
+        updateResultResponse: {},
         deleteResultLoadStatus: 0,
+        deleteResultResponse: {},
         addFinalResultLoadStatus: 0,
+        addFinalResultResponse: {},
         updateFinalResultLoadStatus: 0,
-        deleteFinalResultLoadStatus: 0
+        updateFinalResultResponse: {},
+        deleteFinalResultLoadStatus: 0,
+        deleteFinalResultResponse: {}
     },
 
     actions: {
@@ -153,13 +159,16 @@ export const result = {
                 data.election_id,
                 data.location_id,
                 data.location_type,
-                data.votes,
-                data.added_by,
-                data.updated_by
+                data.votes
             ).then(function(response) {
                 commit('setAddResultLoadStatus', 2);
+                commit('setAddResultResponse', response.data);
             }).catch(function() {
                 commit('setAddResultLoadStatus', 3);
+                commit('setÀddResultResponse', {
+                    success: 0,
+                    message: 'Something went wrong. Try again'
+                });
             });
         },
 
@@ -172,8 +181,13 @@ export const result = {
                 data.updated_by
             ).then(function(response) {
                 commit('setUpdateResultLoadStatus', 2);
+                commit('setUpdateResultResponse', response.data);
             }).catch(function() {
                 commit('setUpdateResultLoadStatus', 3);
+                commit('setUpdateResultResponse', {
+                    success: 0,
+                    message: 'Something went wrong. Try again'
+                });
             });
         },
 
@@ -184,8 +198,10 @@ export const result = {
                 data.id
             ).then(function(response) {
                 commit('setDeleteResultLoadStatus', 2);
+                commit('setDeleteResultResponse', response.data);
             }).catch(function() {
                 commit('setDeleteResultLoadStatus', 3);
+                commit('setDeleteResultResponse', response.data);
             });
         }, 
 
@@ -220,8 +236,13 @@ export const result = {
                 data.updated_by
             ).then(function(response) {
                 commit('setAddFinalResultLoadStatus', 2);
+                commit('setAddFinalResultResponse', response.data);
             }).catch(function() {
                 commit('setAddFinalResultLoadStatus', 3);
+                commit('setAddFinalResultResponse', {
+                    success: 0,
+                    message: 'Something went wrong. Try again'
+                });
             });
         },
 
@@ -234,8 +255,13 @@ export const result = {
                 data.updated_by
             ).then(function(response) {
                 commit('setUpdateFinalResultLoadStatus', 2);
+                commit('setUpdateFinalResultResponse', response.data);
             }).catch(function() {
                 commit('setUpdateFinalResultLoadStatus', 3);
+                commit('setUpdateFinalResultResponse', {
+                    success: 0,
+                    message: 'Something went wrong. Try again'
+                });
             });
         },
 
@@ -246,8 +272,13 @@ export const result = {
                 data.id
             ).then(function(response) {
                 commit('setDeleteFinalResultLoadStatus', 2);
+                commit('setDeleteFinalResultResponse', response.data);
             }).catch(function() {
                 commit('setDeleteFinalResultLoadStatus', 3);
+                commit('setDeleteFinalResultResponse', {
+                    success: 0,
+                    message: 'Something went wrong. Try again'
+                });
             });
         }
     },
@@ -286,24 +317,48 @@ export const result = {
             state.addResultLoadStatus = status;
         },
 
+        setAddResultResponse(state, response) {
+            state.addResultResponse = response;
+        },
+
         setUpdateResultLoadStatus(state, status) {
             state.updateResultLoadStatus = status;
+        },
+
+        setUpdateResultResponse(state, response) {
+            state.updateResultResponse = response;
         },
 
         setDeleteResultLoadStatus(state, status) {
             state.deleteResultLoadStatus = status;
         },
 
+        setDeleteResultResponse(state, response) {
+            state.deleteResultResponse = response;
+        },
+
         setAddFinalResultLoadStatus(state, status) {
             state.addFinalResultLoadStatus = status;
+        },
+
+        setAddFinalResultResponse(state, response) {
+            state.addFinalResultResponse = response;
         },
 
         setUpdateFinalResultLoadStatus(state, status) {
             state.updateFinalResultLoadStatus = status;
         },
 
+        setUpdateFinalResultResponse(state, response) {
+            state.updateFinalResultResponse = response;
+        },
+
         setDeleteFinalResultLoadStatus(state, status) {
             state.deleteFinalResultLoadStatus = status;
+        },
+
+        setDeleteFinalResultResponse(state, response) {
+            state.deleteFinalResultResponse = response;
         }
     },
 
@@ -340,24 +395,48 @@ export const result = {
             return state.addResultLoadStatus;
         },
 
+        getAddResultResponse(state) {
+            return state.addResultResponse;
+        },
+
         getUpdateResultLoadStatus(state) {
             return state.updateResultLoadStatus;
+        },
+
+        getUpdateResultResponse(state) {
+            return state.updateResultResponse;
         },
 
         getDeleteResultLoadStatus(state) {
             return state.deleteResultLoadStatus;
         },
 
+        getDeleteResultResponse(state) {
+            return state.deleteResultResponse;
+        },
+
         getAddFinalResultLoadStatus(state) {
             return state.addFinalResultLoadStatus;
+        },
+
+        getAddFinalResultResponse(state) {
+            return state.addFinalResultResponse;
         },
 
         getUpdateFinalResultLoadStatus(state) {
             return state.updateFinalResultLoadStatus;
         },
 
+        getUpdateFinalResultResponse(state) {
+            return state.updateFinalResultResponse;
+        },
+
         getDeleteFinalResultLoadStatus(state) {
             return state.deleteFinalResultLoadStatus;
+        },
+
+        getDeleteFinalResultResponse(state) {
+            return state.deleteFinalResultResponse;
         }
     }
 };

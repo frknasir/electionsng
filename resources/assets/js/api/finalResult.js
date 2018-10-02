@@ -3,7 +3,7 @@
 */
 import { CONFIG } from '../config.js';
 
-export default {
+export default { 
     /***
      * GET /api/v1/election/{election_id}/finalResults
      */

@@ -15,7 +15,7 @@ export default {
             '/state/' +
             stateId +
             '/results'
-        );
+        ); 
     },
 
     /* *
