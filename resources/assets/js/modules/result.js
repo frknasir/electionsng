@@ -155,8 +155,7 @@ export const result = {
             commit('setAddResultLoadStatus', 1);
 
             ResultAPI.addResult(
-                data.political_party_id,
-                data.election_id,
+                data.candidate_id,
                 data.location_id,
                 data.location_type,
                 data.votes
@@ -177,8 +176,7 @@ export const result = {
 
             ResultAPI.updateResult(
                 data.id,
-                data.votes,
-                data.updated_by
+                data.votes
             ).then(function(response) {
                 commit('setUpdateResultLoadStatus', 2);
                 commit('setUpdateResultResponse', response.data);
@@ -231,9 +229,7 @@ export const result = {
 
             FinalResultAPI.addFinalResult(
                 data.candidate_id,
-                data.votes,
-                data.added_by,
-                data.updated_by
+                data.votes
             ).then(function(response) {
                 commit('setAddFinalResultLoadStatus', 2);
                 commit('setAddFinalResultResponse', response.data);
@@ -251,8 +247,7 @@ export const result = {
 
             FinalResultAPI.updateFinalResult(
                 data.id,
-                data.votes,
-                data.updated_by
+                data.votes
             ).then(function(response) {
                 commit('setUpdateFinalResultLoadStatus', 2);
                 commit('setUpdateFinalResultResponse', response.data);

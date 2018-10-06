@@ -13,7 +13,7 @@
         </div>
         <div class="card-body">
             <line-chart :messages="{empty: 'No data'}" :data="'/api/v1/election/'+election.id+'/viz/location/mostUpdates'" 
-            height="460px" :refresh="60"></line-chart>
+            height="460px"></line-chart>
         </div>
     </div>
 </template>

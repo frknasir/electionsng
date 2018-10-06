@@ -78,22 +78,16 @@ export default {
      * POST  /api/v1/result
     */
     addResult: function ( 
-        political_party_id, 
-        election_id, 
+        candidate_id, 
         location_id,
         location_type,
-        votes,
-        added_by,
-        updated_by 
+        votes 
     ) {
         return axios.post( CONFIG.API_URL + '/result', {
-            political_party_id: political_party_id,
-            election_id: election_id,
+            candidate_id: candidate_id,
             location_id: location_id,
             location_type: location_type,
-            votes: votes,
-            added_by: added_by,
-            updated_by: updated_by
+            votes: votes
         });
     },
 
@@ -102,13 +96,11 @@ export default {
      */
     updateResult: function ( 
         id,
-        votes,
-        updated_by 
+        votes
     ) {
         return axios.put( CONFIG.API_URL + '/result', {
             id: id,
-            votes: votes,
-            updated_by: updated_by
+            votes: votes
         });
     },
 
@@ -119,7 +111,9 @@ export default {
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/result', {
-            id: id
+            params: {
+                id: id
+            }
         });
     }
 };

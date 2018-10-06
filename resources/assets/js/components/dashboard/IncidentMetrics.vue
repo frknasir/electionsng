@@ -13,7 +13,7 @@
         </div>
         <div class="card-body">
             <column-chart :messages="{empty: 'No data'}" :data="'/api/v1/election/'+election.id+'/viz/location/mostIncidents'"
-            height="460px" :refresh="60"></column-chart>
+            height="460px"></column-chart>
         </div>
     </div>
 </template>

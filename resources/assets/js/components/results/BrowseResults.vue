@@ -214,7 +214,9 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button @click="addResult(new_result)" type="button" class="btn btn-primary">Save changes</button>
+                        <button @click="addResult(new_result)" type="button" class="btn btn-primary">
+                            Save
+                        </button>
                     </div>
                 </div>
             </div>
@@ -266,7 +268,54 @@
     </div>
 </template>
 <script>
+    import { HELPERS } from '../../helpers.js';
+
     export default {
+        data() {
+            return {
+                new_result: {
+                    candidate_id: '',
+                    election_id: this.$route.params.id,
+                    location_id: '',
+                    location_type: '',
+                    votes: ''
+                },
+                edit_result: {
+                    id: '',
+                    votes: ''
+                },
+                HF: HELPERS,
+                validations: {
+                    id: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    candidate_id: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    location_id: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    location_type: {
+                        is_valid: true,
+                        text: ''
+                    },
+                    votes: {
+                        is_valid: true,
+                        text: ''
+                    }
+                },
+                result_type: 'normal',
+                location_type: null,
+                state_slct: null,
+                lg_slct: null,
+                ra_slct: null,
+                pu_slct: null,
+                chartData: [["APC", 4], ["PDP", 2], ["APGA", 10], ["SDP", 5], ["SSD", 3]]
+            }
+        },
         mounted() {
             let vm = this;
             vm.$nextTick(function() {
@@ -282,28 +331,6 @@
             this.$store.dispatch('getFinalResults', {
                 id: this.$route.params.id
             });
-        },
-        data() {
-            return {
-                new_result: {
-                    political_party_id: '',
-                    election_id: this.$route.params.id,
-                    location_id: '',
-                    location_type: '',
-                    votes: ''
-                },
-                edit_result: {
-                    id: '',
-                    votes: ''
-                },
-                result_type: 'normal',
-                location_type: null,
-                state_slct: null,
-                lg_slct: null,
-                ra_slct: null,
-                pu_slct: null,
-                chartData: [["APC", 4], ["PDP", 2], ["APGA", 10], ["SDP", 5], ["SSD", 3]]
-            }
         },
         watch: {
             location_type: function() {
@@ -333,6 +360,92 @@
                     id: this.ra_slct
                 })
             },
+
+            addResultLoadStatus: function(val) {
+                let vm = this;
+                if(val == 3 && vm.addResultResponse.success == 0) {
+                    vm.show_form = true;
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.addResultResponse.message, 
+                        'danger'
+                    );
+                } else if(val == 2 && vm.addResultResponse.success == 1) {
+                    $('#addResultModal').modal('hide');
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.addResultResponse.message, 
+                        'success'
+                    );
+
+                    vm.getResults(vm.location_type);
+                } 
+            },
+            
+            addFinalResultLoadStatus: function(val) {
+                let vm = this;
+                if(val == 3 && vm.addFinalResultResponse.success == 0) {
+                    vm.show_form = true;
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.addFinalResultResponse.message, 
+                        'danger'
+                    );
+                } else if(val == 2 && vm.addFinalResultResponse.success == 1) {
+                    $('#addFinalResultModal').modal('hide');
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.addFinalResultResponse.message, 
+                        'success'
+                    );
+
+                    this.$store.dispatch('getFinalResults', {
+                        id: this.$route.params.id
+                    });
+                } 
+            },
+
+            updateResultLoadStatus: function() {
+                let vm = this;
+                if(vm.updateResultLoadStatus == 3 && vm.updateResultResponse.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.updateResultResponse.message, 
+                        'danger'
+                    );
+                } else if(vm.updateResultLoadStatus == 2 && vm.updateResultResponse.success == 1) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.updateResultResponse.message, 
+                        'success'
+                    );
+                } 
+            },
+
+            updateFinalResultStatus: function() {
+                let vm = this;
+                if(vm.updateFinalResultStatus == 3 && vm.updateFinalResultResponse.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.updateFinalResultResponse.message, 
+                        'danger'
+                    );
+                } else if(vm.updateFinalResultStatus == 2 && vm.updateFinalResultResponse.success == 1) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.updateFinalResultResponse.message, 
+                        'success'
+                    );
+                } 
+            }
         },
         computed: {
             election() {
@@ -379,6 +492,24 @@
             },
             userLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
+            },
+            addResultLoadStatus() {
+                return this.$store.getters.getAddResultLoadStatus;
+            },
+            addResultResponse() {
+                return this.$store.getters.getAddResultResponse;
+            },
+            updateResultLoadStatus() {
+                return this.$store.getters.getUpdateResultLoadStatus;
+            },
+            updateResultResponse() {
+                return this.$store.getters.getUpdateResultResponse;
+            },
+            deleteResultResponse() {
+                return this.$store.getters.getDeleteResultResponse;
+            },
+            addFinalResultLoadStatus() {
+                return this.$store.getters.getAddFinalResultLoadStatus;
             }
         },
         methods: {
@@ -432,7 +563,7 @@
                     var modal = $(this)
 
                     modal.find('#add-result-party').val(party)
-                    vm.new_result.political_party_id = party_id;
+                    vm.new_result.candidate_id = party_id;
 
                     if(!location_id && !location_type) {
                         vm.result_type = 'final';
@@ -459,13 +590,89 @@
                     vm.edit_result.votes = parseInt(votes);
                 })
             },
+            validateResult(result) {
+                let validResult = true;
+                let validations = this.validations;
+
+                if(!result.candidate_id) {
+                    validResult = false;
+                    validations.candidate_id.is_valid = false;
+                    validations.candidate_id.text = "candidate id can not be empty";
+                }
+
+                if(!result.location_id) {
+                    validResult = false;
+                    validations.location_id.is_valid = false;
+                    validations.location_id.text = "location id can not be empty";
+                }
+
+                if(!result.location_type) {
+                    validResult = false;
+                    validations.location_type.is_valid = false;
+                    validations.location_type.text = "location type can not be empty";
+                }
+
+                if(!result.votes) {
+                    validResult = false;
+                    validations.location_type.is_valid = false;
+                    validations.location_type.text = "votes can not be empty"
+                }
+
+                return validResult;
+            },
+            validateFinalResult(result) {
+                let validResult = true;
+                let validations = this.validations;
+
+                if(!result.candidate_id) {
+                    validResult = false;
+                    validations.candidate_id.is_valid = false;
+                    validations.candidate_id.text = "candidate id can not be empty";
+                }
+
+                if(!result.votes) {
+                    validResult = false;
+                    validations.location_type.is_valid = false;
+                    validations.location_type.text = "votes can not be empty"
+                }
+
+                return validResult;
+            },
             addResult(result) {
-                console.log(JSON.stringify(result));
-                console.log(this.result_type);
+                switch (this.result_type) {
+                    case 'normal':
+                        if(this.validateResult(result)) {
+                            this.$store.dispatch('addResult', result);
+                        }
+                        break;
+
+                    case 'final':
+                        if(this.validateFinalResult(result)) {
+                            this.$store.dispatch('addFinalResult', result);
+                        }
+                        break;
+                
+                    default:
+                        break;
+                }
             },
             updateResult(result) {
-                console.log(JSON.stringify(result));
-                console.log(this.result_type);
+                if(this.location_type == null) {
+                    //this is a final result
+                    this.$store.dispatch('updateFinalResult', result)
+                } else {
+                    //this is not a final result
+                    this.$store.dispatch('updateResult', result);
+                }
+            },
+            deleteResult(id) {
+                if(this.location_type == null && confirm('are you sure?')) {
+                    //this is a final result
+                    this.$store.dispatch('deleteFinalResult', id)
+                } else if(this.location_type != null && confirm('are you sure?')) {
+                    //this is not a final result
+                    this.$store.dispatch('deleteResult', id)
+                }
             }
         }
     }

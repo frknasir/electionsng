@@ -21,15 +21,11 @@ export default {
     */
     addFinalResult: function ( 
         candidate_id,
-        votes,
-        added_by,
-        updated_by 
+        votes 
     ) {
         return axios.post( CONFIG.API_URL + '/finalResult', {
             candidate_id: candidate_id,
-            votes: votes,
-            added_by: added_by,
-            updated_by: updated_by
+            votes: votes
         });
     },
 
@@ -38,13 +34,11 @@ export default {
      */
     updateFinalResult: function ( 
         id,
-        votes,
-        updated_by 
+        votes
     ) {
         return axios.put( CONFIG.API_URL + '/finalResult', {
             id: id,
-            votes: votes,
-            updated_by: updated_by
+            votes: votes
         });
     },
 
@@ -55,7 +49,9 @@ export default {
         id
     ) {
         return axios.delete( CONFIG.API_URL + '/finalResult', {
-            id: id
+            params: {
+                id: id 
+            }
         });
     }
 };
