@@ -425,6 +425,8 @@
                         vm.updateResultResponse.message, 
                         'success'
                     );
+
+                    vm.getResults(vm.location_type);
                 } 
             },
 
@@ -444,6 +446,56 @@
                         vm.updateFinalResultResponse.message, 
                         'success'
                     );
+
+                    this.$store.dispatch('getFinalResults', {
+                        id: this.$route.params.id
+                    });
+                } 
+            },
+
+            deleteResultLoadStatus: function() {
+                let vm = this;
+                
+                if(vm.deleteResultLoadStatus == 3 && vm.deleteResultResponse.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteResultResponse.message, 
+                        'danger'
+                    );
+                } else if(vm.deleteResultLoadStatus == 2 && vm.deleteResultResponse.success == 1) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteResultResponse.message, 
+                        'success'
+                    );
+
+                    vm.getResults(vm.location_type);
+                } 
+            },
+
+            deleteFinalResultLoadStatus: function() {
+                let vm = this;
+                
+                if(vm.deleteFinalResultLoadStatus == 3 && vm.deleteFinalResultResponse.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteFinalResultResponse.message, 
+                        'danger'
+                    );
+                } else if(vm.deleteFinalResultLoadStatus == 2 && vm.deleteFinalResultResponse.success == 1) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteFinalResultResponse.message, 
+                        'success'
+                    );
+
+                    this.$store.dispatch('getFinalResults', {
+                        id: this.$route.params.id
+                    });
                 } 
             }
         },
