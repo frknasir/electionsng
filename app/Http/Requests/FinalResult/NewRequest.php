@@ -13,7 +13,7 @@ class NewRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,9 +24,7 @@ class NewRequest extends FormRequest
     public function rules() {
         return [
             'candidate_id' => 'required',
-            'votes' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'votes' => 'required'
         ];
     }
 
@@ -38,9 +36,7 @@ class NewRequest extends FormRequest
     public function messages() {
         return [
             'candidate.required' => 'Candidate id can not be empty',
-            'votes.require' => 'Votes can not be empty',
-            'added_by.required' => 'Who is adding this registration area?',
-            'updated_by.required' => 'Who is updating this registration area?'
+            'votes.require' => 'Votes can not be empty'
         ];
     }
 }

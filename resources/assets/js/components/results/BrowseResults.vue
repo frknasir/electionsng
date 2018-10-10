@@ -164,13 +164,14 @@
                             :data-party="result.party">
                             <i class="material-icons">edit</i>
                         </button>
-                        <button v-else rel="tooltip" class="btn btn-success" 
+                        <button v-if="result.votes === 'Not Available'" rel="tooltip" class="btn btn-success" 
                             data-toggle="modal" data-target="#addResultModal"
                             :data-locationid="result.location_id" :data-locationtype="result.location_type" 
-                            :data-partyid="result.party_id" :data-party="result.party">
+                            :data-partyid="result.party_id" :data-party="result.party" 
+                            :data-candidateid="result.candidate_id">
                             <i class="material-icons">add</i>
                         </button>
-                        <button @click="deleteResult(result.id)" type="button" rel="tooltip" class="btn btn-danger">
+                        <button v-else @click="deleteResult(result.id)" type="button" rel="tooltip" class="btn btn-danger">
                             <i class="material-icons">close</i>
                         </button>
                     </td>
@@ -318,6 +319,7 @@
         },
         mounted() {
             let vm = this;
+
             vm.$nextTick(function() {
                 vm.initUpdateResultModal();
                 vm.initAddResultModal();
@@ -380,6 +382,8 @@
                         'success'
                     );
 
+                    vm.new_result.votes = '';
+
                     vm.getResults(vm.location_type);
                 } 
             },
@@ -395,13 +399,15 @@
                         'danger'
                     );
                 } else if(val == 2 && vm.addFinalResultResponse.success == 1) {
-                    $('#addFinalResultModal').modal('hide');
+                    $('#addResultModal').modal('hide');
                     vm.HF.showNotification(
                         'top', 
                         'center', 
                         vm.addFinalResultResponse.message, 
                         'success'
                     );
+
+                    vm.new_result.votes = '';
 
                     this.$store.dispatch('getFinalResults', {
                         id: this.$route.params.id
@@ -419,6 +425,8 @@
                         'danger'
                     );
                 } else if(vm.updateResultLoadStatus == 2 && vm.updateResultResponse.success == 1) {
+                    $('#updateResultModal').modal('hide');
+
                     vm.HF.showNotification(
                         'top', 
                         'center', 
@@ -430,16 +438,17 @@
                 } 
             },
 
-            updateFinalResultStatus: function() {
+            updateFinalResultLoadStatus: function() {
                 let vm = this;
-                if(vm.updateFinalResultStatus == 3 && vm.updateFinalResultResponse.success == 0) {
+                if(vm.updateFinalResultLoadStatus == 3 && vm.updateFinalResultResponse.success == 0) {
                     vm.HF.showNotification(
                         'top', 
                         'center', 
                         vm.updateFinalResultResponse.message, 
                         'danger'
                     );
-                } else if(vm.updateFinalResultStatus == 2 && vm.updateFinalResultResponse.success == 1) {
+                } else if(vm.updateFinalResultLoadStatus == 2 && vm.updateFinalResultResponse.success == 1) {
+                    $('#updateResultModal').modal('hide');
                     vm.HF.showNotification(
                         'top', 
                         'center', 
@@ -497,6 +506,10 @@
                         id: this.$route.params.id
                     });
                 } 
+            },
+            
+            results: function(val) {
+                this.updateChartData(val);
             }
         },
         computed: {
@@ -557,11 +570,29 @@
             updateResultResponse() {
                 return this.$store.getters.getUpdateResultResponse;
             },
+            deleteResultLoadStatus() {
+                return this.$store.getters.getDeleteResultLoadStatus;
+            },
             deleteResultResponse() {
                 return this.$store.getters.getDeleteResultResponse;
             },
+            updateFinalResultLoadStatus() {
+                return this.$store.getters.getUpdateFinalResultLoadStatus;
+            },
+            updateFinalResultResponse() {
+                return this.$store.getters.getUpdateFinalResultResponse;
+            },
+            deleteFinalResultLoadStatus() {
+                return this.$store.getters.getDeleteFinalResultLoadStatus;
+            },
+            deleteFinalResultResponse() {
+                return this.$store.getters.getDeleteFinalResultResponse;
+            },
             addFinalResultLoadStatus() {
                 return this.$store.getters.getAddFinalResultLoadStatus;
+            },
+            addFinalResultResponse() {
+                return this.$store.getters.getAddFinalResultResponse;
             }
         },
         methods: {
@@ -609,13 +640,14 @@
                     var location_id = button.data('locationid') // Extract info from data-* attributes
                     var location_type = button.data('locationtype')
                     var party_id = button.data('partyid')
+                    var candidate_id = button.data('candidateid');
                     var party = button.data('party')
                     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
                     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
                     var modal = $(this)
 
                     modal.find('#add-result-party').val(party)
-                    vm.new_result.candidate_id = party_id;
+                    vm.new_result.candidate_id = candidate_id;
 
                     if(!location_id && !location_type) {
                         vm.result_type = 'final';
@@ -691,6 +723,7 @@
                 return validResult;
             },
             addResult(result) {
+
                 switch (this.result_type) {
                     case 'normal':
                         if(this.validateResult(result)) {
@@ -720,10 +753,25 @@
             deleteResult(id) {
                 if(this.location_type == null && confirm('are you sure?')) {
                     //this is a final result
-                    this.$store.dispatch('deleteFinalResult', id)
+                    this.$store.dispatch('deleteFinalResult', {
+                        id: id
+                    })
                 } else if(this.location_type != null && confirm('are you sure?')) {
                     //this is not a final result
-                    this.$store.dispatch('deleteResult', id)
+                    this.$store.dispatch('deleteResult', {
+                        id: id
+                    })
+                }
+            },
+            updateChartData(results) {
+                this.chartData = [];
+
+                for(let i = 0; i < results.length; i++) {
+                    let datum = [];
+                    let result = results[i];
+                    datum.push(result.party);
+                    datum.push(result.votes);
+                    this.chartData.push(datum);
                 }
             }
         }

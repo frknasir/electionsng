@@ -215,6 +215,39 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api'], function() {
       'PoliticalPartyController@destroy'
     );
 
+    /**
+     * Result routes
+     */
+    Route::post(
+      '/result',
+      'ResultController@store'
+    );
+
+    Route::put(
+      '/result',
+      'ResultController@update'
+    );
+
+    Route::delete(
+      '/result',
+      'ResultController@destroy'
+    );
+
+    Route::post(
+      '/finalResult',
+      'FinalResultController@store'
+    );
+
+    Route::put(
+      '/finalResult',
+      'FinalResultController@update'
+    );
+
+    Route::delete(
+      '/finalResult',
+      'FinalResultController@destroy'
+    );
+
 });
 
 Route::group(['prefix'=> 'v1'], function() {

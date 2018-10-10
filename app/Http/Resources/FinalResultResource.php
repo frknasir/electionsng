@@ -19,7 +19,7 @@ class FinalResultResource extends JsonResource
         $candidate = Candidate::findOrFail($this->candidate_id);
         $user = ($this->added_by) ? User::findOrFail($this->added_by)->name : NULL;
         $party = $candidate->politicalParty;
-        //return parent::toArray($request); 
+         
         return [
             'id' => $this->id,
             'candidate_id' => $this->candidate_id,

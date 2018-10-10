@@ -10,6 +10,7 @@ use App\Http\Requests\FinalResult\NewRequest;
 use App\Http\Requests\FinalResult\UpdateRequest;
 use App\Http\Requests\FinalResult\DelRequest;
 use DB;
+use Auth;
 
 class FinalResultController extends Controller {
     /**
@@ -55,11 +56,12 @@ class FinalResultController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(NewRequest $request) {
+        $user = Auth::user()->id;
+
         $finalResult = new FinalResult();
         $finalResult->candidate_id = $request->input('candidate_id');
         $finalResult->votes = $request->input('votes');
-        $finalResult->added_by = $request->input('added_by');
-        $finalResult->updated_by = $request->input('updated_by');
+        $finalResult->added_by = $finalResult->updated_by = $user;
 
         if($finalResult->save()) {
             return response()->json([
@@ -97,14 +99,16 @@ class FinalResultController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateRequest $request) {
+        $user = Auth::user()->id;
+
         $finalResult = FinalResult::findOrFail($request->input('id'));
         $finalResult->votes = $request->input('votes');
-        $finalResult->updated_by = $request->input('updated_by');
+        $finalResult->updated_by = $user;
 
         if($finalResult->save()) {
             return response()->json([
                 'success' => 1,
-                'message' => 'result added successfully'
+                'message' => 'result updated successfully'
             ]);
         }
     }

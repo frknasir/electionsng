@@ -13,7 +13,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,8 +24,7 @@ class UpdateRequest extends FormRequest
     public function rules() {
         return [
             'id' => 'required',
-            'votes' => 'required',
-            'updated_by' => 'required'
+            'votes' => 'required'
         ];
     }
 
@@ -37,8 +36,7 @@ class UpdateRequest extends FormRequest
     public function messages() {
         return [
             'id.required' => 'id can not be empty',
-            'votes.required' => 'votes can not be empty',
-            'updated_by.required' => 'Who is updating this registration area?'
+            'votes.required' => 'votes can not be empty'
         ];
     }
 }

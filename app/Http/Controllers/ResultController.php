@@ -15,6 +15,7 @@ use App\Http\Requests\Result\NewRequest;
 use App\Http\Requests\Result\UpdateRequest;
 use App\Http\Requests\Result\DelRequest;
 use DB;
+use Auth;
 
 class ResultController extends Controller {
     /**
@@ -301,14 +302,14 @@ class ResultController extends Controller {
      */
     public function store(NewRequest $request) {
         $result = new Result();
+        $user = Auth::user()->id;
 
         $result->political_party_id = $request->input('political_party_id');
         $result->election_id = $request->input('election_id');
         $result->location_id = $request->input('location_id');
         $result->location_type = $request->input('location_type');
         $result->votes = $request->input('votes');
-        $result->added_by = $request->input('added_by');
-        $result->updated_by = $request->input('updated_by');
+        $result->added_by = $result->updated_by = $user;
 
         if($result->save()) {
             return response()->json([
@@ -347,14 +348,15 @@ class ResultController extends Controller {
      */
     public function update(UpdateRequest $request) {
         $result = Result::findOrFail($request->input('id'));
+        $user = Auth::user()->id;
 
         $result->votes = $request->input('votes');
-        $result->updated_by = $request->input('updated_by');
+        $result->updated_by = $user;
 
         if($result->save()) {
             return response()->json([
                 'success' => 1,
-                'message' => 'result added successfully'
+                'message' => 'result updated successfully'
             ]);
         }
     }

@@ -13,7 +13,7 @@ class NewRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,7 @@ class NewRequest extends FormRequest
      */
     public function rules() {
         return [
-            'political_party_id' => 'required',
-            'election_id' => 'required',
+            'candidate_id' => 'required',
             'location_id' => 'required',
             'location_type' => 'required',
             'votes' => 'required',
@@ -40,8 +39,7 @@ class NewRequest extends FormRequest
      */
     public function messages() {
         return [
-            'political_party_id.required' => 'political party id can not be empty',
-            'election_id.required' => 'election id can not be empty',
+            'candidate_id.required' => 'candidate id can not be empty',
             'location_id.required' => 'location id can not be empty',
             'location_type.required' => 'location type can not be empty',
             'votes' => 'required',
