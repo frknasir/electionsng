@@ -5,59 +5,17 @@ import { CONFIG } from '../config.js';
 
 export default {
     /* *
-    GET /api/v1/election/{election_id}/state/{state_id}/results
+    GET /api/v1/election/{electionId}/{locationType}/{locationId}/results
     */
-    getStateResults: function(electionId, stateId) {
+    getResults: function(electionId, locationType, locationId) {
         return axios.get( 
             CONFIG.API_URL + 
             '/election/'  +
             electionId +
-            '/state/' +
-            stateId +
+            '/' + locationType +
+            '/' + locationId +
             '/results'
         ); 
-    },
-
-    /* *
-    GET /api/v1/election/{election_id}/localGovernment/{local_government_id}/liveUpdates
-    */
-    getLocalGovernmentResults: function(electionId, localGovernmentId) {
-        return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/localGovernment/' +
-            localGovernmentId +
-            '/results'
-        );
-    },
-
-    /* *
-    GET /api/v1/election/{election_id}/registrationArea/{registration_area_id}/results
-    */
-    getRegistrationAreaResults: function(electionId, registrationAreaId) {
-        return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/registrationArea/' +
-            registrationAreaId +
-            '/results'
-        );
-    },
-
-    /* *
-    GET /api/v1/election/{election_id}/pollingUnit/{polling_unit_id}/results
-    */
-    getPollingUnitResults: function(electionId, pollingUnitId) {
-        return axios.get( 
-            CONFIG.API_URL + 
-            '/election/'  +
-            electionId +
-            '/pollingUnit/' +
-            pollingUnitId +
-            '/results'
-        );
     },
 
     /**

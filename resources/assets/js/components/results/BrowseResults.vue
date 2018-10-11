@@ -63,7 +63,7 @@
                 <label class="form-check-label">
                     <input class="form-check-input" type="radio" 
                         name="pu-location_type"  
-                        value="lg" v-model="location_type"> Local Government
+                        value="localGovernment" v-model="location_type"> Local Government
                     <span class="circle">
                         <span class="check"></span>
                     </span>
@@ -73,7 +73,7 @@
                 <label class="form-check-label">
                     <input class="form-check-input" type="radio" 
                         name="pu-location_type" 
-                        value="ra" v-model="location_type"> Registration Area
+                        value="registrationArea" v-model="location_type"> Registration Area
                     <span class="circle">
                         <span class="check"></span>
                     </span>
@@ -83,7 +83,7 @@
                 <label class="form-check-label">
                     <input class="form-check-input" type="radio" 
                         name="pu-location_type" 
-                        value="pu" v-model="location_type"> Polling Unit
+                        value="pollingUnit" v-model="location_type"> Polling Unit
                     <span class="circle">
                         <span class="check"></span>
                     </span>
@@ -93,7 +93,7 @@
         <div class="mb-3">
             <form>
                 <div class="form-row">
-                    <div v-show="election.election_type_id == 1 && (location_type === 'state' || location_type === 'lg' || location_type === 'ra' || location_type === 'pu')" 
+                    <div v-show="election.election_type_id == 1 && (location_type === 'state' || location_type === 'localGovernment' || location_type === 'registrationArea' || location_type === 'pollingUnit')" 
                         class="col">
                         <label for="state">State</label>
                         <select v-model="state_slct" class="form-control">
@@ -103,7 +103,7 @@
                             </option>
                         </select>
                     </div>
-                    <div v-show="location_type === 'lg' || location_type === 'ra' || location_type === 'pu'" 
+                    <div v-show="location_type === 'localGovernment' || location_type === 'registrationArea' || location_type === 'pollingUnit'" 
                         class="col">
                         <label for="lg">Local Government</label>
                         <select v-model="lg_slct" class="form-control">
@@ -113,7 +113,7 @@
                             </option>
                         </select>
                     </div>
-                    <div v-show="location_type === 'ra' || location_type === 'pu'"
+                    <div v-show="location_type === 'registrationArea' || location_type === 'pollingUnit'"
                         class="col">
                         <label for="ra">Registration Area</label>
                         <select v-model="ra_slct" class="form-control">
@@ -123,7 +123,7 @@
                             </option>
                         </select>
                     </div>
-                    <div v-show="location_type === 'pu'" class="col">
+                    <div v-show="location_type === 'pollingUnit'" class="col">
                         <label for="pu">Polling Unit</label>
                         <select v-model="pu_slct" class="form-control">
                             <option v-for="pu in pollingUnits" v-bind:key="pu.id" :value="pu.id">
@@ -135,6 +135,10 @@
                 <button @click="getResults(location_type)" v-show="location_type !== null" 
                     type="button" class="btn btn-success">
                     Get Results
+                </button>
+                <button @click="getFResults()" v-show="location_type !== null" 
+                    type="button" class="btn btn-success">
+                    Final Results
                 </button>
             </form>
         </div>
@@ -314,7 +318,7 @@
                 lg_slct: null,
                 ra_slct: null,
                 pu_slct: null,
-                chartData: [["APC", 4], ["PDP", 2], ["APGA", 10], ["SDP", 5], ["SSD", 3]]
+                chartData: []
             }
         },
         mounted() {
@@ -597,41 +601,34 @@
         },
         methods: {
             getResults(location_type) {
-                switch (location_type) {
-                    case "state":
-                        this.$store.dispatch('getStateResults', {
-                            electionId: this.election.id,
-                            stateId: this.state_slct
-                        });
-                        break;
+                let location_id = '';
 
-                    case "lg":
-                        this.$store.dispatch('getLocalGovernmentResults', {
-                            electionId: this.election.id,
-                            localGovernmentId: this.lg_slct
-                        });
-                        break;
-
-                    case "ra":
-                        this.$store.dispatch('getRegistrationAreaResults', {
-                            electionId: this.election.id,
-                            registrationAreaId: this.ra_slct
-                        });
-                        break;
-
-                    case "pu":
-                        this.$store.dispatch('getPollingUnitResults', {
-                            electionId: this.election.id,
-                            pollingUnitId: this.pu_slct
-                        });
-                        break;
-                
-                    default:
-                        this.$store.dispatch('getFinalResults', {
-                            id: this.$route.params.id
-                        });
-                        break;
+                if(location_type == 'state') {
+                    location_id = state_slct;
+                } else if(location_type == 'localGovernment') {
+                    location_id = this.lg_slct;
+                } else if(location_type == 'registrationArea') {
+                    location_id = this.ra_slct;
+                } else if(location_type == 'pollingUnit') {
+                    location_id = this.pu_slct;
                 }
+
+                this.$store.dispatch('getResults', {
+                    electionId: this.election.id,
+                    locationType: location_type,
+                    locationId: location_id
+                });
+            },
+            getFResults() {
+                this.location_type = null;
+                this.state_slct = null;
+                this.lg_slct = null;
+                this.ra_slct = null;
+                this.ra_slct = null;
+
+                this.$store.dispatch('getFinalResults', {
+                    id: this.$route.params.id
+                });
             },
             initAddResultModal() {
                 let vm = this;

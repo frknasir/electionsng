@@ -41,90 +41,19 @@ export const result = {
     },
 
     actions: {
-        getStateResults({commit}, data) {
+        getResults({commit}, data) {
             commit('setResultsLoadStatus', 1);
 
-            ResultAPI.getStateResults(
+            ResultAPI.getResults(
                 data.electionId,
-                data.stateId
+                data.locationType,
+                data.locationId
             ).then(function(response) {
                 commit('setResultsLoadStatus', 2);
                 commit('setResults', response.data.data);
                 let l = response.data.data[0].location.name;
                 commit('setForr', {
                     location_type: "For State: ",
-                    location_name: l
-                });
-            }).catch(function() {
-                commit('setResultsLoadStatus', 3);
-                commit('setResults', []);
-                commit('setForr', {
-                    location_type: "No Results ",
-                    location_name: "Available For This Location"
-                });
-            });
-        },
-
-        getLocalGovernmentResults({commit}, data) {
-            commit('setResultsLoadStatus', 1);
-
-            ResultAPI.getLocalGovernmentResults(
-                data.electionId,
-                data.localGovernmentId
-            ).then(function(response) {
-                commit('setResultsLoadStatus', 2);
-                commit('setResults', response.data.data);
-                let l = response.data.data[0].location.name;
-                commit('setForr', {
-                    location_type: "For Local Government: ",
-                    location_name: l
-                });
-            }).catch(function() {
-                commit('setResultsLoadStatus', 3);
-                commit('setResults', []);
-                commit('setForr', {
-                    location_type: "No Results ",
-                    location_name: "Available For This Location"
-                });
-            });
-        },
-
-        getRegistrationAreaResults({commit}, data) {
-            commit('setResultsLoadStatus', 1);
-
-            ResultAPI.getRegistrationAreaResults(
-                data.electionId,
-                data.registrationAreaId
-            ).then(function(response) {
-                commit('setResultsLoadStatus', 2);
-                commit('setResults', response.data.data);
-                let l = response.data.data[0].location.name;
-                commit('setForr', {
-                    location_type: "For Registration Area: ",
-                    location_name: l
-                });
-            }).catch(function() {
-                commit('setResultsLoadStatus', 3);
-                commit('setResults', []);
-                commit('setForr', {
-                    location_type: "No Results ",
-                    location_name: "Available For This Location"
-                });
-            });
-        },
-
-        getPollingUnitResults({commit}, data) {
-            commit('setResultsLoadStatus', 1);
-
-            ResultAPI.getPollingUnitResults(
-                data.electionId,
-                data.pollingUnitId
-            ).then(function(response) {
-                commit('setResultsLoadStatus', 2);
-                commit('setResults', response.data.data);
-                let l = response.data.data[0].location.name;
-                commit('setForr', {
-                    location_type: "For Polling Unit: ",
                     location_name: l
                 });
             }).catch(function() {

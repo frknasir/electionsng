@@ -428,23 +428,8 @@ Route::group(['prefix'=> 'v1'], function() {
   );
 
   Route::get(
-    '/election/{electionId}/state/{stateId}/results',
-    'ResultController@stateResults'
-  );
-
-  Route::get(
-    '/election/{electionId}/localGovernment/{lgId}/results',
-    'ResultController@localGovernmentResults'
-  );
-
-  Route::get(
-    '/election/{electionId}/registrationArea/{raId}/results',
-    'ResultController@registrationAreaResults'
-  );
-
-  Route::get(
-    '/election/{electionId}/pollingUnit/{puId}/results',
-    'ResultController@pollingUnitResults'
+    '/election/{electionId}/{locationType}/{locationId}/results',
+    'ResultController@index'
   );
 
   Route::get(
