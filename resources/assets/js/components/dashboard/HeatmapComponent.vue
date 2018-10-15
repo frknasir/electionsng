@@ -8,17 +8,22 @@
     <div class="card">
         <div class="card-header card-header-icon card-header-rose">
             <div class="card-icon">
-                <i class="material-icons">layerst</i>
+                <i class="material-icons">layers</i>
             </div>
-            <h4 class="card-title"> HeatMap
-                <small>
+            <h4 class="card-title">HeatMap</h4>
+            <div class="row">
+                <div class="col-md-10">
                     <select v-model="type" class="form-control" name="" id="">
                         <option value="updates">Updates</option>
                         <option value="incidents">Incidents</option>
                         <option value="results">Results</option>
                     </select>
-                </small>
-            </h4>
+                </div>
+                <div class="col-md-2">
+                    <action-loader class="text-center" :loading='heatMapDataLoadStatus == 1' 
+                        :color="'#4caf50'"></action-loader>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div id="map"></div>
@@ -26,7 +31,12 @@
     </div>
 </template>
 <script>
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 type: 'incidents',

@@ -98,6 +98,9 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            <action-loader class="text-center" :loading='candidatesLoadStatus == 1' 
+                            :color="'#4caf50'"></action-loader>
+
                             <table role="table" id="candidates-table" 
                                 class="table table-success table-striped table-bordered">
                                 <thead role="group">
@@ -111,9 +114,9 @@
                                     </tr>
                                 </thead>
                                 <tbody role="rowgroup">
-                                    <tr role="row" v-for="candidate in candidates" v-bind:key="candidate.id">
+                                    <tr role="row" v-for="(candidate, index) in candidates" v-bind:key="candidate.id">
                                         <td role="cell">
-                                            {{ candidate.id }}
+                                            {{ index + 1 }}
                                         </td>
                                         <td role="cell">
                                             {{ candidate.party_name +
@@ -191,8 +194,12 @@
 </template>
 <script>
 import { HELPERS } from '../../helpers.js';
+import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
 
 export default {
+    components: {
+        ActionLoader
+    },
     data() {
         return {
             HF: HELPERS

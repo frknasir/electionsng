@@ -72,7 +72,11 @@
                                     </small>
                                 </div>
 
-                                <button @click="updateCandidate(candidt)" type="submit" class="btn btn-success">Submit</button>
+                                <button v-if="updateCandidateLoadStatus != 1" @click="updateCandidate(candidt)" type="submit" class="btn btn-success">
+                                    Submit
+                                </button>
+                                <action-loader class="text-left" :loading='updateCandidateLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
                                 {{ updateCandidateResult.message }}
@@ -87,8 +91,12 @@
 </template> 
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 candidt: {

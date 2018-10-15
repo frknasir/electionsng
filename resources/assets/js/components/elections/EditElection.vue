@@ -83,7 +83,11 @@
                                     </small>
                                 </div>
 
-                                <button @click="updateElection(uElection)" type="button" class="btn btn-success">Submit</button>
+                                <button v-if="updateElectionLoadStatus != 1" @click="updateElection(uElection)" type="button" 
+                                    class="btn btn-success">Submit</button>
+
+                                <action-loader class="text-left" :loading='updateElectionLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                         </div>
                         <div class="card-footer"></div>
@@ -95,8 +99,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 state: '',
