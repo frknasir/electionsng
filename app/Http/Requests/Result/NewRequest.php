@@ -26,9 +26,7 @@ class NewRequest extends FormRequest
             'candidate_id' => 'required',
             'location_id' => 'required',
             'location_type' => 'required',
-            'votes' => 'required',
-            'added_by' => 'required',
-            'updated_by' => 'required'
+            'votes' => 'required'
         ];
     }
 
@@ -42,9 +40,7 @@ class NewRequest extends FormRequest
             'candidate_id.required' => 'candidate id can not be empty',
             'location_id.required' => 'location id can not be empty',
             'location_type.required' => 'location type can not be empty',
-            'votes' => 'required',
-            'added_by.required' => 'Who is adding this registration area?',
-            'updated_by.required' => 'Who is updating this registration area?'
+            'votes' => 'required'
         ];
     }
 }

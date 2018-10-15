@@ -169,8 +169,7 @@
                             <i class="material-icons">edit</i>
                         </button>
                         <button v-if="result.votes === 'Not Available'" rel="tooltip" class="btn btn-success" 
-                            data-toggle="modal" data-target="#addResultModal"
-                            :data-locationid="result.location_id" :data-locationtype="result.location_type" 
+                            data-toggle="modal" data-target="#addResultModal" 
                             :data-partyid="result.party_id" :data-party="result.party" 
                             :data-candidateid="result.candidate_id">
                             <i class="material-icons">add</i>
@@ -312,7 +311,7 @@
                         text: ''
                     }
                 },
-                result_type: 'normal',
+                result_type: 'final',
                 location_type: null,
                 state_slct: null,
                 lg_slct: null,
@@ -377,6 +376,8 @@
                         vm.addResultResponse.message, 
                         'danger'
                     );
+
+                    vm.new_result.votes = '';
                 } else if(val == 2 && vm.addResultResponse.success == 1) {
                     $('#addResultModal').modal('hide');
                     vm.HF.showNotification(
@@ -387,7 +388,7 @@
                     );
 
                     vm.new_result.votes = '';
-
+                    
                     vm.getResults(vm.location_type);
                 } 
             },
@@ -514,6 +515,10 @@
             
             results: function(val) {
                 this.updateChartData(val);
+                this.$nextTick(function() {
+                    this.initAddResultModal();
+                    this.initUpdateResultModal();
+                });
             }
         },
         computed: {
@@ -618,6 +623,11 @@
                     locationType: location_type,
                     locationId: location_id
                 });
+
+                this.new_result.location_id = location_id;
+                this.new_result.location_type = location_type;
+
+                this.result_type = 'normal';
             },
             getFResults() {
                 this.location_type = null;
@@ -625,10 +635,14 @@
                 this.lg_slct = null;
                 this.ra_slct = null;
                 this.ra_slct = null;
+                this.new_result.location_id = '';
+                this.new_result.location_type = '';
 
                 this.$store.dispatch('getFinalResults', {
                     id: this.$route.params.id
                 });
+
+                this.result_type = 'final';
             },
             initAddResultModal() {
                 let vm = this;
@@ -645,13 +659,6 @@
 
                     modal.find('#add-result-party').val(party)
                     vm.new_result.candidate_id = candidate_id;
-
-                    if(!location_id && !location_type) {
-                        vm.result_type = 'final';
-                    } else {
-                        vm.new_result.location_id = location_id;
-                        vm.new_result.location_type = location_type;
-                    }
                 })
             },
             initUpdateResultModal() {

@@ -33,7 +33,7 @@ class ResultController extends Controller {
         ));
 
         return ResultResource::collection(collect($results));
-    }
+    } 
 
     public function collationStats($electionId) {
         $stats = array();
@@ -206,8 +206,7 @@ class ResultController extends Controller {
         $result = new Result();
         $user = Auth::user()->id;
 
-        $result->political_party_id = $request->input('political_party_id');
-        $result->election_id = $request->input('election_id');
+        $result->candidate_id = $request->input('candidate_id');
         $result->location_id = $request->input('location_id');
         $result->location_type = $request->input('location_type');
         $result->votes = $request->input('votes');

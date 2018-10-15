@@ -22,7 +22,7 @@ class ResultResource extends JsonResource {
         $user = ($this->added_by) ? User::findOrFail($this->added_by)->name : NULL;
         $party = $candidate->politicalParty;
         $location = ($this->id) ? Result::findOrFail($this->id)->location : NULL;
-        return [
+        return [ 
             'id' => $this->id,
             'candidate_id' => $this->candidate_id,
             'candidate_name' => $candidate->aspirant,
@@ -33,8 +33,8 @@ class ResultResource extends JsonResource {
             'location' => $location,
             'votes' => ($this->votes) ? number_format($this->votes) : "Not Available",
             'added_by_name' => $user,
-            'created_at' => ($this->created_at == NULL) ? $this->created_at : date('d M Y - H:i:s', $this->created_at->timestamp),
-            'updated_at' => ($this->updated_at == NULL) ? $this->updated_at : date('d M Y - H:i:s', $this->updated_at->timestamp)
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
         ]; 
     }
 }

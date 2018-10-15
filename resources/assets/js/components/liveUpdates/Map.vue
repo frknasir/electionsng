@@ -228,13 +228,17 @@
         methods: {
             initMap() {
                 let vm = this;
+                let mapzoom = 9;
 
-                vm.map = L.map('map').setView(
-                    [
-                        vm.election.state.latitude, 
-                        vm.election.state.longitude
-                    ], 9
-                );
+                //check if election is presidential. then reduce the zoom
+                if(vm.election.election_type_id == 1) {
+                    mapzoom = 6
+                }
+
+                vm.map = L.map('map').setView([
+                    vm.election.state.latitude, 
+                    vm.election.state.longitude
+                ], mapzoom);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

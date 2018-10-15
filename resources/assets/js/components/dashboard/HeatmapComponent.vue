@@ -77,10 +77,17 @@
         methods: {
             initHeatMap(data) {
                 let vm = this;
+                let mapzoom = 12;
+
+                //check if election is presidential. then reduce the zoom
+                if(vm.election.election_type_id == 1) {
+                    mapzoom = 6
+                }
+
                 vm.map = L.map('map').setView([
                     vm.election.state.latitude, 
                     vm.election.state.longitude
-                ], 12);
+                ], mapzoom);
 
                 vm.map.touchZoom.disable();
                 vm.map.doubleClickZoom.disable();

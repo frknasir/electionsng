@@ -51,9 +51,15 @@ export const result = {
             ).then(function(response) {
                 commit('setResultsLoadStatus', 2);
                 commit('setResults', response.data.data);
-                let l = response.data.data[0].location.name;
+
+                let l = 'No Results Available For This Location';
+                let type = '';
+                if(response.data.data[0].location) {
+                    l = response.data.data[0].location.name;
+                }
+
                 commit('setForr', {
-                    location_type: "For State: ",
+                    location_type: "",
                     location_name: l
                 });
             }).catch(function() {
@@ -93,7 +99,7 @@ export const result = {
                 commit('setAddResultResponse', response.data);
             }).catch(function() {
                 commit('setAddResultLoadStatus', 3);
-                commit('setÀddResultResponse', {
+                commit('setAddResultResponse', {
                     success: 0,
                     message: 'Something went wrong. Try again'
                 });
