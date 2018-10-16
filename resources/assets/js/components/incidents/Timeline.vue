@@ -26,6 +26,10 @@
             </div>
         </div>
 
+        <!-- Loader -->
+        <action-loader class="text-center" :loading='incidentsLoadStatus == 1' 
+            :color="'#4caf50'"></action-loader>
+
         <!-- timeline item 1 -->
         <div v-for="incident in incidents" v-bind:key="incident.id" class="row no-gutters">
             <div v-if="incident.id % 2 == 0"  class="col-sm"> <!--spacer--> </div>
@@ -107,8 +111,12 @@
 
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+
     export default {
-        props: [],
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 moment: window.moment,

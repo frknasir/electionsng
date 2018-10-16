@@ -64,10 +64,12 @@
                                         {{ validations.longitude.text }}
                                     </small>
                                 </div>
-                                <button @click="addPollingUnit(pollingUnit)" type="button" 
+                                <button v-if="addPollingUnitLoadStatus != 1" @click="addPollingUnit(pollingUnit)" type="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='addPollingUnitLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
                                 {{ addPollingUnitResult.message }}
@@ -84,8 +86,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 pollingUnit: {

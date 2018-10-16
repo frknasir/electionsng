@@ -39,10 +39,12 @@
                                         {{ validations.longitude.text }}
                                     </small>
                                 </div>
-                                <button @click="editState(st)" type="button" 
+                                <button v-if="updateStateLoadStatus != 1" @click="editState(st)" type="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='updateStateLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                         </div>
                     </div>
@@ -53,8 +55,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 st: {

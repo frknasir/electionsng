@@ -193,113 +193,113 @@
     </div>
 </template>
 <script>
-import { HELPERS } from '../../helpers.js';
-import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+    import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
 
-export default {
-    components: {
-        ActionLoader
-    },
-    data() {
-        return {
-            HF: HELPERS
-        }
-    },
-    mounted() {
-        this.initBioModal();
-    },
-    created() {
-        this.$store.dispatch('getCandidates', {
-            id: this.$route.params.id,
-            url: null 
-        });
-    },
-    computed: {
-        election() {
-            return this.$store.getters.getElection;
+    export default {
+        components: {
+            ActionLoader
         },
-        electionLoadStatus() {
-            return this.$store.getters.getElectionLoadStatus;
-        },
-        candidatesLoadStatus() {
-            return this.$store.getters.getCandidatesLoadStatus;
-        },
-        candidates() {
-            return this.$store.getters.getCandidates;
-        },
-        user() {
-            return this.$store.getters.getUser;
-        },
-        userLoadStatus() {
-            return this.$store.getters.getUserLoadStatus;
-        },
-        pagination() {
-            return this.$store.getters.getPagination;
-        },
-        deleteCandidateLoadStatus() {
-            return this.$store.getters.getDeleteCandidateLoadStatus;
-        },
-        deleteCandidateResult() {
-            return this.$store.getters.getDeleteCandidateResult;
-        }
-    },
-    watch: {
-        candidatesLoadStatus: function () {
-            if(this.candidatesLoadStatus == 2) {
-
+        data() {
+            return {
+                HF: HELPERS
             }
         },
-        deleteCandidateLoadStatus: function() {
-            let vm = this;
-            
-            if(vm.deleteCandidateLoadStatus == 3 && vm.deleteCandidateResult.success == 0) {
-                vm.HF.showNotification(
-                    'top', 
-                    'center', 
-                    vm.deleteCandidateResult.message, 
-                    'danger'
-                );
-            } else if(vm.deleteCandidateLoadStatus == 2 && vm.deleteCandidateResult.success == 1) {
-                //reload candidates
-                this.$store.dispatch('getCandidates', {
-                    id: this.$route.params.id,
-                    url: null 
-                });
-                vm.HF.showNotification(
-                    'top', 
-                    'center', 
-                    vm.deleteCandidateResult.message, 
-                    'success'
-                );
-            } 
-        }
-    },
-    methods: {
-        initBioModal() {
-            $('#bioModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget) // Button that triggered the modal
-                var name = button.data('name');
-                var bio = button.data('bio'); // Extract info from data-* attributes
-                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-                var modal = $(this);
-                modal.find('.modal-title').text(name);
-                modal.find('.modal-body').html(bio);
-            })
+        mounted() {
+            this.initBioModal();
         },
-        getCandidates(url) {
+        created() {
             this.$store.dispatch('getCandidates', {
                 id: this.$route.params.id,
-                url: url
+                url: null 
             });
         },
-        deleteCandidate(data) {
-            if(confirm("are you sure?")){
-                this.$store.dispatch('deleteCandidate', {
-                    id: data
+        computed: {
+            election() {
+                return this.$store.getters.getElection;
+            },
+            electionLoadStatus() {
+                return this.$store.getters.getElectionLoadStatus;
+            },
+            candidatesLoadStatus() {
+                return this.$store.getters.getCandidatesLoadStatus;
+            },
+            candidates() {
+                return this.$store.getters.getCandidates;
+            },
+            user() {
+                return this.$store.getters.getUser;
+            },
+            userLoadStatus() {
+                return this.$store.getters.getUserLoadStatus;
+            },
+            pagination() {
+                return this.$store.getters.getPagination;
+            },
+            deleteCandidateLoadStatus() {
+                return this.$store.getters.getDeleteCandidateLoadStatus;
+            },
+            deleteCandidateResult() {
+                return this.$store.getters.getDeleteCandidateResult;
+            }
+        },
+        watch: {
+            candidatesLoadStatus: function () {
+                if(this.candidatesLoadStatus == 2) {
+
+                }
+            },
+            deleteCandidateLoadStatus: function() {
+                let vm = this;
+                
+                if(vm.deleteCandidateLoadStatus == 3 && vm.deleteCandidateResult.success == 0) {
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteCandidateResult.message, 
+                        'danger'
+                    );
+                } else if(vm.deleteCandidateLoadStatus == 2 && vm.deleteCandidateResult.success == 1) {
+                    //reload candidates
+                    this.$store.dispatch('getCandidates', {
+                        id: this.$route.params.id,
+                        url: null 
+                    });
+                    vm.HF.showNotification(
+                        'top', 
+                        'center', 
+                        vm.deleteCandidateResult.message, 
+                        'success'
+                    );
+                } 
+            }
+        },
+        methods: {
+            initBioModal() {
+                $('#bioModal').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget) // Button that triggered the modal
+                    var name = button.data('name');
+                    var bio = button.data('bio'); // Extract info from data-* attributes
+                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                    var modal = $(this);
+                    modal.find('.modal-title').text(name);
+                    modal.find('.modal-body').html(bio);
+                })
+            },
+            getCandidates(url) {
+                this.$store.dispatch('getCandidates', {
+                    id: this.$route.params.id,
+                    url: url
                 });
+            },
+            deleteCandidate(data) {
+                if(confirm("are you sure?")){
+                    this.$store.dispatch('deleteCandidate', {
+                        id: data
+                    });
+                }
             }
         }
     }
-}
 </script>

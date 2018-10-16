@@ -145,6 +145,11 @@
         <div class="text-center">
             <h2 class="title title-modern">{{ forr.location_type + forr.location_name }}</h2>
         </div>
+        
+        <!-- results loader -->
+        <action-loader class="text-center" :loading='resultsLoadStatus == 1' 
+            :color="'#4caf50'"></action-loader>
+
         <table id="final-results-dt" class="table table-success table-striped table-bordered">
             <thead>
                 <tr>
@@ -218,9 +223,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button @click="addResult(new_result)" type="button" class="btn btn-primary">
+                        <button v-if="addResultLoadStatus != 1 || addFinalResultLoadStatus != 1" 
+                            @click="addResult(new_result)" type="button" class="btn btn-primary">
                             Save
                         </button>
+                        <clip-loader class="" :loading='addResultLoadStatus == 1 || addFinalResultLoadStatus == 1' 
+                            :color="'#4caf50'"></clip-loader>
                     </div>
                 </div>
             </div>
@@ -260,7 +268,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button @click="updateResult(edit_result)" type="button" class="btn btn-primary">Save changes</button>
+                        <button v-if="updateResultLoadStatus != 1 || updateFinalResultLoadStatus != 1" @click="updateResult(edit_result)" type="button" 
+                            class="btn btn-primary">Save changes</button>
+                        <clip-loader class="" :loading='updateResultLoadStatus == 1 || updateFinalResultLoadStatus == 1' 
+                            :color="'#4caf50'"></clip-loader>
                     </div>
                 </div>
             </div>
@@ -273,8 +284,14 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+    import ClipLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader,
+            ClipLoader
+        },
         data() {
             return {
                 new_result: {

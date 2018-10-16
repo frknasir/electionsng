@@ -31,6 +31,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <action-loader class="text-center" :loading='politicalPartiesLoadStatus == 1' 
+                        :color="'#4caf50'"></action-loader>
+
                     <div class="row">
                         <div v-for="politicalParty in politicalParties" v-bind:key="politicalParty.id" class="col-md-4">
                             <div class="card">
@@ -63,15 +66,19 @@
 </template> 
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 HF: HELPERS
             }
         },
         computed: {
-            politicalParties() {
+            politicalParties() { 
                 return this.$store.getters.getPoliticalParties;
             },
             politicalPartiesLoadStatus() {

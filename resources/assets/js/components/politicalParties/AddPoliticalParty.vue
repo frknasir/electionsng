@@ -38,10 +38,12 @@
                                         {{ validations.name.text }}
                                     </small>
                                 </div>
-                                <button @click="addPoliticalParty(politicalParty)" type="button" 
+                                <button v-if="addPoliticalPartyLoadStatus != 1" @click="addPoliticalParty(politicalParty)" type="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='addPoliticalPartyLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
                                 {{ addPoliticalPartyResult.message }}
@@ -58,8 +60,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 politicalParty: {

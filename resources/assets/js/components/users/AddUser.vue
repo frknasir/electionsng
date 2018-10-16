@@ -78,10 +78,12 @@
                                         {{ validations.role_id.text }}
                                     </small>
                                 </div>
-                                <button @click="addUser(user)" user="button" 
+                                <button v-if="addUserLoadStatus != 1" @click="addUser(user)" user="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='addUserLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
                                 {{ addUserResult.message }}
@@ -98,8 +100,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 user: {

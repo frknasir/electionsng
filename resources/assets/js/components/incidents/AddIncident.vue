@@ -159,7 +159,11 @@
                                 <small v-show="!validations.location_type.is_valid" class="form-text text-muted text-danger">
                                     {{ validations.location_type.text }}
                                 </small>
-                                <button @click="addIncident(incident)" type="button" class="btn btn-success">Submit</button>
+
+                                <button v-if="addIncidentLoadStatus != 1" @click="addIncident(incident)" type="button" 
+                                    class="btn btn-success">Submit</button>
+                                <action-loader class="text-left" :loading='addIncidentLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
                                 {{ addIncidentResult.message }}
@@ -172,13 +176,17 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> 
     </div>
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 incident: {

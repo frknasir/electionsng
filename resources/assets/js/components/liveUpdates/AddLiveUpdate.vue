@@ -143,7 +143,10 @@
                                 <small v-show="!validations.location_type.is_valid" class="form-text text-muted text-danger">
                                     {{ validations.location_type.text }}
                                 </small>
-                                <button @click="addLiveUpdate(liveUpdate)" type="button" class="btn btn-success">Submit</button>
+                                <button v-if="addLiveUpdateLoadStatus != 1" @click="addLiveUpdate(liveUpdate)" type="button" 
+                                    class="btn btn-success">Submit</button>
+                                <action-loader class="text-left" :loading='addLiveUpdateLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
                                 {{ addLiveUpdateResult.message }}
@@ -161,8 +164,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 liveUpdate: {

@@ -25,6 +25,10 @@
                 </div>
             </div>
         </div>
+
+        <!-- Loader -->
+        <action-loader class="text-center" :loading='liveUpdatesLoadStatus == 1' 
+            :color="'#4caf50'"></action-loader>
         
         <!-- timeline item 1 -->
         <div v-for="liveUpdate in liveUpdates" v-bind:key="liveUpdate.id" class="row no-gutters">
@@ -101,8 +105,12 @@
 
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+
     export default {
-        props: [],
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 moment: window.moment,

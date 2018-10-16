@@ -27,6 +27,7 @@
 <template>
     <div>
         <div class="wrapper-full-page" id="map"></div>
+
         <!--info window-->
         <div v-show="info_window_active" id="info-window" class="col-md-4">
             <div class="card card-nav-tabs">
@@ -81,9 +82,11 @@
             <div class="btn-group dropup">
                 <button type="button" class="btn btn-success">
                     {{ filter_btn_label }}
-                    <span class="badge badge-default">
+                    <span v-if="liveUpdatesLoadStatus != 1" class="badge badge-default">
                         {{ luPagination.total }}
                     </span>
+                    <action-loader :loading='liveUpdatesLoadStatus == 1' 
+                        :color="'#ffffff'"></action-loader>
                 </button>
                 <button type="button" class="btn btn-success dropdown-toggle" 
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -116,8 +119,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+
     export default {
-        props: [],
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 map: null,

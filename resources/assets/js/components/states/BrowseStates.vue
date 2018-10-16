@@ -11,6 +11,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <action-loader class="text-center" :loading='statesLoadStatus == 1' 
+                        :color="'#4caf50'"></action-loader>
+
                     <div class="row">
                         <div v-for="state in states" v-bind:key="state.id" class="col-md-4">
                             <div class="card">
@@ -59,7 +62,12 @@
     </div>
 </template>
 <script>
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
 

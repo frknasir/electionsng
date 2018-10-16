@@ -52,10 +52,12 @@
                                         {{ validations.longitude.text }}
                                     </small>
                                 </div>
-                                <button @click="addRegistrationArea(registrationArea)" type="button" 
+                                <button v-if="addRegistrationAreaLoadStatus != 1" @click="addRegistrationArea(registrationArea)" type="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='addRegistrationAreaLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
                                 {{ addRegistrationAreaResult.message }}
@@ -72,8 +74,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 registrationArea: {

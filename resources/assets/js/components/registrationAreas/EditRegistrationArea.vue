@@ -51,10 +51,12 @@
                                         {{ validations.longitude.text }}
                                     </small>
                                 </div>
-                                <button @click="editRegistrationArea(ra)" type="button" 
+                                <button v-if="updateRegistrationAreaLoadStatus != 1" @click="editRegistrationArea(ra)" type="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='updateRegistrationAreaLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                         </div>
                     </div>
@@ -65,8 +67,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 ra: {

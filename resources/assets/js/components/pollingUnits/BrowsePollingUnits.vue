@@ -34,6 +34,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <action-loader class="text-center" :loading='pollingUnitsLoadStatus == 1' 
+                        :color="'#4caf50'"></action-loader>
+
                     <div class="row">
                         <div v-for="pollingUnit in pollingUnits" v-bind:key="pollingUnit.id" class="col-md-4">
                             <div class="card">
@@ -72,8 +75,12 @@
 </template> 
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 HF: HELPERS

@@ -67,10 +67,12 @@
                                 <small v-show="!validations.active.is_valid" class="form-text text-muted text-danger">
                                     {{ validations.active.text }}
                                 </small>
-                                <button @click="editUser(usr)" user="button" 
+                                <button v-if="updateUserLoadStatus != 1" @click="editUser(usr)" user="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='updateUserLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                         </div>
                     </div>
@@ -113,25 +115,28 @@
                                         {{ validations.cpassword.text }}
                                     </small>
                                 </div>
-                                <button @click="changeUserPassword(changePassword)" user="button" 
+                                <button v-if="changeUserPasswordLoadStatus != 1" @click="changeUserPassword(changePassword)" user="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='changeUserPasswordLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
         </div>
     </div>
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 usr: {

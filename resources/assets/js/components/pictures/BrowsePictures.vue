@@ -14,10 +14,14 @@
 <template>
     <div class="content">
         <div class="container-fluid">
+            <action-loader class="text-center" :loading='picturesLoadStatus == 1' 
+                :color="'#4caf50'"></action-loader>
+
             <div class="row">
                 <div v-for="(picture, index) in pictures" v-bind:key="index" class="col-md-6">
                     <div class="card">
                         <div class="card-body">
+                            
                             <h4 class="card-title">
                                 {{ picture.title }} <br>
                                 <small>
@@ -60,7 +64,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 moment: window.moment,
@@ -68,7 +77,7 @@
             }
         },
         computed: {
-            election() {
+            election() { 
                 return this.$store.getters.getElection;
             },
             electionLoadStatus() {

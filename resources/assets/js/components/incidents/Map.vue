@@ -82,9 +82,11 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-success">
                     {{ filter_btn_label }} 
-                    <span class="badge badge-default">
+                    <span v-if="incidentsLoadStatus != 1" class="badge badge-default">
                         {{ iPagination.total }}
                     </span>
+                    <action-loader :loading='incidentsLoadStatus == 1' 
+                        :color="'#ffffff'"></action-loader>
                 </button>
                 <button type="button" class="btn btn-success dropdown-toggle" 
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -117,7 +119,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
+
     export default { 
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 map: null,

@@ -98,6 +98,9 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <action-loader class="text-center" :loading='usersLoadStatus == 1' 
+                        :color="'#4caf50'"></action-loader>
+
                     <table role="table" id="users-table" 
                         class="table table-success table-striped table-bordered">
                         <thead role="group">
@@ -157,8 +160,12 @@
 </template> 
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 HF: HELPERS

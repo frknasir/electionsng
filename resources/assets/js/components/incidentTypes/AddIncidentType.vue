@@ -26,10 +26,12 @@
                                         {{ validations.name.text }}
                                     </small>
                                 </div>
-                                <button @click="addIncidentType(incidentType)" type="button" 
+                                <button v-if="addIncidentTypeLoadStatus != 1" @click="addIncidentType(incidentType)" type="button" 
                                     class="btn btn-success">
                                     Submit
                                 </button>
+                                <action-loader class="text-left" :loading='addIncidentTypeLoadStatus == 1' 
+                                    :color="'#4caf50'"></action-loader>
                             </form>
                             <div v-show="!show_form" class="alert alert-success" role="alert">
                                 {{ addIncidentTypeResult.message }}
@@ -46,8 +48,12 @@
 </template>
 <script>
     import { HELPERS } from '../../helpers.js';
+    import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
             return {
                 incidentType: {

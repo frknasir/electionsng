@@ -8,7 +8,7 @@
               :to="{ path: $routerHistory.previous().path }">
               <i class="material-icons">arrow_back</i>
           </router-link>
-          <div class="navbar-wrapper">
+          <div v-if="electionLoadStatus != 1" class="navbar-wrapper">
             <a v-if="$route.meta.isElectionPage" class="navbar-text">
               {{ election.title }}
             </a>
@@ -16,6 +16,8 @@
               {{ $route.name }}
             </a>
           </div>
+          <action-loader class="text-left" :loading='electionLoadStatus == 1' 
+            :color="'#ffffff'"></action-loader>
           <button class="navbar-toggler" type="button" 
             data-toggle="collapse" data-target="#navbar_nav" aria-controls="navbar_nav" 
             aria-expanded="false" aria-label="Toggle navigation">
@@ -34,30 +36,35 @@
     </nav>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      title: null 
-    };
-  },
-  computed: {
-    election() {
-      return this.$store.getters.getElection;
+  import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
+
+  export default {
+    components: {
+      ActionLoader
     },
-    electionLoadStatus() {
-      return this.$store.getters.getElectionLoadStatus;
+    data() {
+      return {
+        title: null 
+      };
+    },
+    computed: {
+      election() {
+        return this.$store.getters.getElection;
+      },
+      electionLoadStatus() {
+        return this.$store.getters.getElectionLoadStatus;
+      }
+    },
+    watch: {
+      election: function() {
+        this.title = this.election.title.substring(0, 19) + "... ";
+      }
+    },
+    mounted() {},
+    created() {
+      this.$store.dispatch("getElection", {
+        id: this.$route.params.id
+      });
     }
-  },
-  watch: {
-    election: function() {
-      this.title = this.election.title.substring(0, 19) + "... ";
-    }
-  },
-  mounted() {},
-  created() {
-    this.$store.dispatch("getElection", {
-      id: this.$route.params.id
-    });
-  }
-};
+  };
 </script> 
