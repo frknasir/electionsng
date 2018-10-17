@@ -111,7 +111,7 @@
             }
         },
         computed: {
-            user() {
+            user() { 
                 return this.$store.getters.getUser;
             },
             userLoadStatus() {

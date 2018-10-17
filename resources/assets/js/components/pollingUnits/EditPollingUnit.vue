@@ -82,8 +82,11 @@
     import ActionLoader from 'vue-spinner/src/ClipLoader.vue';
 
     export default {
+        components: {
+            ActionLoader
+        },
         data() {
-            return {
+            return { 
                 pu: {
                     id: this.$route.params.pollingUnitId,
                     code: '',

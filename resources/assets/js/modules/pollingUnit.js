@@ -52,7 +52,7 @@ export const pollingUnit = {
         },
 
         addPollingUnit({commit, state, dispatch}, data) { 
-            commit('setPollingUnitLoadStatus', 1);
+            commit('setAddPollingUnitLoadStatus', 1);
 
             PollingUnitAPI.addPollingUnit(
                 data.code,
@@ -100,10 +100,10 @@ export const pollingUnit = {
                 data.id
             ).then(function(response) {
                 commit('setDeletePollingUnitLoadStatus', 2);
-                commit('setUpdatePollingUnitResult', response.data);
+                commit('setDeletePollingUnitResult', response.data);
             }).catch(function() {
                 commit('setDeletePollingUnitLoadStatus', 3);
-                commit('setUpdatePollingUnitResult', {
+                commit('setDeletePollingUnitResult', {
                     success: 0,
                     message: 'Something went wrong. Try again!'
                 });

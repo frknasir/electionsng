@@ -136,9 +136,10 @@
                         'danger'
                     );
                 } else if(vm.deletePollingUnitLoadStatus == 2 && vm.deletePollingUnitResult.success == 1) {
-                    //reload registration areas
-                    this.$store.dispatch('getRegistrationAreas', {
-                            id: this.$route.params.localGovernmentId
+                    //reload polling Units
+                    this.$store.dispatch(
+                        'getPollingUnits', {
+                            id: this.$route.params.registrationId
                         }
                     );
                     vm.HF.showNotification(

@@ -26,7 +26,7 @@ class ResultController extends Controller {
     public function index($electionId, $locationType, $locationId) {
         $candidates = Candidate::select('id')->where('election_id', $electionId)->get();
 
-        $results = DB::select(DB::raw("SELECT table1.id, candidates.id as candidate_id, table1.location_type, table1.location_id, table1.votes, table1.added_by, table1.created_at, table1.updated_at FROM (SELECT * FROM results WHERE results.location_id = :locationId AND results.location_type = :locationType AND results.candidate_id IN (SELECT candidates.id FROM candidates WHERE candidates.election_id = :electionId)) AS table1 RIGHT JOIN candidates ON table1.candidate_id = candidates.id"), array(
+        $results = DB::select(DB::raw("SELECT table1.id, candidates.id as candidate_id, table1.location_type, table1.location_id, table1.votes, table1.added_by, table1.created_at, table1.updated_at FROM (SELECT * FROM results WHERE results.location_id = :locationId AND results.location_type = :locationType) AS table1 RIGHT JOIN candidates ON table1.candidate_id = candidates.id WHERE candidates.id IN (SELECT candidates.id FROM candidates WHERE candidates.election_id = :electionId)"), array(
             'electionId' => $electionId,
             'locationType' => $locationType,
             'locationId' => $locationId

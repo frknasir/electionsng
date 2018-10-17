@@ -52,7 +52,7 @@ export const registrationArea = {
         },
 
         addRegistrationArea({commit, state, dispatch}, data) {
-            commit('setRegistrationAreaLoadStatus', 1);
+            commit('setAddRegistrationAreaLoadStatus', 1);
 
             RegistrationAreaAPI.addRegistrationArea(
                 data.name,
