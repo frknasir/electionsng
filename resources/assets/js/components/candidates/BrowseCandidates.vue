@@ -62,7 +62,7 @@
 <template>
     <div class="content">
         <div class="container-fluid">
-            <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
+            <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true" id="action-btn">
                 <router-link class="btn btn-success btn-fab btn-lg btn-round" 
                     :to="'/election/'+election.id+'/candidates/add'">
                     <i class="material-icons">add</i>
@@ -110,7 +110,7 @@
                                         <th role="columnheader">Aspirant</th>
                                         <th role="columnheader">Deputy</th>
                                         <th role="columnheader">Bio</th>
-                                        <th role="columnheader" v-if="userLoadStatus == 2 && user != {}">Action</th>
+                                        <th role="columnheader" v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody role="rowgroup">
@@ -136,7 +136,7 @@
                                                 Read
                                             </button>
                                         </td>
-                                        <td v-if="userLoadStatus == 2 && user != {}" class="td-actions">
+                                        <td v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true" class="td-actions">
                                             <router-link 
                                                 :to="'/election/'+election.id+'/candidates/edit/'+candidate.id" 
                                                 rel="tooltip" class="btn btn-success">
@@ -202,7 +202,8 @@
         },
         data() {
             return {
-                HF: HELPERS
+                HF: HELPERS,
+                permittedToMakeChanges: false
             }
         },
         mounted() {
@@ -213,6 +214,13 @@
                 id: this.$route.params.id,
                 url: null 
             });
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         computed: {
             election() {
@@ -272,6 +280,14 @@
                         'success'
                     );
                 } 
+            },
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         methods: {

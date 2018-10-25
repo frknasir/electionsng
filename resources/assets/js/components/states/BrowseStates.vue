@@ -45,11 +45,10 @@
                                     </table>
                                 </div>
                                 <div class="card-footer">
-                                    <div v-if="userLoadStatus == 2 && user != {}">
-                                        <router-link class="btn btn-block btn-warning" 
+                                    <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">
+                                        <router-link class="btn btn-just-icon btn-warning" 
                                             :to="'/states/edit/'+state.id">
                                             <i class="material-icons">create</i>
-                                            Edit
                                         </router-link>
                                     </div>
                                 </div>
@@ -62,6 +61,7 @@
     </div>
 </template>
 <script>
+    import { HELPERS } from '../../helpers.js';
     import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
 
     export default {
@@ -70,7 +70,8 @@
         },
         data() {
             return {
-
+                permittedToMakeChanges: false,
+                HF: HELPERS
             }
         },
         computed: {
@@ -87,8 +88,25 @@
                 return this.$store.getters.getUserLoadStatus;
             }
         },
+        watch: {
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
+            }
+        },
         created() {
             this.$store.dispatch('getStates');
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         mounted() {
 

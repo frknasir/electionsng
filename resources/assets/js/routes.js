@@ -43,7 +43,7 @@ function requireAuth (to, from, next) {
                 let permitted = to.meta.permitted;
                 let flag = false;
 
-                roles.forEach(role => {
+                roles.forEach(role => { 
                     if(permitted.includes(role)) {
                         flag = true;
                     }
@@ -94,7 +94,11 @@ export default new VueRouter({
                         {
                             path: '',
                             name: 'Elections',
-                            component: Vue.component('BrowseElections', require('./components/elections/BrowseElections.vue'))
+                            component: Vue.component('BrowseElections', 
+                            require('./components/elections/BrowseElections.vue')),
+                            meta: {
+                                permittedToMakeChanges: ['Super-admin', 'Admin']
+                            }
                         },
                         {
                             path: 'edit/:electionId',
@@ -123,7 +127,11 @@ export default new VueRouter({
                         {
                             path: '',
                             name: 'States',
-                            component: Vue.component('BrowseStates', require('./components/states/BrowseStates.vue'))
+                            component: Vue.component('BrowseStates', 
+                            require('./components/states/BrowseStates.vue')),
+                            meta: {
+                                permittedToMakeChanges: ['Super-admin', 'Admin']
+                            }
                         },
                         {
                             path: 'edit/:stateId',
@@ -146,7 +154,10 @@ export default new VueRouter({
                             component: Vue.component(
                                 'BrowseLocalGovernments', 
                                 require('./components/localGovernments/BrowseLocalGovernments.vue')
-                            )
+                            ),
+                            meta: {
+                                permittedToMakeChanges: ['Super-admin', 'Admin']
+                            }
                         },
                         {
                             path: 'edit/:localGovernmentId',
@@ -172,7 +183,10 @@ export default new VueRouter({
                             component: Vue.component(
                                 'BrowseRegistrationAreas', 
                                 require('./components/registrationAreas/BrowseRegistrationAreas.vue')
-                            )
+                            ),
+                            meta: {
+                                permittedToMakeChanges: ['Super-admin', 'Admin', 'Data Entry']
+                            }
                         },
                         {
                             path: 'edit/:registrationAreaId',
@@ -183,7 +197,7 @@ export default new VueRouter({
                             ),
                             beforeEnter: requireAuth,
 							meta: {
-								permitted: ['Super-admin', 'Admin']
+								permitted: ['Super-admin', 'Admin', 'Data Entry']
                             }
                         },
                         {
@@ -195,7 +209,7 @@ export default new VueRouter({
                             ),
                             beforeEnter: requireAuth,
 							meta: {
-								permitted: ['Super-admin', 'Admin']
+								permitted: ['Super-admin', 'Admin', 'Data Entry']
                             }
                         }
                     ]
@@ -210,7 +224,10 @@ export default new VueRouter({
                             component: Vue.component(
                                 'BrowsePollingUnits',
                                 require('./components/pollingUnits/BrowsePollingUnits.vue')
-                            )
+                            ),
+                            meta: {
+                                permittedToMakeChanges: ['Super-admin', 'Admin', 'Data Entry']
+                            }
                         },
                         {
                             path: 'edit/:pollingUnitId',
@@ -221,7 +238,7 @@ export default new VueRouter({
                             ),
                             beforeEnter: requireAuth,
 							meta: {
-								permitted: ['Super-admin', 'Admin']
+								permitted: ['Super-admin', 'Admin', 'Data Entry']
                             }
                         },
                         {
@@ -233,7 +250,7 @@ export default new VueRouter({
                             ),
                             beforeEnter: requireAuth,
 							meta: {
-								permitted: ['Super-admin', 'Admin']
+								permitted: ['Super-admin', 'Admin', 'Data Entry']
                             }
                         }
                     ]
@@ -248,7 +265,10 @@ export default new VueRouter({
                             component: Vue.component(
                                 'BrowsePoliticalParties',
                                 require('./components/politicalParties/BrowsePoliticalParties.vue')
-                            )
+                            ),
+                            meta: {
+                                permittedToMakeChanges: ['Super-admin', 'Admin', 'Data Entry']
+                            }
                         },
                         {
                             path: 'edit/:politicalPartyId',
@@ -259,7 +279,7 @@ export default new VueRouter({
                             ),
                             beforeEnter: requireAuth,
 							meta: {
-								permitted: ['Super-admin', 'Admin']
+								permitted: ['Super-admin', 'Admin', 'Data Entry']
                             }
                         },
                         {
@@ -271,7 +291,7 @@ export default new VueRouter({
                             ),
                             beforeEnter: requireAuth,
 							meta: {
-								permitted: ['Super-admin', 'Admin']
+								permitted: ['Super-admin', 'Admin', 'Data Entry']
                             }
                         }
                     ]
@@ -286,7 +306,10 @@ export default new VueRouter({
                             component: Vue.component(
                                 'BrowseIncidentTypes',
                                 require('./components/incidentTypes/BrowseIncidentTypes.vue')
-                            )
+                            ),
+                            meta: {
+                                permittedToMakeChanges: ['Super-admin', 'Admin']
+                            }
                         },
                         {
                             path: 'edit/:incidentTypeId',
@@ -327,7 +350,8 @@ export default new VueRouter({
                             ),
                             beforeEnter: requireAuth,
 							meta: {
-								permitted: ['Super-admin']
+                                permitted: ['Super-admin'],
+                                permittedToMakeChanges: ['Super-admin']
                             }
                         },
                         {
@@ -387,7 +411,8 @@ export default new VueRouter({
                                     name: 'Browse Candidates',
                                     component: Vue.component('BrowseCandidates', require('./components/candidates/BrowseCandidates.vue')),
                                     meta: {
-                                        isElectionPage: true
+                                        isElectionPage: true,
+                                        permittedToMakeChanges: ['Super-admin', 'Admin', 'Data Entry']
                                     },
                                 },
                                 {
@@ -404,7 +429,7 @@ export default new VueRouter({
                                     component: Vue.component('EditCandidate', require('./components/candidates/EditCandidate.vue')),
                                     beforeEnter: requireAuth,
                                     meta: {
-                                        permitted: ['Super-admin', 'Admin'],
+                                        permitted: ['Super-admin', 'Admin', 'Data Entry'],
                                         isElectionPage: true
                                     }
                                 },
@@ -414,7 +439,7 @@ export default new VueRouter({
                                     component: Vue.component('AddCandidate', require('./components/candidates/AddCandidate.vue')),
                                     beforeEnter: requireAuth,
                                     meta: {
-                                        permitted: ['Super-admin', 'Admin'],
+                                        permitted: ['Super-admin', 'Admin', 'Data Entry'],
                                         isElectionPage: true
                                     }
                                 }
@@ -434,7 +459,8 @@ export default new VueRouter({
                                     name: 'Browse Updates',
                                     component: Vue.component('BrowseLiveUpdates', require('./components/liveUpdates/BrowseLiveUpdates.vue')),
                                     meta: {
-                                        isElectionPage: true
+                                        isElectionPage: true,
+                                        permittedToMakeChanges: ['Super-admin', 'Admin', 'Tracking Officer']
                                     }
                                 },
                                 {
@@ -473,7 +499,8 @@ export default new VueRouter({
                                     name: 'Browse Incidents',
                                     component: Vue.component('BrowseIncidents', require('./components/incidents/BrowseIncidents.vue')),
                                     meta: {
-                                        isElectionPage: true
+                                        isElectionPage: true,
+                                        permittedToMakeChanges: ['Super-admin', 'Admin', 'Tracking Officer']
                                     }
                                 },
                                 {
@@ -508,7 +535,8 @@ export default new VueRouter({
                                 }
                             },
                             meta: {
-                                isElectionPage: true
+                                isElectionPage: true,
+                                permittedToMakeChanges: ['Super-admin', 'Admin', 'Tracking Officer', 'Data Entry']
                             }
                         },
                         {
@@ -525,7 +553,8 @@ export default new VueRouter({
                                     name: 'Pictures',
                                     component: Vue.component('BrowsePictures', require('./components/pictures/BrowsePictures.vue')),
                                     meta: {
-                                        isElectionPage: true
+                                        isElectionPage: true,
+                                        permittedToMakeChanges: ['Super-admin', 'Admin', 'Tracking Officer']
                                     }
                                 },
                                 {

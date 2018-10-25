@@ -15,7 +15,7 @@
     <div class="content">
         <div class="container">
 
-            <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
+            <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true" id="action-btn">
                 <router-link class="btn btn-success btn-fab btn-lg btn-round" 
                     :to="'/politicalParties/add'">
                     <i class="material-icons">add</i>
@@ -44,15 +44,13 @@
                                     <h4>{{ politicalParty.name }}</h4>
                                 </div>
                                 <div class="card-footer">
-                                    <div v-if="userLoadStatus == 2 && user != {}">
-                                        <router-link class="btn btn-warning" 
+                                    <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">
+                                        <router-link class="btn btn-just-icon btn-warning" 
                                             :to="'/politicalParties/edit/'+politicalParty.id">
                                             <i class="material-icons">create</i>
-                                            Edit
                                         </router-link>
-                                        <button @click="deletePoliticalParty(politicalParty.id)" class="btn btn-danger">
+                                        <button @click="deletePoliticalParty(politicalParty.id)" class="btn btn-just-icon btn-danger">
                                             <i class="material-icons">cancel</i>
-                                            Delete
                                         </button>
                                     </div>
                                 </div>
@@ -74,7 +72,8 @@
         },
         data() {
             return {
-                HF: HELPERS
+                HF: HELPERS,
+                permittedToMakeChanges: false
             }
         },
         computed: {
@@ -102,6 +101,13 @@
         },
         created() {
             this.$store.dispatch('getPoliticalParties');
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         mounted() {
 
@@ -127,6 +133,14 @@
                         'success'
                     );
                 } 
+            },
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         methods: {

@@ -29,7 +29,7 @@
                                 </small>
                             </h4>
                             <div v-html="picture.description" class="card-text"></div>
-                            <div v-if="userLoadStatus == 2 && user != {}">
+                            <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">
                                 <router-link class="btn btn-sm btn-just-icon btn-warning" 
                                     :to="'/election/'+election.id+'/pictures/edit/'+picture.id">
                                     <i class="material-icons">create</i>
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
+            <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true" id="action-btn">
                 <router-link class="btn btn-success btn-fab btn-lg btn-round" 
                     :to="'/election/'+election.id+'/pictures/add'">
                     <i class="material-icons">add</i>
@@ -73,7 +73,8 @@
         data() {
             return {
                 moment: window.moment,
-                HF: HELPERS
+                HF: HELPERS,
+                permittedToMakeChanges: false
             }
         },
         computed: {
@@ -129,6 +130,14 @@
                         'success'
                     );
                 } 
+            },
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         created() {
@@ -136,6 +145,13 @@
                 election_id: this.$route.params.id,
                 url: null
             });
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         methods: {
             getPictures(url) {

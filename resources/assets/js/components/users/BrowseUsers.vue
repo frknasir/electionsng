@@ -86,7 +86,9 @@
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">
-                                                <i class="material-icons">search</i>
+                                                <i class="material-icons">
+                                                    Search
+                                                </i>
                                             </span>
                                         </div>
                                         <input type="text" class="form-control form-control-success" 
@@ -110,7 +112,7 @@
                                 <th role="columnheader">Email</th>
                                 <th role="columnheader">Roles</th>
                                 <th role="columnheader">Status</th>
-                                <th role="columnheader" v-if="userLoadStatus == 2 && user != {}">Action</th>
+                                <th role="columnheader" v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">Action</th>
                             </tr>
                         </thead> 
                         <tbody role="rowgroup">
@@ -128,7 +130,7 @@
                                 <td>
                                     {{ user.active_label }}
                                 </td>
-                                <td v-if="userLoadStatus == 2 && user != {}" class="td-actions">
+                                <td v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true" class="td-actions">
                                     <router-link 
                                         :to="'/users/edit/'+user.id" 
                                         rel="tooltip" class="btn btn-success">
@@ -168,7 +170,8 @@
         },
         data() {
             return {
-                HF: HELPERS
+                HF: HELPERS,
+                permittedToMakeChanges: false
             }
         },
         computed: {
@@ -198,6 +201,13 @@
             this.$store.dispatch('getUsers', {
                 url: null
             });
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         mounted() {
 
@@ -225,6 +235,14 @@
                         'success'
                     );
                 } 
+            },
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         methods: {

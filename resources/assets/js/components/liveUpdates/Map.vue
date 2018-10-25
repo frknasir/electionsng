@@ -34,15 +34,13 @@
                 <div class="card-header card-header-success">
                     <h4 class="card-title"></h4>
                     <p class="category"></p> 
-                    <div v-if="userLoadStatus == 2 && user != {}">
-                        <router-link class="btn btn-sm btn-warning" 
+                    <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">
+                        <router-link class="btn btn-just-icon btn-sm btn-warning" 
                             :to="'/election/'+election.id+'/liveUpdates/edit/'+liveUpdate.id">
                             <i class="material-icons">create</i>
-                            Edit
                         </router-link>
-                        <button @click="deleteLiveUpdate(liveUpdate.id)" class="btn btn-sm btn-danger">
+                        <button @click="deleteLiveUpdate(liveUpdate.id)" class="btn btn-just-icon btn-sm btn-danger">
                             <i class="material-icons">clear</i>
-                            Delete
                         </button>
                     </div>
                 </div>
@@ -137,7 +135,8 @@
                 location_filter: null,
                 filter_btn_label: "Filter By",
                 info_desc: '',
-                HF: HELPERS
+                HF: HELPERS,
+                permittedToMakeChanges: false
             }
         },
         computed: {
@@ -220,6 +219,14 @@
                         'success'
                     );
                 } 
+            },
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         mounted() {
@@ -231,6 +238,13 @@
                 url: null,
                 limit: null
             });
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         methods: {
             initMap() {

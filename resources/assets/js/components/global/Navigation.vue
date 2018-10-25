@@ -56,8 +56,10 @@
       }
     },
     watch: {
-      election: function() {
-        this.title = this.election.title.substring(0, 19) + "... ";
+      electionLoadStatus: function(val) {
+        if(val == 2) {
+          this.title = this.election.title.substring(0, 19) + "... ";
+        }
       }
     },
     mounted() {},

@@ -157,7 +157,7 @@
                     <th role="columnheader">Party</th>
                     <th role="columnheader">Candidate</th>
                     <th role="columnheader">Votes</th>
-                    <th role="columnheader" v-if="userLoadStatus == 2 && user != {}">Action</th>
+                    <th role="columnheader" v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -166,7 +166,7 @@
                     <td>{{ result.party }}</td>
                     <td>{{ result.candidate_name }}</td>
                     <td>{{ result.votes }}</td>
-                    <td v-if="userLoadStatus == 2 && user != {}" class="td-actions">
+                    <td v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true" class="td-actions">
                         <button v-if="result.votes !== 'Not Available'" rel="tooltip" class="btn btn-success" 
                             data-toggle="modal" data-target="#updateResultModal" 
                             :data-id="result.id" :data-votes="result.votes" 
@@ -277,9 +277,6 @@
             </div>
         </div>
         <!-- /End Result Modal -->
-    
-    
-    
     </div>
 </template>
 <script>
@@ -334,7 +331,8 @@
                 lg_slct: null,
                 ra_slct: null,
                 pu_slct: null,
-                chartData: []
+                chartData: [],
+                permittedToMakeChanges: false
             }
         },
         mounted() {
@@ -353,6 +351,13 @@
             this.$store.dispatch('getFinalResults', {
                 id: this.$route.params.id
             });
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         watch: {
             location_type: function() {
@@ -536,6 +541,15 @@
                     this.initAddResultModal();
                     this.initUpdateResultModal();
                 });
+            },
+
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         computed: {

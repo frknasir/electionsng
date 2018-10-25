@@ -19,7 +19,7 @@
 <template>
     <div class="content">
         <div class="container">
-            <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
+            <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true" id="action-btn">
                 <router-link class="btn btn-success btn-fab btn-lg btn-round" 
                     to="elections/add">
                     <i class="material-icons">add</i>
@@ -82,7 +82,7 @@
                                             </p>
                                         </div>
                                         <div class="card-footer">
-                                            <div v-if="userLoadStatus == 2 && user != {}">
+                                            <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">
                                                 <router-link 
                                                     :to="'/elections/edit/'+election.id" 
                                                     rel="tooltip" class="btn btn-sm btn-success">
@@ -123,11 +123,15 @@
     </div>
 </template>
 <script>
+    import { HELPERS } from '../../helpers.js';
+
     export default {
         data() {
             return {
                 moment: window.moment,
-                election_filter: 'all'
+                election_filter: 'all',
+                permittedToMakeChanges: false,
+                HF: HELPERS
             }
         },
         computed: {
@@ -157,13 +161,20 @@
             this.$store.dispatch('getElections', {
                 url: null
             });
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         mounted() {
             
         }, 
         watch: {
-            elections: function() {
-                if(this.electionsLoadStatus == 2) {
+            electionsLoadStatus: function(val) {
+                if(val == 2) {
                     this.$nextTick(function () {
                         // Code that will run only after the
                         // entire view has been rendered
@@ -223,6 +234,16 @@
                         'success'
                     );
                 } 
+            },
+            userLoadStatus: function(val) {
+                let vm = this;
+
+                if(val == 2) {
+                    vm.permittedToMakeChanges = vm.HF.authorise(
+                        vm.user.roles, 
+                        vm.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         methods: {

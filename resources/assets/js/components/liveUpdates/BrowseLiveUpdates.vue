@@ -40,7 +40,7 @@
                 </button>
             </div>
         </div>
-        <div v-if="userLoadStatus == 2 && user != {}" id="action-btn">
+        <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true" id="action-btn">
             <router-link class="btn btn-success btn-fab btn-lg btn-round" 
                 :to="'/election/'+election.id+'/liveUpdates/add'">
                 <i class="material-icons">add</i>
@@ -51,19 +51,22 @@
     </div>
 </template>
 <script>
+    import { HELPERS } from '../../helpers.js';
     import MapComponent from './Map.vue';
     import Timeline from './Timeline.vue';
 
     export default {
         components: {
             MapComponent,
-            Timeline,
+            Timeline
         },
         data() {
             return {
                 active_component: 'map',
                 map_active: true,
                 timeline_active: false,
+                permittedToMakeChanges: false,
+                HF: HELPERS
             }
         }, 
         computed: {
@@ -78,7 +81,14 @@
             }
         },
         watch: {
-
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
+            }
         },
         mounted() {
 
@@ -87,6 +97,13 @@
             this.$store.dispatch("getElection", {
                 id: this.$route.params.id
             });
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         methods: {
             toggleComponent(component) {

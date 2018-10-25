@@ -31,10 +31,10 @@
             :color="'#4caf50'"></action-loader>
         
         <!-- timeline item 1 -->
-        <div v-for="liveUpdate in liveUpdates" v-bind:key="liveUpdate.id" class="row no-gutters">
-            <div v-if="liveUpdate.id % 2 == 0"  class="col-sm"> <!--spacer--> </div>
+        <div v-for="(liveUpdate, index) in liveUpdates" v-bind:key="liveUpdate.id" class="row no-gutters">
+            <div v-if="index % 2 == 0"  class="col-sm"> <!--spacer--> </div>
             <!-- timeline item 1 center dot -->
-            <div v-if="liveUpdate.id % 2 == 0" class="col-sm-1 text-center flex-column d-none d-sm-flex">
+            <div v-if="index % 2 == 0" class="col-sm-1 text-center flex-column d-none d-sm-flex">
                 <div class="row h-50">
                     <div class="col">&nbsp;</div>
                     <div class="col">&nbsp;</div>
@@ -70,21 +70,19 @@
                             <i class="material-icons">flag</i> 
                             <span class="updated_at">Edited</span>
                         </div>
-                        <div v-if="userLoadStatus == 2 && user != {}">
-                            <router-link class="btn btn-sm btn-warning" 
+                        <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">
+                            <router-link class="btn btn-sm btn-just-icon btn-warning" 
                                 :to="'/election/'+election.id+'/liveUpdates/edit/'+liveUpdate.id">
                                 <i class="material-icons">create</i>
-                                Edit
                             </router-link>
-                            <button @click="deleteLiveUpdate(liveUpdate.id)" class="btn btn-sm btn-danger">
+                            <button @click="deleteLiveUpdate(liveUpdate.id)" class="btn btn-sm btn-just-icon btn-danger">
                                 <i class="material-icons">clear</i>
-                                Delete
                             </button>
                         </div>
                     </div> 
                 </div>
             </div>
-            <div v-if="liveUpdate.id % 2 == 1" class="col-sm-1 text-center flex-column d-none d-sm-flex">
+            <div v-if="index % 2 == 1" class="col-sm-1 text-center flex-column d-none d-sm-flex">
                 <div class="row h-50">
                     <div class="col border-right">&nbsp;</div>
                     <div class="col">&nbsp;</div>
@@ -97,7 +95,7 @@
                     <div class="col">&nbsp;</div>
                 </div>
             </div>
-            <div v-if="liveUpdate.id % 2 == 1" class="col-sm"> <!--spacer--></div>
+            <div v-if="index % 2 == 1" class="col-sm"> <!--spacer--></div>
         </div>
         <!--/row-->
     </div>
@@ -115,7 +113,8 @@
             return {
                 moment: window.moment,
                 location_filter: null,
-                HF: HELPERS
+                HF: HELPERS,
+                permittedToMakeChanges: false
             }
         },
         computed: {
@@ -172,6 +171,14 @@
                         'success'
                     );
                 } 
+            },
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         mounted() {
@@ -183,6 +190,13 @@
                 url: null,
                 limit: 10
             });
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         methods: {
             getLiveUpdates(url) {

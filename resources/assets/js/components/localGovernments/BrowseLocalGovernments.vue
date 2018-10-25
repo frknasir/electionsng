@@ -46,11 +46,10 @@
                                     </table>
                                 </div>
                                 <div class="card-footer">
-                                    <div v-if="userLoadStatus == 2 && user != {}">
-                                        <router-link class="btn btn-block btn-warning" 
+                                    <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">
+                                        <router-link class="btn btn-just-icon btn-warning" 
                                             :to="'/localGovernments/'+localGovernment.state_id+'/edit/'+localGovernment.id">
                                             <i class="material-icons">create</i>
-                                            Edit
                                         </router-link>
                                     </div>
                                 </div>
@@ -63,6 +62,7 @@
     </div>
 </template>
 <script>
+    import { HELPERS } from '../../helpers.js';
     import ActionLoader from 'vue-spinner/src/ScaleLoader.vue';
 
     export default {
@@ -71,7 +71,9 @@
         },
         data() {
             return {
-                state: ''
+                state: '',
+                permittedToMakeChanges: false,
+                HF: HELPERS
             }
         },
         computed: {
@@ -95,6 +97,13 @@
                     id: this.$route.params.stateId
                 }
             );
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         mounted() {
 
@@ -103,6 +112,14 @@
             localGovernmentsLoadStatus: function(val) {
                 if(val == 2) {
                     this.state = this.localGovernments[0].state_name;
+                }
+            },
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
                 }
             }
         }

@@ -16,5 +16,17 @@ export const HELPERS = {
                 align: align
             }
         });
+    },
+
+    authorise: function(roles = [], permitted = []) {
+        let flag = false;
+
+        roles.forEach(role => {
+            if(permitted.includes(role)) {
+                flag = true;
+            }
+        });
+
+        return true;
     }
 };

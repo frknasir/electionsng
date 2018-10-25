@@ -53,15 +53,13 @@
                                     </p>
                                 </div>
                                 <div class="card-footer">
-                                    <div v-if="userLoadStatus == 2 && user != {}">
-                                        <router-link class="btn btn-warning" 
+                                    <div v-if="userLoadStatus == 2 && user != {} && permittedToMakeChanges == true">
+                                        <router-link class="btn btn-just-icon btn-warning" 
                                             :to="'/pollingUnits/'+pollingUnit.registration_area_id+'/edit/'+pollingUnit.id">
                                             <i class="material-icons">create</i>
-                                            Edit
                                         </router-link>
-                                        <button @click="deletePollingUnit(pollingUnit.id)" class="btn btn-danger">
+                                        <button @click="deletePollingUnit(pollingUnit.id)" class="btn btn-just-icon btn-danger">
                                             <i class="material-icons">cancel</i>
-                                            Delete
                                         </button>
                                     </div>
                                 </div>
@@ -83,7 +81,8 @@
         },
         data() {
             return {
-                HF: HELPERS
+                HF: HELPERS,
+                permittedToMakeChanges: false
             }
         },
         computed: {
@@ -120,6 +119,13 @@
                     id: this.$route.params.registrationId
                 }
             );
+
+            if(this.userLoadStatus == 2) {
+                this.permittedToMakeChanges = this.HF.authorise(
+                    this.user.roles, 
+                    this.$route.meta.permittedToMakeChanges
+                );
+            }
         },
         mounted() {
 
@@ -149,6 +155,14 @@
                         'success'
                     );
                 } 
+            },
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.permittedToMakeChanges = this.HF.authorise(
+                        this.user.roles, 
+                        this.$route.meta.permittedToMakeChanges
+                    );
+                }
             }
         },
         methods: {
