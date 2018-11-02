@@ -12,16 +12,18 @@
             </h4>
         </div>
         <div class="card-body">
-            <column-chart :messages="{empty: 'No data'}" :data="'/api/v1/election/'+election.id+'/viz/location/mostIncidents'"
+            <column-chart :messages="{empty: 'No data'}" :data="url+'/election/'+election.id+'/viz/location/mostIncidents'"
             height="460px"></column-chart>
         </div>
     </div>
 </template>
 <script>
+    import { CONFIG } from '../../config.js';
+
     export default {
         data() {
             return {
-                
+                url: CONFIG.API_URL
             }
         },
         created() {

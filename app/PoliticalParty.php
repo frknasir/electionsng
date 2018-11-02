@@ -11,6 +11,7 @@ use Laravel\Scout\Searchable;
 class PoliticalParty extends Model
 {
     use Searchable;
+    
     /**
      * Eloquent Relationship
      */
