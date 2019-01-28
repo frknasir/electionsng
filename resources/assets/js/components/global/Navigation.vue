@@ -9,10 +9,7 @@
               <i class="material-icons">arrow_back</i>
           </router-link>
           <div v-if="electionLoadStatus != 1" class="navbar-wrapper">
-            <a v-if="$route.meta.isElectionPage" class="navbar-text">
-              {{ election.title }}
-            </a>
-            <a v-else class="navbar-text">
+            <a class="navbar-text">
               {{ $route.name }}
             </a>
           </div>
@@ -40,33 +37,33 @@
 
   export default {
     components: {
-      ActionLoader
+        ActionLoader
     },
     data() {
-      return {
-        title: null 
-      };
+        return {
+            title: null 
+        };
     },
     computed: {
-      election() {
-        return this.$store.getters.getElection;
-      },
-      electionLoadStatus() {
-        return this.$store.getters.getElectionLoadStatus;
-      }
+        election() {
+            return this.$store.getters.getElection;
+        },
+        electionLoadStatus() {
+            return this.$store.getters.getElectionLoadStatus;
+        }
     },
     watch: {
-      electionLoadStatus: function(val) {
-        if(val == 2) {
-          this.title = this.election.title.substring(0, 19) + "... ";
+        electionLoadStatus: function(val) {
+            if(val == 2) {
+                this.title = this.election.title.substring(0, 19) + "... ";
+            }
         }
-      }
     },
     mounted() {},
     created() {
-      this.$store.dispatch("getElection", {
-        id: this.$route.params.id
-      });
+        this.$store.dispatch("getElection", {
+            id: this.$route.params.id
+        });
     }
   };
 </script> 

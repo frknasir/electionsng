@@ -38,7 +38,7 @@ class ElectionController extends Controller
 
         $elections = Election::whereDate(
             'date',
-            '<',
+            '>',
             $this->today
         )->paginate();
 
@@ -50,7 +50,7 @@ class ElectionController extends Controller
 
         $elections = Election::whereDate(
             'date',
-            '>',
+            '<',
             $this->today
         )->paginate();
 

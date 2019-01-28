@@ -27,7 +27,7 @@ export default {
     GET /api/v1/elections/upcoming
     */
     getUpcoming: function(url = null) {
-        url = url || CONFIG.API_URL + '/elections/upcoming'
+        url = url || CONFIG.API_URL + '/elections/upcoming';
         return axios.get( url );
     },
 

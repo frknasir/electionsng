@@ -14,28 +14,27 @@ window.ClassicEditor = require('@ckeditor/ckeditor5-build-classic');
 
 try {
     window.$ = window.jQuery = require('jquery');
-    
-    //require('../../../template/material-dashboard-html-v2.1.0/assets/js/core/popper.min');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/core/bootstrap-material-design.min.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/perfect-scrollbar.jquery.min.js');
+
+    require('../../../public/js/core/bootstrap-material-design.min.js');
+    require('../../../public/js/plugins/perfect-scrollbar.jquery.min.js');
     window.moment = require('moment');
-    window.swal = require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/sweetalert2.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.validate.min.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.bootstrap-wizard.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-selectpicker.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-datetimepicker.min.js');
-    //require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.dataTables.min.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-tagsinput.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jasny-bootstrap.min.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/fullcalendar.min.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery-jvectormap.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/nouislider.min.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/core.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/arrive.min.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/buttons.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/bootstrap-notify.js');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/material-dashboard.min.js?v=2.0.2');
-    require('../../../template/material-dashboard-html-v2.1.0/assets/js/plugins/jquery.sharrre.js');
+    window.swal = require('../../../public/js/plugins/sweetalert2.js');
+    require('../../../public/js/plugins/jquery.validate.min.js');
+    require('../../../public/js/plugins/jquery.bootstrap-wizard.js');
+    require('../../../public/js/plugins/bootstrap-selectpicker.js');
+    require('../../../public/js/plugins/bootstrap-datetimepicker.min.js');
+    //require('../../../public/js/plugins/jquery.dataTables.min.js');
+    require('../../../public/js/plugins/bootstrap-tagsinput.js');
+    require('../../../public/js/plugins/jasny-bootstrap.min.js');
+    require('../../../public/js/plugins/fullcalendar.min.js');
+    require('../../../public/js/plugins/jquery-jvectormap.js');
+    require('../../../public/js/plugins/nouislider.min.js');
+    //require('../../../public/js/plugins/core.js');
+    require('../../../public/js/plugins/arrive.min.js');
+    //require('../../../public/js/plugins/buttons.js');
+    require('../../../public/js/plugins/bootstrap-notify.js');
+    require('../../../public/js/material-dashboard.min.js?v=2.1.0');
+    //require('../../../public/js/plugins/jquery.sharrre.js');
 } catch (e) {}
 
 /**

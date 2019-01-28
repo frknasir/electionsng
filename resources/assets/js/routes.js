@@ -460,6 +460,7 @@ export default new VueRouter({
                                     component: Vue.component('BrowseLiveUpdates', require('./components/liveUpdates/BrowseLiveUpdates.vue')),
                                     meta: {
                                         isElectionPage: true,
+                                        isMap: true,
                                         permittedToMakeChanges: ['Super-admin', 'Admin', 'Tracking Officer']
                                     }
                                 },
@@ -500,6 +501,7 @@ export default new VueRouter({
                                     component: Vue.component('BrowseIncidents', require('./components/incidents/BrowseIncidents.vue')),
                                     meta: {
                                         isElectionPage: true,
+                                        isMap: true,
                                         permittedToMakeChanges: ['Super-admin', 'Admin', 'Tracking Officer']
                                     }
                                 },
@@ -550,7 +552,7 @@ export default new VueRouter({
                             children: [
                                 {
                                     path: '',
-                                    name: 'Pictures',
+                                    name: 'Polls in Pictures',
                                     component: Vue.component('BrowsePictures', require('./components/pictures/BrowsePictures.vue')),
                                     meta: {
                                         isElectionPage: true,

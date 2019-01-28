@@ -1,31 +1,33 @@
 <style scoped>
-    #pagination {
+    /*#pagination {
         position: fixed;
         top: 10%;
         right: 30px;
         z-index: 4;
-    }
+    }*/
 </style>
  
 <template>
     <div class="container py-2 px-5">
         <!-- pagination -->
-        <div id="pagination">
-            <div class="card">
-                <div class="card-body text-center">
-                    <button @click="getIncidents(iPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !iPagination.prev_page_url}]">
-                        <i class="material-icons">chevron_left</i>
-                    </button>
-                    <label>
-                        showing to {{ iPagination.to }} of {{ iPagination.total }} updates
-                    </label>
-                    <button @click="getIncidents(iPagination.next_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !iPagination.next_page_url}]">
-                        <i class="material-icons">chevron_right</i>                        
-                    </button>
+        <div class="col-md-6 mr-auto ml-auto">
+            <div id="pagination">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <button @click="getIncidents(iPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !iPagination.prev_page_url}]">
+                            <i class="material-icons">chevron_left</i>
+                        </button>
+                        <label>
+                            showing to {{ iPagination.to }} of {{ iPagination.total }} updates
+                        </label>
+                        <button @click="getIncidents(iPagination.next_page_url)" 
+                            class="btn btn-just-icon" v-bind:class="[{disabled: !iPagination.next_page_url}]">
+                            <i class="material-icons">chevron_right</i>                        
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-
         <!-- Loader -->
         <action-loader class="text-center" :loading='incidentsLoadStatus == 1' 
             :color="'#4caf50'"></action-loader>
@@ -104,6 +106,25 @@
         </div>
         <!--/row-->
         <!--/row-->
+        <!-- pagination -->
+        <div class="col-md-6 mr-auto ml-auto">
+            <div id="pagination">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <button @click="getIncidents(iPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !iPagination.prev_page_url}]">
+                            <i class="material-icons">chevron_left</i>
+                        </button>
+                        <label>
+                            showing to {{ iPagination.to }} of {{ iPagination.total }} updates
+                        </label>
+                        <button @click="getIncidents(iPagination.next_page_url)" 
+                            class="btn btn-just-icon" v-bind:class="[{disabled: !iPagination.next_page_url}]">
+                            <i class="material-icons">chevron_right</i>                        
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

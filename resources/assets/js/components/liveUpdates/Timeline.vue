@@ -1,31 +1,32 @@
 <style scoped>
-    #pagination {
+    /*#pagination {
         position: fixed;
         top: 10%;
         right: 30px;
         z-index: 4;
-    }
+    }*/
 </style>
 
 <template>
     <div class="container py-2 px-5">
         <!-- pagination -->
-        <div id="pagination">
-            <div class="card">
-                <div class="card-body text-center">
-                    <button @click="getLiveUpdates(luPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.prev_page_url}]">
-                        <i class="material-icons">chevron_left</i>
-                    </button>
-                    <label>
-                        showing to {{ luPagination.to }} of {{ luPagination.total }} updates
-                    </label>
-                    <button @click="getLiveUpdates(luPagination.next_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.next_page_url}]">
-                        <i class="material-icons">chevron_right</i>                        
-                    </button>
+        <div class="col-md-6 mr-auto ml-auto">
+            <div id="pagination">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <button @click="getLiveUpdates(luPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.prev_page_url}]">
+                            <i class="material-icons">chevron_left</i>
+                        </button>
+                        <label>
+                            showing to {{ luPagination.to }} of {{ luPagination.total }} updates
+                        </label>
+                        <button @click="getLiveUpdates(luPagination.next_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.next_page_url}]">
+                            <i class="material-icons">chevron_right</i>                        
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-
         <!-- Loader -->
         <action-loader class="text-center" :loading='liveUpdatesLoadStatus == 1' 
             :color="'#4caf50'"></action-loader>
@@ -98,6 +99,24 @@
             <div v-if="index % 2 == 1" class="col-sm"> <!--spacer--></div>
         </div>
         <!--/row-->
+        <!-- pagination -->
+        <div class="col-md-6 mr-auto ml-auto">
+            <div id="pagination">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <button @click="getLiveUpdates(luPagination.prev_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.prev_page_url}]">
+                            <i class="material-icons">chevron_left</i>
+                        </button>
+                        <label>
+                            showing to {{ luPagination.to }} of {{ luPagination.total }} updates
+                        </label>
+                        <button @click="getLiveUpdates(luPagination.next_page_url)" class="btn btn-just-icon" v-bind:class="[{disabled: !luPagination.next_page_url}]">
+                            <i class="material-icons">chevron_right</i>                        
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

@@ -10,27 +10,29 @@
             Tip 2: you can also add an image using data-image tag
         -->
         <div class="logo">
+            <router-link class="simple-text logo-mini" to="/">
+                EN
+            </router-link>
             <router-link class="simple-text logo-normal" to="/">
                 ElectionsNG
             </router-link>
         </div>
         <div class="sidebar-wrapper">
-            <ul class="nav">
-                <li v-if="userLoadStatus == 2 && user != {}" class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#userCollapse">
-                        <i class="material-icons">
-                            settings
-                        </i>
-                        <p>
+            <div v-if="userLoadStatus == 2 && user != {}" class="user">
+                <div class="photo">
+                    <img src="/img/default-avatar.png" />
+                </div>
+                <div class="user-info">
+                    <a data-toggle="collapse" href="#collapseExample" class="username">
+                        <span>
                             {{ user.name }}
                             <b class="caret"></b>
-                        </p>
+                        </span>
                     </a>
-
-                    <div class="collapse" id="userCollapse">
+                    <div class="collapse" id="collapseExample">
                         <ul class="nav">
-                            <li class="nav-item ">
-                                <a class="dropdown-item" :href="config.URL+'/logout'" 
+                            <li class="nav-item">
+                                <a class="nav-link" :href="config.URL+'/logout'" 
                                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">
                                     <span class="sidebar-mini"> L </span>
@@ -43,15 +45,19 @@
                             </li>
                         </ul>
                     </div>
-                </li>
-
-                <li v-else class="nav-item">
-                    <a class="nav-link" :href="config.URL+'/login'">
-                        <i class="material-icons">person</i>
-                        <p>Login</p>
+                </div>
+            </div>
+            <div v-else class="user">
+                <div class="photo">
+                    <img src="/img/default-avatar.png" />
+                </div>
+                <div class="user-info">
+                    <a class="username" :href="config.URL+'/login'">
+                        <span>Login</span>
                     </a>
-                </li>
-
+                </div>
+            </div>
+            <ul class="nav">
                 <!--<li @click="updateActivePage('home')" class="nav-item" :class="{ 'active': active_pages.home.is_active }">
                     <router-link class="nav-link" to='/'>
                         <i class="material-icons">home</i>
@@ -104,7 +110,7 @@
                             <i class="material-icons">
                                 image
                             </i>
-                            <p>Pictures</p>
+                            <p>Polls In Pictures</p>
                         </router-link>
                     </li>
                 </div>
@@ -175,7 +181,7 @@
 </template>
 
 <script>
-    import bg from '../../../../../template/material-dashboard-html-v2.1.0/assets/img/sidebar-1.jpg';
+    import bg from '../../../../../public/img/sidebar-1.jpg';
     import { CONFIG } from '../../config.js';
 
     export default {

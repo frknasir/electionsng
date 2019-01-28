@@ -1,7 +1,7 @@
 <style scoped>
     .maps {
         height: 200px;
-        z-index: 2;
+        z-index: -1;
     }
 
     #action-btn {
@@ -64,21 +64,25 @@
                                 <div v-for="election in elections" v-bind:key="election.id" class="col-md-4">
                                     <div class="card">
                                         <div class="card-header card-chart card-header-success p-0">
-                                            <div :id="election.id" class="maps"></div>
+                                            <router-link :to="'/election/'+election.id" >
+                                                <div :id="election.id" class="maps"></div>
+                                            </router-link>
                                         </div>
                                         <div class="card-body">
                                             <h4 class="card-title">
                                                 <router-link :to="'/election/'+election.id">
-                                                    {{ election.title }}
+                                                    {{ moment(election.date, 'YYYY-MM-DD').format('ll') }}
                                                 </router-link><br />
                                                 <small class="badge badge-success">
                                                     {{ election.election_type_name }}
                                                 </small>
                                             </h4>
                                             <p class="card-category text-center">
-                                                <span class="display-4">
-                                                    {{ moment(election.date, 'YYYY-MM-DD').format('ll') }}
-                                                </span>
+                                                <router-link :to="'/election/'+election.id">
+                                                    <h4>
+                                                        {{ election.title }}
+                                                    </h4>
+                                                </router-link>
                                             </p>
                                         </div>
                                         <div class="card-footer">

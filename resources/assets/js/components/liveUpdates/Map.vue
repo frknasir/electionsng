@@ -1,9 +1,14 @@
 <style scoped>
     #map {
-        position:absolute;
+        position: fixed;
         width: 100%;
-        height: 89%;
+        height: 100vh;
         z-index: 1;
+    }
+
+    .map-box {
+        display: flex;
+        flex-direction: column;
     }
 
     #info-window {
@@ -26,7 +31,7 @@
 </style>
 <template>
     <div>
-        <div class="wrapper-full-page" id="map"></div>
+        <div id="map"></div>
 
         <!--info window-->
         <div v-show="info_window_active" id="info-window" class="col-md-4">
