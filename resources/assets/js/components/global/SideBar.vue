@@ -173,8 +173,8 @@
             </ul>
             <hr>
             <div class="copyright p-3">
-                &copy; 2018,
-                <!-- <a href="https://starfolk.tech" target="_blank">Starfolk,LLC</a> for a better nation. -->
+                <!-- &copy; 2018,
+                <a href="https://starfolk.tech" target="_blank">Starfolk,LLC</a> for a better nation. -->
             </div>
         </div>
     </div>
