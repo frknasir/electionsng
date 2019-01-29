@@ -18,7 +18,7 @@
             </router-link>
         </div>
         <div class="sidebar-wrapper">
-            <div v-if="userLoadStatus == 2 && user != {}" class="user">
+            <div v-show="userLoadStatus == 2 && user != {}" class="user">
                 <div class="photo">
                     <img src="/img/default-avatar.png" />
                 </div>
@@ -40,14 +40,16 @@
                                 </a>
                                 <form id="logout-form" :action="config.URL+'/logout'" 
                                     method="POST" style="display: none;">
-                                    <input type="hidden" name="_token" id="csrf-token" :value="csrf_token" />
+                                    <input type="hidden" name="_token" id="csrf-token" 
+                                        :value="csrf_token" />
                                 </form>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <div v-else class="user">
+            <div v-show="userLoadStatus != 2 || user == {}" class="user">
+                <!-- Login -->
                 <div class="photo">
                     <img src="/img/default-avatar.png" />
                 </div>
@@ -56,6 +58,18 @@
                         <span>Login</span>
                     </a>
                 </div>
+                <!-- End Login -->
+
+                <!-- Register -->
+                <div class="photo">
+                    <img src="/img/default-avatar.png" />
+                </div>
+                <div class="user-info">
+                    <a class="username" :href="config.URL+'/register'">
+                        <span>Register</span>
+                    </a>
+                </div>
+                <!-- End Register -->
             </div>
             <ul class="nav">
                 <!--<li @click="updateActivePage('home')" class="nav-item" :class="{ 'active': active_pages.home.is_active }">

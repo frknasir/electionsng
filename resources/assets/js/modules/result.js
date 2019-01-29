@@ -55,7 +55,7 @@ export const result = {
                 let l = 'No Results Available For This Location';
                 let type = '';
                 if(response.data.data[0].location) {
-                    l = response.data.data[0].location.name;
+                    l = response.data.data[0].location.name || response.data.data[0].location.code;
                 }
 
                 commit('setForr', {
