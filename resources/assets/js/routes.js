@@ -582,6 +582,11 @@ export default new VueRouter({
                             ]
                         }
                     ]
+                },
+                {
+                    path: '/find-your-pu',
+                    name: 'Find Your PU',
+                    component: Vue.component( 'FindYourPU', require( './pages/FindYourPU.vue' ) )
                 }
             ]
         }

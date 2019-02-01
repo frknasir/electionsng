@@ -91,7 +91,7 @@
                                             </span>
                                         </label>
                                     </div>
-                                    <div class="form-check form-check-radio form-check-inline disabled">
+                                    <div class="form-check form-check-radio form-check-inline">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="radio" 
                                                 name="pu-location_type" 
@@ -101,7 +101,7 @@
                                             </span>
                                         </label>
                                     </div>
-                                    <div class="form-check form-check-radio form-check-inline disabled">
+                                    <div class="form-check form-check-radio form-check-inline">
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="radio" 
                                                 name="pu-location_type" 

@@ -68,7 +68,7 @@
                     <a class="username" :href="config.URL+'/register'">
                         <span>Register</span>
                     </a>
-                </div>
+                </div> 
                 <!-- End Register -->
             </div>
             <ul class="nav">
@@ -81,6 +81,12 @@
 
                 <!-- the chunk below will be visible only when an election is not being monitored -->
                 <div v-if="$route.meta.isElectionPage">
+                    <li @click="updateActivePage('home')" class="nav-item" :class="{ 'active': active_pages.home.is_active }">
+                        <router-link class="nav-link" to='/'>
+                            <i class="material-icons">home</i>
+                            <p>Back to Home</p>
+                        </router-link>
+                    </li>
                     <li @click="updateActivePage('dashboard')" class="nav-item" :class="{ 'active': active_pages.dashboard.is_active }">
                         <router-link class="nav-link" :to="'/election/'+$route.params.id">
                             <i class="material-icons">dashboard</i>
@@ -137,6 +143,14 @@
                             ballot
                         </i>
                         <p>Elections</p>
+                    </router-link>
+                </li>
+                <li @click="updateActivePage('findYourPU')" class="nav-item" :class="{ 'active': active_pages.findYourPU.is_active }">
+                    <router-link class="nav-link" to='/find-your-pu'>
+                        <i class="material-icons">
+                            location_on
+                        </i>
+                        <p>Find Your PU</p>
                     </router-link>
                 </li>
                 <!-- Administrative Chunk -->
@@ -209,6 +223,9 @@
                     home: {
                         is_active: true
                     },
+                    findYourPU: {
+                        is_active: false
+                    },
                     dashboard: {
                         is_active: false
                     },
@@ -256,6 +273,10 @@
                         this.active_pages.home.is_active = true;
                         break;
 
+                    case "findYourPU":
+                        this.active_pages.findYourPU.is_active = true;
+                        break;
+
                     case "dashboard":
                         this.active_pages.dashboard.is_active = true;
                         break;
@@ -295,6 +316,9 @@
             resetActivePages() {
                 this.active_pages = {
                     home: {
+                        is_active: false
+                    },
+                    findYourPU: {
                         is_active: false
                     },
                     dashboard: {
