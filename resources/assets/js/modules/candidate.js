@@ -81,7 +81,7 @@ export const candidate = {
         updateCandidate({commit, state, dispatch}, data) {
             commit('setUpdateCandidateLoadStatus', 1);
 
-            CandidateAPI.updateCandidate(
+            CandidateAPI.updateCandidate( 
                 data.id,
                 data.political_party_id,
                 data.aspirant,

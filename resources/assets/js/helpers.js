@@ -27,6 +27,6 @@ export const HELPERS = {
             }
         });
 
-        return true;
+        return flag;
     }
 };

@@ -154,7 +154,7 @@
                     </router-link>
                 </li>
                 <!-- Administrative Chunk -->
-                <li v-if="userLoadStatus == 2 && user != {}" class="nav-item dropdown" 
+                <li v-if="userLoadStatus == 2 && user != {} && canSeeAdminDropdown" class="nav-item dropdown" 
                     :class="{ 'active': active_pages.administration.is_active }">
                     <a class="nav-link" data-toggle="collapse" href="#adminCollapse">
                         <i class="material-icons">
@@ -174,19 +174,19 @@
                                     <span class="sidebar-normal">Electoral Areas</span>
                                 </router-link>
                             </li>
-                            <li @click="updateActivePage('administration')" class="nav-item">
+                            <li v-show="isAdmins" @click="updateActivePage('administration')" class="nav-item">
                                 <router-link class="dropdown-item" to='/politicalParties'>
                                     <span class="sidebar-mini">PP</span>
                                     <span class="sidebar-normal">Political Parties</span>
                                 </router-link>
                             </li>
-                            <li @click="updateActivePage('administration')" class="nav-item">
+                            <li v-show="isAdmins" @click="updateActivePage('administration')" class="nav-item">
                                 <router-link class="dropdown-item" to='/incidentTypes'>
                                     <span class="sidebar-mini">IT</span>
                                     <span class="sidebar-normal">Incident Types</span>
                                 </router-link>
                             </li>
-                            <li @click="updateActivePage('administration')" class="nav-item">
+                            <li v-show="user.roles.includes('Super-admin')" @click="updateActivePage('administration')" class="nav-item">
                                 <router-link class="dropdown-item" to='/users'>
                                     <span class="sidebar-mini">MU</span>
                                     <span class="sidebar-normal">Manage Users</span>
@@ -209,12 +209,14 @@
 </template>
 
 <script>
+    import { HELPERS } from '../../helpers.js';
     import bg from '../../../../../public/img/sidebar-1.jpg';
     import { CONFIG } from '../../config.js';
 
     export default {
         data() {
             return {
+                HF: HELPERS,
                 bg: bg,
                 active: this.$route.name,
                 config: CONFIG,
@@ -250,11 +252,25 @@
                     administration: {
                         is_active: false
                     }
-                }
+                },
+                isAdmins: false,
+                canSeeAdminDropdown: false
             } 
         },
         created() {
             this.$store.dispatch('getAuthUser');
+
+            if(this.userLoadStatus == 2) {
+                this.isAdmins = this.HF.authorise(
+                    this.user.roles, 
+                    ['Super-admin','Admin']
+                );
+
+                this.canSeeAdminDropdown = this.HF.authorise(
+                    user.roles,
+                    ['Super-admin','Admin','Data Entry']
+                );
+            }
         },
         computed: {
             user() {
@@ -262,6 +278,21 @@
             },
             userLoadStatus() {
                 return this.$store.getters.getUserLoadStatus;
+            }
+        },
+        watch: {
+            userLoadStatus: function(val) {
+                if(val == 2) {
+                    this.isAdmins = this.HF.authorise(
+                        this.user.roles, 
+                        ['Super-admin','Admin']
+                    );
+
+                    this.canSeeAdminDropdown = this.HF.authorise(
+                        user.roles,
+                        ['Super-admin','Admin','Data Entry']
+                    );
+                }
             }
         },
         methods: {
