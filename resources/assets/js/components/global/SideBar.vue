@@ -267,7 +267,7 @@
                 );
 
                 this.canSeeAdminDropdown = this.HF.authorise(
-                    user.roles,
+                    this.user.roles,
                     ['Super-admin','Admin','Data Entry']
                 );
             }
@@ -289,7 +289,7 @@
                     );
 
                     this.canSeeAdminDropdown = this.HF.authorise(
-                        user.roles,
+                        this.user.roles,
                         ['Super-admin','Admin','Data Entry']
                     );
                 }
