@@ -28,6 +28,7 @@ try {
     require('../../../public/js/plugins/jasny-bootstrap.min.js');
     require('../../../public/js/plugins/fullcalendar.min.js');
     require('../../../public/js/plugins/jquery-jvectormap.js');
+    require('../../../public/js/jvector-map-ng.js');
     require('../../../public/js/plugins/nouislider.min.js');
     //require('../../../public/js/plugins/core.js');
     require('../../../public/js/plugins/arrive.min.js');

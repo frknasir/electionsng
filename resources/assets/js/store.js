@@ -40,6 +40,7 @@ import { role } from './modules/role.js';
 import { state } from './modules/state.js';
 import { user } from './modules/user.js';
 import { viz } from './modules/viz.js';
+import { metric } from './modules/metric.js';
 
 /*
 Exports our data store.
@@ -61,6 +62,7 @@ export default new Vuex.Store({
         role,
         state,
         user,
-        viz
+        viz,
+        metric
     }
 });

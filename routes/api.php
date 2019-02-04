@@ -494,6 +494,11 @@ Route::group(['prefix'=> 'v1'], function() {
       '/election/{electionId}/viz/finalResults',
       'VizController@getFinalResultsData'
     );
+
+    /**
+     * Metric Data
+     */
+    Route::get('/metric', 'MetricController@index');
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

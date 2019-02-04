@@ -6,6 +6,9 @@
     <div class="content">
         <div class="container">
 
+            <!-- render general metrics -->
+            <general-metrics></general-metrics>
+
             <div class="card card-blog">
                 <div class="card-header card-header-image">
                     <iframe width="100%" height="480" src="https://www.youtube.com/embed/tQMKGcvMQME?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" ></iframe>
@@ -18,19 +21,22 @@
                 </div>
             </div><br><br>
 
-            <!-- Browse Election Component -->
-            <browse-elections></browse-elections>
+            <!-- render map metrics -->
+            <map-component></map-component>
+
         </div>
     </div>
 </template>
 
 <script>
     import bg from '../../../../public/img/product2.jpg';
-    import BrowseElections from '../components/elections/BrowseElections.vue';
+    import GeneralMetrics from '../components/home/GeneralMetrics.vue';
+    import MapComponent from '../components/home/Map.vue';
     
     export default {
         components: {
-            BrowseElections
+            GeneralMetrics,
+            MapComponent
         },
         data() {
             return {
