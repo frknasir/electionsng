@@ -17,10 +17,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td>Kaduna</td>
-                                    <td>10</td>
+                                <tr v-for="(x, index) in stateElectionsCount" :key="index">
+                                    <td class="text-center">{{ index + 1 }}</td>
+                                    <td>{{ x.name }}</td>
+                                    <td>{{ x.elections_count }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -37,31 +37,36 @@
     export default {
         data() {
             return {
-                mapData: {
-                    "NG-AB": 760,
-                    "NG-AD": 550,
-                    "NG-AK": 120,
-                    "NG-BA": 1300,
-                    "NG-BE": 540,
-                    "NG-BO": 690,
-                    "NG-BY": 200,
-                    "NG-CR": 200,
-                    "NG-DE": 600,
-                    "NG-EB": 300,
-                    "NG-ED": 2920,
-                }
+                mapData: {}
             };
         },
         computed: {
+            stateElectionsCount() {
+                return this.$store.getters.getStateElectionsCount;
+            },
 
+            stateElectionsCountLoadStatus() {
+                return this.$store.getters.getStateElectionsCountLoadStatus;
+            }
         },
         created() {
+            this.$store.dispatch('loadStateElectionsCount');
+        },
+        watch: {
+            stateElectionsCountLoadStatus: function(val) {
+                if(val == 2) {
+                    this.stateElectionsCount.forEach(sec => {
+                        this.mapData["NG-"+sec.code] = sec.elections_count * 100;
+                    });
 
+                    this.$nextTick(() => {
+                        this.initMap();
+                    });
+                }
+            }
         },
         mounted() {
-            this.$nextTick(()=>{
-                this.initMap();
-            });
+            
         },
         methods: {
             initMap: function() {

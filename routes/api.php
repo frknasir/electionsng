@@ -499,6 +499,7 @@ Route::group(['prefix'=> 'v1'], function() {
      * Metric Data
      */
     Route::get('/metric', 'MetricController@index');
+    Route::get('/stateElectionsCount', 'MetricController@getStateElectionsCount');
 });
 
 //Route::get('/lg/coordinates/populate', 'LocalGovernmentController@getCoordinates');

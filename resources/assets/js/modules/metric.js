@@ -10,7 +10,9 @@ import MetricAPI from '../api/metric.js';
 export const metric = {
     state: {
         metrics: {},
-        metricsLoadStatus: 0
+        metricsLoadStatus: 0,
+        stateElectionsCount: {},
+        stateElectionsCountLoadStatus: 0
     },
     actions: {
         loadMetrics({commit, state}, data) {
@@ -24,6 +26,18 @@ export const metric = {
                 commit('setMetrics', {});
             });
         },
+
+        loadStateElectionsCount({commit, state}, data) {
+            commit('setStateElectionsCountLoadStatus', 1);
+
+            MetricAPI.getStateElectionsCount().then(function(response) {
+                commit('setStateElectionsCountLoadStatus', 2);
+                commit('setStateElectionsCount', response.data);
+            }).catch(function() {
+                commit('setStateElectionsCountLoadStatus', 3);
+                commit('setStateElectionsCount', {});
+            });
+        }
     },
     mutations: {
         setMetrics(state, metrics) {
@@ -32,6 +46,14 @@ export const metric = {
 
         setMetricsLoadStatus(state, status) {
             state.metricsLoadStatus = status;
+        },
+
+        setStateElectionsCount(state, stateElectionsCount) {
+            state.stateElectionsCount = stateElectionsCount;
+        },
+
+        setStateElectionsCountLoadStatus(state, status) {
+            state.stateElectionsCountLoadStatus = status;
         }
     },
     getters: {
@@ -41,6 +63,14 @@ export const metric = {
 
         getMetricsLoadStatus(state) {
             return state.metricsLoadStatus;
+        },
+
+        getStateElectionsCount(state) {
+            return state.stateElectionsCount;
+        },
+
+        getStateElectionsCountLoadStatus(state) {
+            return state.stateElectionsCountLoadStatus;
         }
     }
 };

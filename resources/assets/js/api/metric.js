@@ -9,5 +9,12 @@ export default {
      */
     index: function() {
         return axios.get(CONFIG.API_URL + "/metric");
+    },
+
+    /**
+     * GET /api/v1/stateElectionsCount
+     */
+    getStateElectionsCount: function() {
+        return axios.get(CONFIG.API_URL + "/stateElectionsCount");
     }
 };

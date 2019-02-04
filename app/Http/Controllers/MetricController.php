@@ -7,6 +7,7 @@ use App\LiveUpdate;
 use App\Incident;
 use App\User;
 use App\Picture;
+use App\State;
 use Illuminate\Http\Request;
 
 class MetricController extends Controller {
@@ -29,6 +30,18 @@ class MetricController extends Controller {
         $response['pictures'] = number_format(Picture::all()->count());
 
         return response()->json($response);
+    }
+
+    public function getStateElectionsCount() {
+        /**
+         * States and their 
+         * total # of elections 
+         */
+        $response = array();
+
+        $states = State::withCount('elections')->get();
+
+        return response()->json($states);
     }
 
 }
