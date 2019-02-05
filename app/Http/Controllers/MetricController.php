@@ -39,7 +39,7 @@ class MetricController extends Controller {
          */
         $response = array();
 
-        $states = State::withCount('elections')->get();
+        $states = State::withCount('elections')->paginate(7);
 
         return response()->json($states);
     }

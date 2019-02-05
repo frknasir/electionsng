@@ -12,6 +12,7 @@ export const metric = {
         metrics: {},
         metricsLoadStatus: 0,
         stateElectionsCount: {},
+        SECPagination: {},
         stateElectionsCountLoadStatus: 0
     },
     actions: {
@@ -30,9 +31,14 @@ export const metric = {
         loadStateElectionsCount({commit, state}, data) {
             commit('setStateElectionsCountLoadStatus', 1);
 
-            MetricAPI.getStateElectionsCount().then(function(response) {
+            MetricAPI.getStateElectionsCount(
+                data.url
+            ).then(function(response) {
                 commit('setStateElectionsCountLoadStatus', 2);
-                commit('setStateElectionsCount', response.data);
+                commit('setStateElectionsCount', response.data.data);
+                commit('setSECPagination', {
+                    pData: response.data
+                });
             }).catch(function() {
                 commit('setStateElectionsCountLoadStatus', 3);
                 commit('setStateElectionsCount', {});
@@ -54,6 +60,21 @@ export const metric = {
 
         setStateElectionsCountLoadStatus(state, status) {
             state.stateElectionsCountLoadStatus = status;
+        },
+
+        setSECPagination(state, data) {
+            let meta = data.pData;
+
+            let pagination = {
+                current_page: meta.current_page,
+                last_page: meta.last_page,
+                to: meta.to,
+                total: meta.total,
+                next_page_url: meta.next_page_url,
+                prev_page_url: meta.prev_page_url
+            };
+        
+            state.SECPagination = pagination;
         }
     },
     getters: {
@@ -71,6 +92,10 @@ export const metric = {
 
         getStateElectionsCountLoadStatus(state) {
             return state.stateElectionsCountLoadStatus;
+        },
+
+        getSECPagination(state) {
+            return state.SECPagination;
         }
     }
 };

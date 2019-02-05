@@ -13,16 +13,28 @@
                                 <tr>
                                     <th class="text-center">#</th>
                                     <th>State</th>
-                                    <th># of Elections</th>
+                                    <th class="text-center"># of Elections</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(x, index) in stateElectionsCount" :key="index">
-                                    <td class="text-center">{{ index + 1 }}</td>
+                                    <td class="text-center">{{ x.id }}</td>
                                     <td>{{ x.name }}</td>
-                                    <td>{{ x.elections_count }}</td>
+                                    <td class="text-center">{{ x.elections_count }}</td>
                                 </tr>
                             </tbody>
+                            <div id="pagination-btn">
+                                <nav aria-label="Page navigation ml-auto mr-auto">
+                                    <ul class="pagination text-black">
+                                        <li class="page-item" v-bind:class="[{disabled: !pagination.prev_page_url}]">
+                                            <a @click="loadStateElectionsCount(pagination.prev_page_url)" class="page-link" tabindex="-1">Previous</a>
+                                        </li>
+                                        <li class="page-item" v-bind:class="[{disabled: !pagination.next_page_url}]">
+                                            <a @click="loadStateElectionsCount(pagination.next_page_url)" class="page-link">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </table>
                     </div>
                     <div class="col-md-6">
@@ -37,7 +49,8 @@
     export default {
         data() {
             return {
-                mapData: {}
+                mapData: {},
+                mapInitialized: false
             };
         },
         computed: {
@@ -47,10 +60,16 @@
 
             stateElectionsCountLoadStatus() {
                 return this.$store.getters.getStateElectionsCountLoadStatus;
-            }
+            },
+
+            pagination() {
+                return this.$store.getters.getSECPagination;
+            },
         },
         created() {
-            this.$store.dispatch('loadStateElectionsCount');
+            this.$store.dispatch('loadStateElectionsCount', {
+                url: null
+            });
         },
         watch: {
             stateElectionsCountLoadStatus: function(val) {
@@ -60,7 +79,9 @@
                     });
 
                     this.$nextTick(() => {
-                        this.initMap();
+                        if(!this.mapInitialized) {
+                            this.initMap();
+                        }
                     });
                 }
             }
@@ -91,6 +112,13 @@
                             normalizeFunction: 'polynomial'
                         }]
                     },
+                });
+
+                this.mapInitialized = true;
+            },
+            loadStateElectionsCount: function(url) {
+                this.$store.dispatch('loadStateElectionsCount', {
+                    url: url
                 });
             }
         }

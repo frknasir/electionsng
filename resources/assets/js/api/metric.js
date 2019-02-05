@@ -14,7 +14,8 @@ export default {
     /**
      * GET /api/v1/stateElectionsCount
      */
-    getStateElectionsCount: function() {
-        return axios.get(CONFIG.API_URL + "/stateElectionsCount");
+    getStateElectionsCount: function(url = null) {
+        url = url || CONFIG.API_URL + "/stateElectionsCount";
+        return axios.get(url);
     }
 };
