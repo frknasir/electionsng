@@ -11,7 +11,7 @@
 
             <div class="card card-blog">
                 <div class="card-header card-header-image">
-                    <iframe width="100%" height="480" src="https://www.youtube.com/embed/tQMKGcvMQME?controls=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" ></iframe>
+                    <iframe width="100%" height="360" src="https://www.youtube.com/embed/vteg7_zdpHY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
                 <div class="card-body text-center">
                     <h6 class="card-category text-info">Tutorial</h6>

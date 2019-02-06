@@ -4,14 +4,14 @@
 var api_url = '';
 var url = '';
 
-switch( process.env.NODE_ENV ){
+switch( process.env.NODE_ENV ) {
     case 'development':
         api_url = 'http://127.0.0.1:8000/api/v1';
         url = 'http://127.0.0.1:8000';
     break;
     case 'production':
-        api_url = 'http://beta.electionsng.com/api/v1';
-        url = 'http://beta.electionsng.com';
+        api_url = 'https://www.electionsng.com/api/v1';
+        url = 'https://www.electionsng.com';
     break;
 }
 

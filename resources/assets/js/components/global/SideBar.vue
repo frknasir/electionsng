@@ -201,8 +201,10 @@
             </ul>
             <hr>
             <div class="copyright p-3">
-                <!-- &copy; 2018,
-                <a href="https://starfolk.tech" target="_blank">Starfolk,LLC</a> for a better nation. -->
+                <div class="credits" style="font-size: 12px;"> 
+                    © 2019 PTCIJ, all rights reserved. <br><br> 
+                    Made with <i class="material-icons" alt="love">favorite</i> for a better Nigeria. 
+                </div>
             </div>
         </div>
     </div>
